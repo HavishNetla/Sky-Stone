@@ -8,8 +8,7 @@ import org.firstinspires.ftc.teamcode.Vision.FrameGrabber;
 
 @TeleOp(name = "OpenCV Test" + "Drive", group = "T")
 public class OpenCVTest extends OpMode {
-  public double offSetX = 0;
-  public double offSetY = 0;
+
   FrameGrabber frameGrabber = new FrameGrabber();
 
   @Override
@@ -22,23 +21,21 @@ public class OpenCVTest extends OpMode {
 
   @Override
   public void init_loop() {
+
     if (gamepad1.dpad_up) {
-      offSetY -= 0.5;
+      frameGrabber.offset.y -= 0.5;
     }
     if (gamepad1.dpad_down) {
-      offSetY += 0.5;
+      frameGrabber.offset.y += 0.5;
     }
     if (gamepad1.dpad_left) {
-      offSetX -= 0.5;
+      frameGrabber.offset.x -= 0.5;
     }
     if (gamepad1.dpad_right) {
-      offSetX += 0.5;
+      frameGrabber.offset.x += 0.5;
     }
 
-    frameGrabber.offset.x = offSetX;
-    frameGrabber.offset.y = offSetY;
-
-    telemetry.addData("OFFSET", frameGrabber.len);
+    telemetry.addData("OFFSET",  frameGrabber.offset.x);
 
     telemetry.addData(
         "array", frameGrabber.color);
