@@ -13,3 +13,12 @@
 
 // Include common definitions from above.
 apply from: '../build.common.gradle'
+dependencies {
+    implementation project(path: ':endercv')
+    implementation project(path: ':openCVLibrary3')
+    implementation "org.apache.commons:commons-math3:3.6.1"
+    implementation "org.apache.commons:commons-lang3:3.8.1"
+}
+repositories {
+    mavenCentral()
+}
