@@ -35,10 +35,31 @@ public class OpenCVTest extends OpMode {
       frameGrabber.offset.x += 0.5;
     }
 
-    telemetry.addData("OFFSET",  frameGrabber.offset.x);
+
+    if(gamepad2.y) {
+      frameGrabber.threshold++;
+    } else if(gamepad2.a) {
+      frameGrabber.threshold--;
+    }
+
+    if (gamepad2.dpad_up) {
+      frameGrabber.offset1.y -= 0.5;
+    }
+    if (gamepad2.dpad_down) {
+      frameGrabber.offset1.y += 0.5;
+    }
+    if (gamepad2.dpad_left) {
+      frameGrabber.offset1.x -= 0.5;
+    }
+    if (gamepad2.dpad_right) {
+      frameGrabber.offset1.x += 0.5;
+    }
+
+
+    telemetry.addData("THRESHOLD",  frameGrabber.threshold);
 
     telemetry.addData(
-        "array", frameGrabber.color);
+        "array", frameGrabber.sum);
   }
 
   @Override
