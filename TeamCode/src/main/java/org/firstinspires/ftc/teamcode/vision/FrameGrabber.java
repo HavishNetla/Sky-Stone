@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.Vision;
+package org.firstinspires.ftc.teamcode.vision;
 
 import org.corningrobotics.enderbots.endercv.OpenCVPipeline;
-import org.firstinspires.ftc.teamcode.Util.Vector2d;
-import org.firstinspires.ftc.teamcode.Vision.Filters.ColorFilter;
-import org.firstinspires.ftc.teamcode.Vision.Filters.Filter;
+import org.firstinspires.ftc.teamcode.util.Vector2d;
+import org.firstinspires.ftc.teamcode.vision.filters.ColorFilter;
+import org.firstinspires.ftc.teamcode.vision.filters.Filter;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -37,29 +37,29 @@ public class FrameGrabber extends OpenCVPipeline {
 
     Imgproc.rectangle(
             displayMat,
-            new Point(0 + offset.x, 0 + offset.y),
-            new Point(20 + offset.x, 20 + offset.y),
+            new Point(0 + offset.getX(), 0 + offset.getY()),
+            new Point(20 + offset.getX(), 20 + offset.getY()),
             new Scalar(255, 0, 0),
             1,
             0);
 
     Imgproc.rectangle(
             displayMat,
-            new Point(0 + offset1.x, 0 + offset1.y),
-            new Point(20 + offset1.x, 20 + offset1.y),
+            new Point(0 + offset1.getX(), 0 + offset1.getY()),
+            new Point(20 + offset1.getX(), 20 + offset1.getY()),
             new Scalar(0, 255, 0),
             1,
             0);
 
 
-    for (int i = (int) offset.x; i < 20 + offset.x; i++) {
-      for (int j = (int) offset.y; j < 20 + offset.y; j++) {
+    for (int i = (int) offset.getX(); i < 20 + offset.getX(); i++) {
+      for (int j = (int) offset.getY(); j < 20 + offset.getY(); j++) {
         sum = yellowMask.get(i, j)[0];
       }
     }
 
-    for (int i = (int) offset1.x; i < 20 + offset1.x; i++) {
-      for (int j = (int) offset1.y; j < 20 + offset1.y; j++) {
+    for (int i = (int) offset1.getX(); i < 20 + offset1.getX(); i++) {
+      for (int j = (int) offset1.getY(); j < 20 + offset1.getY(); j++) {
         sum1 = yellowMask.get(i, j)[0];
       }
     }
@@ -77,8 +77,8 @@ public class FrameGrabber extends OpenCVPipeline {
     finalColor = sum + ", " + sum1;
 
     Imgproc.putText(displayMat, finalColor, new Point(0, displayMat.height() - 40), 0, 2, new Scalar(255, 255, 255));
-    Imgproc.putText(displayMat, color1, new Point(offset.x - 20, offset.y + 20), 0, 1, new Scalar(255, 255, 255));
-    Imgproc.putText(displayMat, color2, new Point(offset1.x - 20, offset1.y + 20), 0, 1, new Scalar(255, 255, 255));
+    Imgproc.putText(displayMat, color1, new Point(offset.getX() - 20, offset.getY() + 20), 0, 1, new Scalar(255, 255, 255));
+    Imgproc.putText(displayMat, color2, new Point(offset1.getX() - 20, offset1.getY() + 20), 0, 1, new Scalar(255, 255, 255));
 
 
     return displayMat;
