@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ComputerDebuging;
+package org.firstinspires.ftc.teamcode.computerDebuging;
 
 public class Main {
   public static void main(String[] args) {

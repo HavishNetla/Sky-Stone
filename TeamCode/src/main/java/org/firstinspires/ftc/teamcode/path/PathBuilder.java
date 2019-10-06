@@ -1,7 +1,7 @@
-package org.firstinspires.ftc.teamcode.Path;
+package org.firstinspires.ftc.teamcode.path;
 
-import org.firstinspires.ftc.teamcode.Util.Pose2d;
-import org.firstinspires.ftc.teamcode.Util.Vector2d;
+import org.firstinspires.ftc.teamcode.util.Pose2d;
+import org.firstinspires.ftc.teamcode.util.Vector2d;
 
 import java.util.ArrayList;
 

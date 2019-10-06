@@ -1,13 +1,13 @@
-package org.firstinspires.ftc.teamcode.Subsystems;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.Localization.ThreeWheelLocalizer;
-import org.firstinspires.ftc.teamcode.Path.PathFollower;
-import org.firstinspires.ftc.teamcode.Path.PathSegment;
-import org.firstinspires.ftc.teamcode.Util.Pose2d;
-import org.firstinspires.ftc.teamcode.Util.Vector2d;
+import org.firstinspires.ftc.teamcode.localization.ThreeWheelLocalizer;
+import org.firstinspires.ftc.teamcode.path.PathFollower;
+import org.firstinspires.ftc.teamcode.path.PathSegment;
+import org.firstinspires.ftc.teamcode.util.Pose2d;
+import org.firstinspires.ftc.teamcode.util.Vector2d;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -99,10 +99,10 @@ public class MecanumDrive extends Subsystem {
     // ===============================================================================================
 
   private void updatePowers() {
-    powers[0] = targetPower.x - targetPower.y - targetC;
-    powers[1] = targetPower.x + targetPower.y - targetC;
-    powers[2] = targetPower.x - targetPower.y + targetC;
-    powers[3] = targetPower.x + targetPower.y + targetC;
+    powers[0] = targetPower.getX() - targetPower.getY() - targetC;
+    powers[1] = targetPower.getX() + targetPower.getY() - targetC;
+    powers[2] = targetPower.getX() - targetPower.getY() + targetC;
+    powers[3] = targetPower.getX() + targetPower.getY() + targetC;
 
     double max =
         Collections.max(

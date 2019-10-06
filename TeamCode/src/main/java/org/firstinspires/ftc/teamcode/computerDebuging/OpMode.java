@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ComputerDebuging;
+package org.firstinspires.ftc.teamcode.computerDebuging;
 
 public abstract class OpMode {
   public abstract void init();

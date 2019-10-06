@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.Path;
+package org.firstinspires.ftc.teamcode.path;
 
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.Util.MyMath;
-import org.firstinspires.ftc.teamcode.Util.Pose2d;
-import org.firstinspires.ftc.teamcode.Util.Vector2d;
+import org.firstinspires.ftc.teamcode.util.MyMath;
+import org.firstinspires.ftc.teamcode.util.Pose2d;
+import org.firstinspires.ftc.teamcode.util.Vector2d;
 
 import java.util.ArrayList;
 
@@ -23,11 +23,11 @@ public class PathFollower {
   public static double[] goToPoint(
       Vector2d goal, Pose2d pose, double preferredAngle, double speed, double turnSpeed) {
     double absoluteAngleToTarget =
-        90 - Math.toDegrees(Math.atan2(goal.y - pose.y, goal.x - pose.x));
-    double relativeAngleToPoint = absoluteAngleToTarget - pose.heading;
+        90 - Math.toDegrees(Math.atan2(goal.getY() - pose.getY(), goal.getX() - pose.getX()));
+    double relativeAngleToPoint = absoluteAngleToTarget - pose.getHeading();
 
-    double relativeXToPoint = goal.x - pose.x;
-    double relativeYToPoint = goal.y - pose.y;
+    double relativeXToPoint = goal.getX() - pose.getX();
+    double relativeYToPoint = goal.getY() - pose.getY();
 
     double movementXPower = Range.clip(relativeXToPoint / 30, -1, 1);
     double movementYPower = Range.clip(relativeYToPoint / 30, -1, 1);
@@ -35,12 +35,12 @@ public class PathFollower {
     System.out.println("35" + movementXPower + ", " + movementYPower);
 
     Vector2d rotated =
-        new Vector2d(movementXPower, movementYPower).rotated(Math.toRadians(pose.heading));
+        new Vector2d(movementXPower, movementYPower).rotated(Math.toRadians(pose.getHeading()));
 
     System.out.println("41" + rotated);
 
-    movement_x = rotated.x * speed;
-    movement_y = rotated.y * speed;
+    movement_x = rotated.getX() * speed;
+    movement_y = rotated.getY() * speed;
 
     double relativeTurnAngle = relativeAngleToPoint + preferredAngle;
 
@@ -52,7 +52,7 @@ public class PathFollower {
   public double[] followCurve(double followAngle, Pose2d pose, double speed, double turnSpeed) {
     Vector2d point = getLookAheadPoint(pose);
     lookAheadPoint = point;
-    return goToPoint(new Vector2d(point.x, point.y), pose, followAngle, speed, turnSpeed);
+    return goToPoint(new Vector2d(point.getX(), point.getY()), pose, followAngle, speed, turnSpeed);
   }
 
   /**
@@ -71,8 +71,8 @@ public class PathFollower {
 
       double closestAngle = 1000000;
       for (Vector2d intersection : intersectionsinPath) {
-        double angle = Math.toDegrees(Math.atan2(intersection.y - pose.y, intersection.x - pose.x));
-        double newAngle = pose.heading < 0 ? 360 + pose.heading : pose.heading;
+        double angle = Math.toDegrees(Math.atan2(intersection.getY() - pose.getY(), intersection.getX() - pose.getX()));
+        double newAngle = pose.getHeading() < 0 ? 360 + pose.getHeading() : pose.getHeading();
         double deltaAngle = Math.abs(angle - newAngle);
 
         if (deltaAngle < closestAngle) {

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Util
+package org.firstinspires.ftc.teamcode.util
 
 class Pose2d(var x: Double, var y: Double, var heading: Double) {
 
@@ -60,7 +60,7 @@ class Pose2d(var x: Double, var y: Double, var heading: Double) {
     /** @return the Pose translated into a string
      */
     override fun toString(): String {
-        return String.format("(%.3f, %.3f, %.3f°)", x, y, heading)
+        return java.lang.String.format("(%.3f, %.3f, %.3f°)", x, y, heading)
     }
 
     /**

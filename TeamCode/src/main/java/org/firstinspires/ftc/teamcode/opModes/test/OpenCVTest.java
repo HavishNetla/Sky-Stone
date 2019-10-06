@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.OpModes.Test;
+package org.firstinspires.ftc.teamcode.opModes.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay;
-import org.firstinspires.ftc.teamcode.Vision.FrameGrabber;
+import org.firstinspires.ftc.teamcode.vision.FrameGrabber;
 
 @TeleOp(name = "OpenCV Test" + "Drive", group = "T")
 public class OpenCVTest extends OpMode {
@@ -23,16 +23,16 @@ public class OpenCVTest extends OpMode {
   public void init_loop() {
 
     if (gamepad1.dpad_up) {
-      frameGrabber.offset.y -= 0.5;
+      frameGrabber.offset.setY(frameGrabber.offset.getY() - 0.5);
     }
     if (gamepad1.dpad_down) {
-      frameGrabber.offset.y += 0.5;
+      frameGrabber.offset.setY(frameGrabber.offset.getY() + 0.5);
     }
     if (gamepad1.dpad_left) {
-      frameGrabber.offset.x -= 0.5;
+      frameGrabber.offset.setX(frameGrabber.offset.getX() - 0.5);
     }
     if (gamepad1.dpad_right) {
-      frameGrabber.offset.x += 0.5;
+      frameGrabber.offset.setX(frameGrabber.offset.getX() + 0.5);
     }
 
 
@@ -43,16 +43,16 @@ public class OpenCVTest extends OpMode {
     }
 
     if (gamepad2.dpad_up) {
-      frameGrabber.offset1.y -= 0.5;
+      frameGrabber.offset1.setY(frameGrabber.offset1.getY() - 0.5);
     }
     if (gamepad2.dpad_down) {
-      frameGrabber.offset1.y += 0.5;
+      frameGrabber.offset1.setY(frameGrabber.offset1.getY() + 0.5);
     }
     if (gamepad2.dpad_left) {
-      frameGrabber.offset1.x -= 0.5;
+      frameGrabber.offset1.setX(frameGrabber.offset1.getX() - 0.5);
     }
     if (gamepad2.dpad_right) {
-      frameGrabber.offset1.x += 0.5;
+      frameGrabber.offset1.setX(frameGrabber.offset1.getX() + 0.5);
     }
 
 

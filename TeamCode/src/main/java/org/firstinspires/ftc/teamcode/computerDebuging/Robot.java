@@ -1,7 +1,7 @@
-package org.firstinspires.ftc.teamcode.ComputerDebuging;
+package org.firstinspires.ftc.teamcode.computerDebuging;
 
-import org.firstinspires.ftc.teamcode.Util.Pose2d;
-import org.firstinspires.ftc.teamcode.Util.Vector2d;
+import org.firstinspires.ftc.teamcode.util.Pose2d;
+import org.firstinspires.ftc.teamcode.util.Vector2d;
 
 public class Robot {
   public static double x = 0, y = 0, c = 0;
@@ -21,11 +21,11 @@ public class Robot {
 
     Vector2d powers = new Vector2d(x, y);
 
-    Vector2d rotatedPowers = powers.rotated(Math.toRadians(-robotPos.heading));
+    Vector2d rotatedPowers = powers.rotated(Math.toRadians(-robotPos.getHeading()));
 
-    robotPos.x += rotatedPowers.x * elapsedTime * 1000 * 0.2;
-    robotPos.y += rotatedPowers.y * elapsedTime * 1000 * 0.2;
-    robotPos.heading += c * elapsedTime * 100;
+    robotPos.setX(robotPos.getX() + rotatedPowers.getX() * elapsedTime * 1000 * 0.2);
+    robotPos.setY(robotPos.getY() + rotatedPowers.getY() * elapsedTime * 1000 * 0.2);
+    robotPos.setHeading(robotPos.getHeading() + c * elapsedTime * 100);
 
     ComputerDebugging.sendNoClear(robotPos.pos());
   }

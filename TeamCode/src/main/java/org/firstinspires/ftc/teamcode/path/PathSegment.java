@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.Path;
+package org.firstinspires.ftc.teamcode.path;
 
-import org.firstinspires.ftc.teamcode.Util.Vector2d;
+import org.firstinspires.ftc.teamcode.util.Vector2d;
 
 public class PathSegment {
   public Vector2d start, end;

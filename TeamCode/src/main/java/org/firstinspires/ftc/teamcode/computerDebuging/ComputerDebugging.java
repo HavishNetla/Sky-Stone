@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.ComputerDebuging;
+package org.firstinspires.ftc.teamcode.computerDebuging;
 
-import org.firstinspires.ftc.teamcode.Path.PathSegment;
-import org.firstinspires.ftc.teamcode.Util.Pose2d;
-import org.firstinspires.ftc.teamcode.Util.Vector2d;
+import org.firstinspires.ftc.teamcode.path.PathSegment;
+import org.firstinspires.ftc.teamcode.util.Pose2d;
+import org.firstinspires.ftc.teamcode.util.Vector2d;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -24,11 +24,11 @@ public class ComputerDebugging {
     // Create the string that shows the robot position
     // It will look like this "ROBOT:0.0,0.0,0.0"
     messageBuilder.append("ROBOT:");
-    messageBuilder.append(df.format(pose.x));
+    messageBuilder.append(df.format(pose.getX()));
     messageBuilder.append(",");
-    messageBuilder.append(df.format(pose.y));
+    messageBuilder.append(df.format(pose.getY()));
     messageBuilder.append(",");
-    messageBuilder.append(pose.heading);
+    messageBuilder.append(pose.getHeading());
     messageBuilder.append("%");
 
     // udpServer.addMessage(messageBuilder.toString());

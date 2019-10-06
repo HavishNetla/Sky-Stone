@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ComputerDebuging;
+package org.firstinspires.ftc.teamcode.computerDebuging;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.teamcode.Vision.Filters;
+package org.firstinspires.ftc.teamcode.vision.filters;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 

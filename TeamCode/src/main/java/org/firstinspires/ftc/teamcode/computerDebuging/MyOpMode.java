@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.ComputerDebuging;
+package org.firstinspires.ftc.teamcode.computerDebuging;
 
-import org.firstinspires.ftc.teamcode.Path.PathBuilder;
-import org.firstinspires.ftc.teamcode.Path.PathFollower;
-import org.firstinspires.ftc.teamcode.Path.PathSegment;
-import org.firstinspires.ftc.teamcode.Util.Pose2d;
-import org.firstinspires.ftc.teamcode.Util.Vector2d;
+import org.firstinspires.ftc.teamcode.path.PathBuilder;
+import org.firstinspires.ftc.teamcode.path.PathFollower;
+import org.firstinspires.ftc.teamcode.path.PathSegment;
+import org.firstinspires.ftc.teamcode.util.Pose2d;
+import org.firstinspires.ftc.teamcode.util.Vector2d;
 
 import java.util.ArrayList;
 

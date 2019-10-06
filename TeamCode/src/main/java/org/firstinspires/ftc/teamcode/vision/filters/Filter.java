@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Vision.Filters;
+package org.firstinspires.ftc.teamcode.vision.filters;
 
 import org.opencv.core.Mat;
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Util;
+package org.firstinspires.ftc.teamcode.util;
 
 import java.util.ArrayList;
 
@@ -25,22 +25,22 @@ public class MyMath {
       Vector2d c, double r, Vector2d p1, Vector2d p2) {
 
     // Make sure the points don't exactly line up so the slopes work
-    if (Math.abs(p1.y - p2.y) < 0.003) {
-      p1.y = p2.y + 0.003;
+    if (Math.abs(p1.getY() - p2.getY()) < 0.003) {
+      p1.setY(p2.getY() + 0.003);
     }
-    if (Math.abs(p1.x - p2.x) < 0.003) {
-      p1.x = p2.x + 0.003;
+    if (Math.abs(p1.getX() - p2.getX()) < 0.003) {
+      p1.setX(p2.getX() + 0.003);
     }
 
     // Calculate Slope of the line
-    double m1 = (p2.y - p1.y) / (p2.x - p1.x);
+    double m1 = (p2.getY() - p1.getY()) / (p2.getX() - p1.getX());
 
     // the first coefficient in the quadratic
     double quadraticA = 1.0 + Math.pow(m1, 2);
 
     // shift one of the line's points so it is relative to the circle
-    double x1 = p1.x - c.x;
-    double y1 = p1.y - c.y;
+    double x1 = p1.getX() - c.getX();
+    double y1 = p1.getY() - c.getY();
 
     // the second coefficient in the quadratic
     double quadraticB = (2.0 * m1 * y1) - (2.0 * Math.pow(m1, 2) * x1);
@@ -64,12 +64,12 @@ public class MyMath {
       double yRoot1 = m1 * (xRoot1 - x1) + y1;
 
       // now we can add back in translations
-      xRoot1 += c.x;
-      yRoot1 += c.y;
+      xRoot1 += c.getX();
+      yRoot1 += c.getY();
 
       // make sure it was within range of the segment
-      double minX = p1.x < p2.x ? p1.x : p2.x;
-      double maxX = p1.x > p2.x ? p1.x : p2.x;
+      double minX = p1.getX() < p2.getX() ? p1.getX() : p2.getX();
+      double maxX = p1.getX() > p2.getX() ? p1.getX() : p2.getX();
       if (xRoot1 > minX && xRoot1 < maxX) {
         allPoints.add(new Vector2d(xRoot1, yRoot1));
       }
@@ -81,8 +81,8 @@ public class MyMath {
 
       double yRoot2 = m1 * (xRoot2 - x1) + y1;
       // now we can add back in translations
-      xRoot2 += c.x;
-      yRoot2 += c.y;
+      xRoot2 += c.getX();
+      yRoot2 += c.getY();
 
       // make sure it was within range of the segment
       if (xRoot2 > minX && xRoot2 < maxX) {
@@ -100,7 +100,7 @@ public class MyMath {
    * @return distance between them
    */
   public static double distance(Vector2d p1, Vector2d p2) {
-    return Math.sqrt(Math.pow((p2.x - p1.x), 2) + Math.pow((p2.y - p1.y), 2));
+    return Math.sqrt(Math.pow((p2.getX() - p1.getX()), 2) + Math.pow((p2.getY() - p1.getY()), 2));
   }
 
   /**
@@ -126,8 +126,8 @@ public class MyMath {
     Vector2d rotated = new Vector2d(0,0);
     double angleRad = Math.toRadians(angle);
 
-    rotated.x = orig.x * Math.cos(angleRad) - orig.y * Math.sin(angleRad);
-    rotated.y = orig.x * Math.sin(angleRad) - orig.y * Math.cos(angleRad);
+    rotated.setX(orig.getX() * Math.cos(angleRad) - orig.getY() * Math.sin(angleRad));
+    rotated.setY(orig.getX() * Math.sin(angleRad) - orig.getY() * Math.cos(angleRad));
 
     return rotated;
   }
