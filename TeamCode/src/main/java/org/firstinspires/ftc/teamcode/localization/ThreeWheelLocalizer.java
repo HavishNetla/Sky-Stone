@@ -32,7 +32,7 @@ public class ThreeWheelLocalizer {
   private List<Integer> lastWheelPositions;
   private MecanumDrive drive;
 
-  public ThreeWheelLocalizer(MecanumDrive drive) {
+  public ThreeWheelLocalizer(MecanumDrive drive, Telemetry telemetry) {
     this.telemetry = telemetry;
     this.drive = drive;
 
