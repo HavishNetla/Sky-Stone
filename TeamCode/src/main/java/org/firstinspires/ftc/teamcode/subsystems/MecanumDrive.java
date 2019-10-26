@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.localization.ThreeWheelLocalizer;
 import org.firstinspires.ftc.teamcode.path.PathFollower;
 import org.firstinspires.ftc.teamcode.path.PathSegment;
@@ -39,6 +40,7 @@ public class MecanumDrive extends Subsystem {
   private double[] powers;
   private Pose2d position;
   private ThreeWheelLocalizer localizer;
+  private Telemetry telem;
 
   public MecanumDrive(HardwareMap map) {
     frontLeft = map.get(DcMotor.class, "FL");
@@ -47,7 +49,7 @@ public class MecanumDrive extends Subsystem {
     backRight = map.get(DcMotor.class, "BR");
     setMode(Mode.OPEN_LOOP);
 
-    localizer = new ThreeWheelLocalizer(this);
+    localizer = new ThreeWheelLocalizer(this, telem);
   }
 
   // ===============================================================================================
