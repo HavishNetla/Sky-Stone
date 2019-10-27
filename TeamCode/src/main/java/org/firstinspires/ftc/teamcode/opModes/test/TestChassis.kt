@@ -2,23 +2,26 @@ package org.firstinspires.ftc.teamcode.opModes.test
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-
-import org.firstinspires.ftc.teamcode.subsystems.Robot
-import org.firstinspires.ftc.teamcode.util.Vector2d
+import com.qualcomm.robotcore.hardware.DcMotor
 
 @TeleOp(name = "Test Chassis Drive", group = "T")
 class TestChassis : OpMode() {
-    private lateinit var robot: Robot
+    //private lateinit var robot: Robot
+    private lateinit var frontLeft: DcMotor
+    private lateinit var frontRight: DcMotor
+    private lateinit var backLeft: DcMotor
 
     override fun init() {
-        robot = Robot(this)
-        robot.start()
+        frontLeft = hardwareMap.get(DcMotor::class.java, "FL")
+        frontRight = hardwareMap.get(DcMotor::class.java, "FR")
+        backLeft = hardwareMap.get(DcMotor::class.java, "BL")
+
     }
 
     override fun loop() {
-        robot.drive.setVelocity(
-                Vector2d(gamepad1.left_stick_x.toDouble(), gamepad1.left_stick_y.toDouble()), gamepad1.right_stick_x.toDouble())
+        telemetry.addData("FL", frontLeft.currentPosition)
+        telemetry.addData("FR", frontRight.currentPosition)
+        telemetry.addData("BL", backLeft.currentPosition)
 
-        telemetry.addData("Position", robot.drive.position)
     }
 }

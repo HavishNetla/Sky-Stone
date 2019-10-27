@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManagerNotifier;
 import com.qualcomm.robotcore.util.ThreadPool;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
 
 import java.util.ArrayList;
@@ -13,41 +14,48 @@ import java.util.concurrent.ExecutorService;
 public class Robot implements OpModeManagerNotifier.Notifications {
   // Subsystems
   public MecanumDrive drive;
+  public EncoderTest encoderTest;
 
   private List<Subsystem> subsystems;
   private OpModeManagerImpl opModeManager;
   private ExecutorService subsystemUpdateExecutor;
 
   private boolean started;
-
+  private Telemetry telemetry;
+  private int count = 0;
   // Run the "update" function for every subsytem
   private Runnable subsystemUpdateRunnable =
-      new Runnable() {
-        @Override
-        public void run() {
-          while (!Thread.currentThread().isInterrupted()) {
-            for (Subsystem subsystem : subsystems) {
-              subsystem.update();
+          new Runnable() {
+            @Override
+            public void run() {
+              telemetry.addData("f", count);
+              while (!Thread.currentThread().isInterrupted()) {
+                for (Subsystem subsystem : subsystems) {
+                  subsystem.update();
+                }
+                telemetry.addData("f", count);
+                count++;
+              }
             }
-          }
-        }
-      };
+          };
 
-  public Robot(OpMode opMode) {
+  public Robot(OpMode opMode, Telemetry telemetry) {
     subsystems = new ArrayList<>();
 
     // Init subsystems
-    try {
-      drive = new MecanumDrive(opMode.hardwareMap);
-      subsystems.add(drive);
-    } catch (IllegalArgumentException e) {
+    drive = new MecanumDrive(opMode.hardwareMap);
+    subsystems.add(drive);
 
-    }
+    encoderTest = new EncoderTest(opMode.hardwareMap);
+    subsystems.add(encoderTest);
+
     subsystemUpdateExecutor = ThreadPool.newSingleThreadExecutor("subsystem update");
+    this.telemetry = telemetry;
   }
 
   // Starts subsystem executor
   public void start() {
+    telemetry.addData("f", "f");
     if (!started) {
       subsystemUpdateExecutor.submit(subsystemUpdateRunnable);
       started = true;
@@ -65,10 +73,12 @@ public class Robot implements OpModeManagerNotifier.Notifications {
   // ===============================================
 
   @Override
-  public void onOpModePreInit(OpMode opMode) {}
+  public void onOpModePreInit(OpMode opMode) {
+  }
 
   @Override
-  public void onOpModePreStart(OpMode opMode) {}
+  public void onOpModePreStart(OpMode opMode) {
+  }
 
   @Override
   public void onOpModePostStop(OpMode opMode) {

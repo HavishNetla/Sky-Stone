@@ -37,11 +37,11 @@ public class MecanumDrive extends Subsystem {
   private LocalizerMode localizerMode = LocalizerMode.THREE_WHEEL_LOCALIZER;
   private Vector2d targetPower = new Vector2d(0, 0);
   private double targetC = 0;
-  private double[] powers;
+  private double[] powers = new double[3];
   private Pose2d position;
   private ThreeWheelLocalizer localizer;
   private Telemetry telem;
-
+  private double f = 0;
   public MecanumDrive(HardwareMap map) {
     frontLeft = map.get(DcMotor.class, "FL");
     frontRight = map.get(DcMotor.class, "FR");
@@ -55,6 +55,7 @@ public class MecanumDrive extends Subsystem {
   // ===============================================================================================
 
   // ===============================================================================================
+
   // Odometry
   public List<Integer> getTrackingWheelPositions() {
     return Arrays.asList(
@@ -92,11 +93,13 @@ public class MecanumDrive extends Subsystem {
   public void setVelocity(Vector2d vel, double omega) {
     internalSetVelocity(vel, omega);
     setMode(Mode.OPEN_LOOP);
+
+    f = vel.getX();
   }
 
   private void internalSetVelocity(Vector2d vel, double omega) {
-    this.targetPower = vel;
-    this.targetC = omega;
+    targetPower = vel;
+    targetC = omega;
   }
     // ===============================================================================================
 
@@ -137,14 +140,16 @@ public class MecanumDrive extends Subsystem {
     return localizerMode;
   }
 
-
+  public String getF() {
+    return "f";
+  }
 
   @Override
   public void update() {
     // update odometry position
     switch (localizerMode) {
       case THREE_WHEEL_LOCALIZER:
-        position = localizer.update();
+        //position = localizer.update();
         break;
       case NONE:
         break;
@@ -159,6 +164,7 @@ public class MecanumDrive extends Subsystem {
         break;
     }
 
+    updatePowers();
     frontLeft.setPower(powers[0]);
     frontRight.setPower(powers[1]);
     backLeft.setPower(powers[2]);

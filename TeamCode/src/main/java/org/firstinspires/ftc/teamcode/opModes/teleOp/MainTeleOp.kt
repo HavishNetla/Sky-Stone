@@ -2,16 +2,15 @@ package org.firstinspires.ftc.teamcode.opModes.teleOp
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-
 import org.firstinspires.ftc.teamcode.subsystems.Robot
 import org.firstinspires.ftc.teamcode.util.Vector2d
 
 @TeleOp(name = "Mecanum Drive", group = "T")
 class MainTeleOp : OpMode() {
     private lateinit var robot: Robot
-
+    private var count: Int = 0
     override fun init() {
-        robot = Robot(this)
+        robot = Robot(this, this.telemetry)
         robot.start()
     }
 
@@ -19,6 +18,9 @@ class MainTeleOp : OpMode() {
         robot.drive.setVelocity(
                 Vector2d(gamepad1.left_stick_x.toDouble(), gamepad1.left_stick_y.toDouble()), gamepad1.right_stick_x.toDouble())
 
-        telemetry.addData("Position", robot.drive.position)
+        telemetry.addData("Position", robot.drive.powers[0])
+        telemetry.addData("a", robot.drive.f)
+
+        count++
     }
 }
