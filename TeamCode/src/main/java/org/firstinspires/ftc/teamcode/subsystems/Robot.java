@@ -20,7 +20,7 @@ public class Robot implements OpModeManagerNotifier.Notifications {
   private OpModeManagerImpl opModeManager;
   private ExecutorService subsystemUpdateExecutor;
 
-  private boolean started;
+  private boolean started = false;
   private Telemetry telemetry;
   private int count = 0;
   // Run the "update" function for every subsytem
@@ -28,12 +28,11 @@ public class Robot implements OpModeManagerNotifier.Notifications {
           new Runnable() {
             @Override
             public void run() {
-              telemetry.addData("f", count);
               while (!Thread.currentThread().isInterrupted()) {
                 for (Subsystem subsystem : subsystems) {
-                  subsystem.update();
+                  //subsystem.update();
+                  telemetry.addData("32", Thread.currentThread().isInterrupted());
                 }
-                telemetry.addData("f", count);
                 count++;
               }
             }
@@ -43,7 +42,7 @@ public class Robot implements OpModeManagerNotifier.Notifications {
     subsystems = new ArrayList<>();
 
     // Init subsystems
-    drive = new MecanumDrive(opMode.hardwareMap);
+    drive = new MecanumDrive(opMode.hardwareMap, telemetry);
     subsystems.add(drive);
 
     encoderTest = new EncoderTest(opMode.hardwareMap);
@@ -55,10 +54,22 @@ public class Robot implements OpModeManagerNotifier.Notifications {
 
   // Starts subsystem executor
   public void start() {
-    telemetry.addData("f", "f");
-    if (!started) {
-      subsystemUpdateExecutor.submit(subsystemUpdateRunnable);
-      started = true;
+    telemetry.addData("58", "started");
+    if (true) {
+      //subsystemUpdateExecutor.submit(subsystemUpdateRunnable);
+      //subsystemUpdateRunnable.run();
+
+      //while(true) {
+      //  telemetry.addData("f", "f1123");
+      //}
+      //started = true;
+    }
+  }
+
+  public void update() {
+    for (Subsystem subsystem : subsystems) {
+      subsystem.update();
+      //telemetry.addData("32", Thread.currentThread().isInterrupted());
     }
   }
 

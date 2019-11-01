@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -37,19 +38,23 @@ public class MecanumDrive extends Subsystem {
   private LocalizerMode localizerMode = LocalizerMode.THREE_WHEEL_LOCALIZER;
   private Vector2d targetPower = new Vector2d(0, 0);
   private double targetC = 0;
-  private double[] powers = new double[3];
+  private double[] powers = new double[]{0,0,0,0};
   private Pose2d position;
   private ThreeWheelLocalizer localizer;
-  private Telemetry telem;
+  private Telemetry telemetry;
   private double f = 0;
-  public MecanumDrive(HardwareMap map) {
+  public MecanumDrive(HardwareMap map, Telemetry telemetry) {
     frontLeft = map.get(DcMotor.class, "FL");
     frontRight = map.get(DcMotor.class, "FR");
     backLeft = map.get(DcMotor.class, "BL");
     backRight = map.get(DcMotor.class, "BR");
     setMode(Mode.OPEN_LOOP);
 
-    localizer = new ThreeWheelLocalizer(this, telem);
+    localizer = new ThreeWheelLocalizer(this, telemetry);
+
+    frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+    backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+    this.telemetry = telemetry;
   }
 
   // ===============================================================================================
@@ -94,7 +99,7 @@ public class MecanumDrive extends Subsystem {
     internalSetVelocity(vel, omega);
     setMode(Mode.OPEN_LOOP);
 
-    f = vel.getX();
+    telemetry.addData("vel", vel);
   }
 
   private void internalSetVelocity(Vector2d vel, double omega) {
@@ -104,10 +109,10 @@ public class MecanumDrive extends Subsystem {
     // ===============================================================================================
 
   private void updatePowers() {
-    powers[0] = targetPower.getX() - targetPower.getY() - targetC;
-    powers[1] = targetPower.getX() + targetPower.getY() - targetC;
-    powers[2] = targetPower.getX() - targetPower.getY() + targetC;
-    powers[3] = targetPower.getX() + targetPower.getY() + targetC;
+    powers[0] = targetPower.getY() + targetPower.getX() + targetC;
+    powers[1] = targetPower.getY() - targetPower.getX() - targetC;
+    powers[2] = targetPower.getY() - targetPower.getX() + targetC;
+    powers[3] = targetPower.getY() + targetPower.getX() - targetC;
 
     double max =
         Collections.max(
