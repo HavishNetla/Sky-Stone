@@ -49,12 +49,15 @@ public class MecanumDrive extends Subsystem {
     backLeft = map.get(DcMotor.class, "BL");
     backRight = map.get(DcMotor.class, "BR");
     setMode(Mode.OPEN_LOOP);
+    setMode(LocalizerMode.THREE_WHEEL_LOCALIZER);
 
     localizer = new ThreeWheelLocalizer(this, telemetry);
 
     frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
     backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
     this.telemetry = telemetry;
+
+    resetEncoders();
   }
 
   // ===============================================================================================
@@ -64,9 +67,9 @@ public class MecanumDrive extends Subsystem {
   // Odometry
   public List<Integer> getTrackingWheelPositions() {
     return Arrays.asList(
-        frontLeft.getCurrentPosition(),
-        frontRight.getCurrentPosition(),
-        backLeft.getCurrentPosition());
+        -frontLeft.getCurrentPosition(),
+        -frontRight.getCurrentPosition(),
+        -backLeft.getCurrentPosition());
   }
 
   public Pose2d getPosition() {
@@ -94,7 +97,13 @@ public class MecanumDrive extends Subsystem {
     return false;
   }
 
+  public void resetEncoders() {
+    frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+  }
   public void setVelocity(Vector2d vel, double omega) {
     internalSetVelocity(vel, omega);
     setMode(Mode.OPEN_LOOP);
@@ -154,7 +163,7 @@ public class MecanumDrive extends Subsystem {
     // update odometry position
     switch (localizerMode) {
       case THREE_WHEEL_LOCALIZER:
-        //position = localizer.update();
+        position = localizer.update();
         break;
       case NONE:
         break;

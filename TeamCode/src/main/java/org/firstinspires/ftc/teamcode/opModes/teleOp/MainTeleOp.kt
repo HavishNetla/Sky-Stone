@@ -18,6 +18,8 @@ class MainTeleOp : OpMode() {
         robot.update()
         robot.drive.setVelocity(
                 Vector2d(gamepad1.left_stick_x.toDouble(), -gamepad1.left_stick_y.toDouble()), gamepad1.right_stick_x.toDouble())
-        count++
+
+        telemetry.addData("Position", robot.drive.position)
+
     }
 }

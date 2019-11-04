@@ -39,24 +39,33 @@ public class ThreeWheelLocalizer {
     lastWheelPositions = Collections.emptyList();
 
     // poseEstimate = new Pose2d(143, 143, MyMath.toRadians(135));
-    poseEstimate = new Pose2d(0, 0, Math.toRadians(0));
+    poseEstimate = new Pose2d(0, 0, 0);
   }
 
   public Pose2d update() {
     List<Integer> wheelPositions = drive.getTrackingWheelPositions();
     if (!lastWheelPositions.isEmpty()) {
-
       double dL = wheelPositions.get(0) - lastWheelPositions.get(0);
       double dR = wheelPositions.get(1) - lastWheelPositions.get(1);
       double dM = wheelPositions.get(2) - lastWheelPositions.get(2);
 
+      telemetry.addData("dl", dL);
+      telemetry.addData("dR", dR);
+      telemetry.addData("dM", dM);
+
       double dS = (dR + dL) / 2.0;
       dTheta = ((dR - dL) / chassisWidth);
 
-      double avgTheta = theta + dTheta / 2.0;
+      telemetry.addData("dS", dS);
+      telemetry.addData("dTheta", dTheta);
 
-      double dX = dS * Math.cos(avgTheta) + dM * Math.sin(avgTheta);
-      double dY = dS * Math.sin(avgTheta) - dM * Math.cos(avgTheta);
+      double avgTheta = theta + dTheta / 2.0;
+      telemetry.addData("dTheta", dTheta);
+
+      double dY = dS * Math.cos(avgTheta) - dM * Math.sin(avgTheta);
+      double dX = dS * Math.sin(avgTheta) + dM * Math.cos(avgTheta);
+      telemetry.addData("dX", dX);
+      telemetry.addData("dY", dY);
 
       // Update current robot position.
       x += dX;
