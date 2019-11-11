@@ -65,15 +65,19 @@ public class MecanumDrive extends Subsystem {
   // ===============================================================================================
 
   // Odometry
-  public List<Integer> getTrackingWheelPositions() {
+  public List<Double> getTrackingWheelPositions() {
+    double ratio = (Math.PI * 5.08) / 1440;
+
     return Arrays.asList(
-        -frontLeft.getCurrentPosition(),
-        -frontRight.getCurrentPosition(),
-        -backLeft.getCurrentPosition());
+        -frontLeft.getCurrentPosition() * ratio,
+        -frontRight.getCurrentPosition() * ratio,
+        -backLeft.getCurrentPosition() * ratio
+    );
   }
 
   public Pose2d getPosition() {
-    return position;
+    double ratio = (Math.PI * 5.08) / 1440;
+    return new Pose2d(position.getX(), position.getY(), position.getHeading());
   }
 
   public void setPosition(Pose2d pos) {
