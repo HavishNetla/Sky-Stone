@@ -48,6 +48,9 @@ public class ThreeWheelLocalizer {
       double c = 11 * 2 * Math.PI;
       double dL = wheelPositions.get(0) - lastWheelPositions.get(0);
       double dR = wheelPositions.get(1) - lastWheelPositions.get(1);
+
+      dTheta = ((dR - dL) / chassisWidth);
+
       double dM = wheelPositions.get(2) - lastWheelPositions.get(2) - (c / (2 * Math.PI) * dTheta);
 
       telemetry.addData("dl", dL);
@@ -55,7 +58,6 @@ public class ThreeWheelLocalizer {
       telemetry.addData("dM", dM);
 
       double dS = (dR + dL) / 2.0;
-      dTheta = ((dR - dL) / chassisWidth);
 
       telemetry.addData("dS", dS);
       telemetry.addData("dTheta", dTheta);

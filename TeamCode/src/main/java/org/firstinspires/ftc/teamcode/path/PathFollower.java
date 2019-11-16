@@ -54,6 +54,9 @@ public class PathFollower {
     lookAheadPoint = point;
     return goToPoint(new Vector2d(point.getX(), point.getY()), pose, followAngle, speed, turnSpeed);
   }
+  public Vector2d getLookAheadPoint() {
+    return lookAheadPoint;
+  }
 
   /**
    * @param pose The current Pose of the robot
