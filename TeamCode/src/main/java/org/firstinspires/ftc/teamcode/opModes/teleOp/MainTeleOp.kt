@@ -54,9 +54,9 @@ class MainTeleOp : OpMode() {
 
         //telemetry.addData("Position", robot.drive.position)
 
-        var fixPos = Pose2d(robot.drive.position.x, robot.drive.position.y, -robot.drive.position.heading * (180 / Math.PI))
+        var fixPos = Pose2d(robot.drive.position.x, robot.drive.position.y, robot.drive.position.heading * (180 / Math.PI))
         ComputerDebugging.sendRobotLocation(fixPos)
-        ComputerDebugging.sendNoClear(robot.drive.position.pos())
+        //ComputerDebugging.sendNoClear(robot.drive.position.pos())
         //ComputerDebugging.sendPoint(pathFollower.lookAheadPoint)
         ComputerDebugging.sendPacket()
     }
