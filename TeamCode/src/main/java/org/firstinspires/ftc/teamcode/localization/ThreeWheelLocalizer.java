@@ -53,22 +53,12 @@ public class ThreeWheelLocalizer {
 
       double dM = wheelPositions.get(2) - lastWheelPositions.get(2) - (c / (2 * Math.PI) * dTheta);
 
-      telemetry.addData("dl", dL);
-      telemetry.addData("dR", dR);
-      telemetry.addData("dM", dM);
-
       double dS = (dR + dL) / 2.0;
 
-      telemetry.addData("dS", dS);
-      telemetry.addData("dTheta", dTheta);
-
       double avgTheta = theta + dTheta / 2.0;
-      telemetry.addData("dTheta", dTheta);
 
       double dY = dS * Math.sin(avgTheta) - dM * Math.cos(avgTheta);
       double dX = dS * Math.cos(avgTheta) + dM * Math.sin(avgTheta);
-      telemetry.addData("dX", dX);
-      telemetry.addData("dY", dY);
 
       // Update current robot position.
       x += dX;

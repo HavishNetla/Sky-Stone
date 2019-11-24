@@ -22,9 +22,10 @@ public class PathFollower {
 
   public static double[] goToPoint(
       Vector2d goal, Pose2d pose, double preferredAngle, double speed, double turnSpeed) {
+    double fixedHeading = Math.toDegrees(pose.getHeading()) + 90;
     double absoluteAngleToTarget =
         90 - Math.toDegrees(Math.atan2(goal.getY() - pose.getY(), goal.getX() - pose.getX()));
-    double relativeAngleToPoint = absoluteAngleToTarget - pose.getHeading();
+    double relativeAngleToPoint = absoluteAngleToTarget - fixedHeading;
 
     double relativeXToPoint = goal.getX() - pose.getX();
     double relativeYToPoint = goal.getY() - pose.getY();
@@ -35,7 +36,7 @@ public class PathFollower {
     System.out.println("35" + movementXPower + ", " + movementYPower);
 
     Vector2d rotated =
-        new Vector2d(movementXPower, movementYPower).rotated(Math.toRadians(pose.getHeading()));
+        new Vector2d(movementXPower, movementYPower).rotated(Math.toRadians(fixedHeading));
 
     System.out.println("41" + rotated);
 
@@ -75,7 +76,9 @@ public class PathFollower {
       double closestAngle = 1000000;
       for (Vector2d intersection : intersectionsinPath) {
         double angle = Math.toDegrees(Math.atan2(intersection.getY() - pose.getY(), intersection.getX() - pose.getX()));
-        double newAngle = pose.getHeading() < 0 ? 360 + pose.getHeading() : pose.getHeading();
+
+        double angleFix = Math.toDegrees(pose.getHeading()) + 90;
+        double newAngle = angleFix < 0 ? 360 + angleFix : angleFix;
         double deltaAngle = Math.abs(angle - newAngle);
 
         if (deltaAngle < closestAngle) {
