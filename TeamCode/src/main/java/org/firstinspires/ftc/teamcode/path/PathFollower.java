@@ -46,7 +46,7 @@ public class PathFollower {
 
     movement_turn = Range.clip((relativeTurnAngle / Math.toRadians(30)), -1, 1) * turnSpeed;
 
-    return new double[] {movement_x, movement_y, movement_turn};
+    return new double[] {movement_x, movement_y, 0};
   }
 
   public double[] followCurve(double followAngle, Pose2d pose, double speed, double turnSpeed) {
