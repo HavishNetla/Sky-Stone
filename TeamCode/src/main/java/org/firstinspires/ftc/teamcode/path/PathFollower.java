@@ -23,7 +23,7 @@ public class PathFollower {
   }
 
   public static double[] goToPoint(
-      Vector2d goal, Pose2d pose, double preferredAngle, double speed, double turnSpeed) {
+          Vector2d goal, Pose2d pose, double preferredAngle, double speed, double turnSpeed) {
     double dist = Math.hypot(goal.getX() - pose.getX(), goal.getY() - pose.getY());
 
     double fixedHeading = pose.getHeading();
@@ -46,7 +46,7 @@ public class PathFollower {
 
     movement_turn = Range.clip((relativeTurnAngle / Math.toRadians(30)), -1, 1) * turnSpeed;
 
-    return new double[] {movement_x, movement_y, 0};
+    return new double[] {movement_x, movement_y, movement_turn};
   }
 
   public double[] followCurve(double followAngle, Pose2d pose, double speed, double turnSpeed) {
@@ -70,14 +70,14 @@ public class PathFollower {
     // Loop through the path and find all intersections
     for (int i = 0; i < path.size(); i++) {
       ArrayList<Vector2d> intersectionsinPath =
-          MyMath.lineCircleIntersection(
-              pose.pos(), lookAheadDist, path.get(i).start, path.get(i).end);
+              MyMath.lineCircleIntersection(
+                      pose.pos(), lookAheadDist, path.get(i).start, path.get(i).end);
 
       double closestAngle = 1000000;
       for (Vector2d intersection : intersectionsinPath) {
         double angle =
-            Math.toDegrees(
-                Math.atan2(intersection.getY() - pose.getY(), intersection.getX() - pose.getX()));
+                Math.toDegrees(
+                        Math.atan2(intersection.getY() - pose.getY(), intersection.getX() - pose.getX()));
 
         double angleFix = Math.toDegrees(pose.getHeading()) + 90;
         double newAngle = angleFix < 0 ? 360 + angleFix : angleFix;
