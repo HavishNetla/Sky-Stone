@@ -8,6 +8,8 @@ import org.firstinspires.ftc.teamcode.util.Vector2d;
 
 import java.util.ArrayList;
 
+import static org.firstinspires.ftc.teamcode.util.MyMath.AngleWrap;
+
 public class PathFollower {
   public static Vector2d lookAheadPoint;
   static double movement_x, movement_y, movement_turn;
@@ -22,30 +24,27 @@ public class PathFollower {
 
   public static double[] goToPoint(
       Vector2d goal, Pose2d pose, double preferredAngle, double speed, double turnSpeed) {
-    double fixedHeading = Math.toDegrees(pose.getHeading()) + 90;
-    double absoluteAngleToTarget =
-        90 - Math.toDegrees(Math.atan2(goal.getY() - pose.getY(), goal.getX() - pose.getX()));
-    double relativeAngleToPoint = absoluteAngleToTarget - fixedHeading;
+    double dist = Math.hypot(goal.getX() - pose.getX(), goal.getY() - pose.getY());
 
-    double relativeXToPoint = goal.getX() - pose.getX();
-    double relativeYToPoint = goal.getY() - pose.getY();
+    double fixedHeading = pose.getHeading();
+    double absoluteAngleToTarget = Math.atan2(goal.getY() - pose.getY(), goal.getX() - pose.getX());
 
-    double movementXPower = Range.clip(relativeXToPoint / 30, -1, 1);
-    double movementYPower = Range.clip(relativeYToPoint / 30, -1, 1);
+    double relativeAngleToPoint = AngleWrap(fixedHeading - absoluteAngleToTarget);
 
-    System.out.println("35" + movementXPower + ", " + movementYPower);
+    double relativeYToPoint = Math.cos(relativeAngleToPoint) * dist;
+    double relativeXToPoint = Math.sin(relativeAngleToPoint) * dist;
+    System.out.println("heading: " + fixedHeading);
+    System.out.println("rel: " + Math.toDegrees(relativeAngleToPoint) + ", hypit: " + dist);
+    System.out.println("relx: " + relativeXToPoint + ", " + "rely: " + relativeYToPoint);
+    double movementXPower = relativeXToPoint / (Math.abs(relativeXToPoint) + Math.abs(relativeYToPoint));
+    double movementYPower = relativeYToPoint / (Math.abs(relativeXToPoint) + Math.abs(relativeYToPoint));
 
-    Vector2d rotated =
-        new Vector2d(movementXPower, movementYPower).rotated(Math.toRadians(fixedHeading));
-
-    System.out.println("41" + rotated);
-
-    movement_x = rotated.getX() * speed;
-    movement_y = rotated.getY() * speed;
+    movement_x = movementXPower * speed;
+    movement_y = movementYPower * speed;
 
     double relativeTurnAngle = relativeAngleToPoint + preferredAngle;
 
-    movement_turn = Range.clip((relativeTurnAngle) / 30, -1, 1) * turnSpeed;
+    movement_turn = Range.clip((relativeTurnAngle / Math.toRadians(30)), -1, 1) * turnSpeed;
 
     return new double[] {movement_x, movement_y, movement_turn};
   }
@@ -55,6 +54,7 @@ public class PathFollower {
     lookAheadPoint = point;
     return goToPoint(new Vector2d(point.getX(), point.getY()), pose, followAngle, speed, turnSpeed);
   }
+
   public Vector2d getLookAheadPoint() {
     return lookAheadPoint;
   }
@@ -75,7 +75,9 @@ public class PathFollower {
 
       double closestAngle = 1000000;
       for (Vector2d intersection : intersectionsinPath) {
-        double angle = Math.toDegrees(Math.atan2(intersection.getY() - pose.getY(), intersection.getX() - pose.getX()));
+        double angle =
+            Math.toDegrees(
+                Math.atan2(intersection.getY() - pose.getY(), intersection.getX() - pose.getX()));
 
         double angleFix = Math.toDegrees(pose.getHeading()) + 90;
         double newAngle = angleFix < 0 ? 360 + angleFix : angleFix;

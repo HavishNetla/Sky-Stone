@@ -5,11 +5,11 @@ import java.util.ArrayList;
 public class MyMath {
 
   public static double AngleWrap(double angle) {
-    while (angle < -180) {
-      angle += 360;
+    while (angle < -Math.PI) {
+      angle += 2 * Math.PI;
     }
-    while (angle > 180) {
-      angle -= 360;
+    while (angle > Math.PI) {
+      angle -= 2 * Math.PI;
     }
     return angle;
   }
@@ -117,13 +117,12 @@ public class MyMath {
   }
 
   /**
-   *
    * @param orig Vector to rotate
    * @param angle Angle in degrees to rotate by
    * @return a rotated vector
    */
   public static Vector2d rotateVector(Vector2d orig, double angle) {
-    Vector2d rotated = new Vector2d(0,0);
+    Vector2d rotated = new Vector2d(0, 0);
     double angleRad = Math.toRadians(angle);
 
     rotated.setX(orig.getX() * Math.cos(angleRad) - orig.getY() * Math.sin(angleRad));

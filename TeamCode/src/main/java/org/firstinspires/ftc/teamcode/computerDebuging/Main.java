@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.computerDebuging;
 
+import org.firstinspires.ftc.teamcode.util.Pose2d;
+
 public class Main {
   public static void main(String[] args) {
     ComputerDebugging computerDebugging = new ComputerDebugging();
@@ -21,7 +23,8 @@ public class Main {
 
       }
       robot.update();
-      computerDebugging.sendRobotLocation(robot.robotPos);
+      Pose2d fixPos = new Pose2d(Robot.robotPos.getX(), Robot.robotPos.getY(), Robot.robotPos.getHeading() * (180 / Math.PI));
+      computerDebugging.sendRobotLocation(fixPos);
       computerDebugging.sendPacket();
     }
   }
