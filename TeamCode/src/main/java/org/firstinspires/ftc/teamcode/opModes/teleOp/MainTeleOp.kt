@@ -52,7 +52,6 @@ class MainTeleOp : OpMode() {
 
         robot.drive.setVelocity(
                 Vector2d(powers[0], powers[1]), powers[2])
-        robot.update()
 
 
 //        robot.drive.setVelocity(
