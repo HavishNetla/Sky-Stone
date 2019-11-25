@@ -9,7 +9,7 @@ public class Robot {
   private long lastTime = 0;
 
   public Robot() {
-    robotPos = new Pose2d(0, 0, 90);
+    robotPos = new Pose2d(15, 15, Math.PI / 2);
   }
 
   public void update() {
@@ -21,11 +21,11 @@ public class Robot {
 
     Vector2d powers = new Vector2d(x, y);
 
-    Vector2d rotatedPowers = powers.rotated(Math.toRadians(-robotPos.getHeading()));
+    Vector2d rotatedPowers = powers.rotated(robotPos.getHeading() - Math.PI / 2);
 
     robotPos.setX(robotPos.getX() + rotatedPowers.getX() * elapsedTime * 1000 * 0.2);
     robotPos.setY(robotPos.getY() + rotatedPowers.getY() * elapsedTime * 1000 * 0.2);
-    robotPos.setHeading(robotPos.getHeading() + c * elapsedTime * 100);
+    robotPos.setHeading(robotPos.getHeading() + Math.toRadians(-c) * elapsedTime * 100);
 
     ComputerDebugging.sendNoClear(robotPos.pos());
   }
