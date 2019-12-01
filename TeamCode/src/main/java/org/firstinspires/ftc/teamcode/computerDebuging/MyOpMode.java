@@ -10,16 +10,16 @@ import java.util.ArrayList;
 
 public class MyOpMode extends OpMode {
   public static ArrayList<PathSegment> path;
-  public static PathBuilder t = new PathBuilder(new Pose2d(22.86, 60.96, 90));
+  public static PathBuilder t = new PathBuilder(new Pose2d(15.0, 15.0, 0));
 
   @Override
   public void init() {
-    //    path = t.addPoint(new Vector2d(100, 30), "moving forward")
-    //            .addPoint(new Vector2d(30, 200), "moving forward")
-    //            .addPoint(new Vector2d(200, 300), "moving forward")
-    //            .create();
+        path = t.addPoint(new Vector2d(61 * 2, 30.48 * 2), "moving forward")
+                .addPoint(new Vector2d(30 * 2, 45.72 * 2), "moving forward")
+                .addPoint(new Vector2d(45.72 * 2, 152.4 * 2), "moving forward")
+                .create();
 
-    path = t.addPoint(new Vector2d(15, 200), "moving forward").create();
+//    path = t.addPoint(new Vector2d(15, 200), "moving forward").create();
 
     ComputerDebugging.sendPaths(path);
     ComputerDebugging.sendPacket();
@@ -27,12 +27,13 @@ public class MyOpMode extends OpMode {
 
   @Override
   public void loop() {
-    PathFollower pathFollower = new PathFollower(path, 19.685 * 2.54);
+    PathFollower pathFollower = new PathFollower(path, 10.0);
 
     ComputerDebugging.sendPaths(path);
 
-    double[] powers = pathFollower.followCurve(0, Robot.robotPos, 0.5, 2);
-
+        double[] powers = pathFollower.followCurve(0, Robot.robotPos, 0.5, 2);
+//    double[] powers =
+//        PathFollower.goToPoint(new Vector2d(15.0, 200.0), Robot.robotPos, 0, 0.5, 2.0);
     ComputerDebugging.sendPoint(pathFollower.lookAheadPoint);
 
     Robot.x = powers[0];

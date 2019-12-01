@@ -15,10 +15,13 @@ class MainTeleOp : OpMode() {
     private lateinit var computerDebugging: ComputerDebugging
     var t = PathBuilder(Pose2d(15.0, 15.0, 0.0))
 
-    var path = t.addPoint(Vector2d(15.0, 200.0), "moving forward").create()
+    var path = t.addPoint(Vector2d((61 * 2).toDouble(), 30.48 * 2), "moving forward")
+            .addPoint(Vector2d((30 * 2).toDouble(), 45.72 * 2), "moving forward")
+            .addPoint(Vector2d(45.72 * 2, 152.4 * 2), "moving forward")
+            .create()
 
 
-    val pathFollower = PathFollower(path, 19.685 * 2.54)
+    val pathFollower = PathFollower(path, 10.0)
 
     override fun init() {
         robot = Robot(this, this.telemetry)
@@ -28,7 +31,6 @@ class MainTeleOp : OpMode() {
 
         ComputerDebugging.sendPaths(path)
         ComputerDebugging.sendPacket()
-
     }
 
     override fun loop() {
@@ -38,8 +40,8 @@ class MainTeleOp : OpMode() {
 
         ComputerDebugging.sendPaths(path)
 
-//        val powers = pathFollower.followCurve(0.0, robot.drive.position, 0.5, 2.0)
-        val powers = PathFollower.goToPoint(Vector2d(15.0, 100.0), robot.drive.position, 0.0, 0.5, 2.0)
+        val powers = pathFollower.followCurve(0.0, robot.drive.position, 0.5, 2.0)
+//        val powers = PathFollower.goToPoint(Vector2d(15.0, 100.0), robot.drive.position, 0.0, 0.5, 2.0)
 
         robot.drive.setVelocity(
                 Vector2d(powers[0], powers[1]), powers[2])

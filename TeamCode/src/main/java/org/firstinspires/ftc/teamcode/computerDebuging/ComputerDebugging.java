@@ -18,6 +18,12 @@ public class ComputerDebugging {
     messageBuilder = new StringBuilder();
     Thread runner = new Thread(udpServer);
     runner.start();
+
+    sendInit();
+  }
+
+  public static void sendInit() {
+    messageBuilder.append("CLEARINIT:");
   }
 
   public static void sendRobotLocation(Pose2d pose) {
@@ -41,9 +47,22 @@ public class ComputerDebugging {
     messageBuilder.append(path.get(0).end);
 
     for (int i = 1; i < path.size(); i++) {
-      messageBuilder.append(",");
-      messageBuilder.append(path.get(i).end);
+        messageBuilder.append(",");
+        messageBuilder.append(path.get(i).end);
+
+        if(i == path.size() - 1) {
+          messageBuilder.append("%");
+          sendPaths1(path.get(i));
+        }
     }
+  }
+
+  public static void sendPaths1(PathSegment segment) {
+    messageBuilder.append("LINECOLOR:");
+    messageBuilder.append(segment.start);
+    messageBuilder.append(",");
+    messageBuilder.append(segment.end);
+
     messageBuilder.append("%");
   }
 

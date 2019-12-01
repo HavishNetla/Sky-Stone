@@ -36,6 +36,8 @@ public class PathBuilder {
     PathSegment newPoint = new PathSegment(seg.end, new Vector2d(seg.end.getX() + dX, seg.end.getY() + dY), "extend");
 
     path.add(newPoint);
+
+    System.out.println("n: " + newPoint);
     return path;
   }
 }

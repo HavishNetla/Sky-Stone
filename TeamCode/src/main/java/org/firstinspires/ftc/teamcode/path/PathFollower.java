@@ -12,7 +12,12 @@ import static org.firstinspires.ftc.teamcode.util.MyMath.AngleWrap;
 
 public class PathFollower {
   public static Vector2d lookAheadPoint;
+  public static boolean first = true;
+  public static double ogDist;
+  public static boolean hasReachedEnd = false;
+  public static Vector2d followPoint = new Vector2d(0.0, 0.0);
   static double movement_x, movement_y, movement_turn;
+  boolean done = false;
   private ArrayList<PathSegment> path;
   private double lookAheadDist;
 
@@ -23,9 +28,14 @@ public class PathFollower {
   }
 
   public static double[] goToPoint(
-          Vector2d goal, Pose2d pose, double preferredAngle, double speed, double turnSpeed) {
-    double dist = Math.hypot(goal.getX() - pose.getX(), goal.getY() - pose.getY());
+      Vector2d goal, Pose2d pose, double preferredAngle, double speed, double turnSpeed) {
 
+    if (first) {
+      ogDist = Math.hypot(goal.getX() - pose.getX(), goal.getY() - pose.getY());
+      first = false;
+    }
+
+    double dist = Math.hypot(goal.getX() - pose.getX(), goal.getY() - pose.getY()) / ogDist;
     double fixedHeading = pose.getHeading();
     double absoluteAngleToTarget = Math.atan2(goal.getY() - pose.getY(), goal.getX() - pose.getX());
 
@@ -34,11 +44,13 @@ public class PathFollower {
     double relativeYToPoint = Math.cos(relativeAngleToPoint) * dist;
     double relativeXToPoint = Math.sin(relativeAngleToPoint) * dist;
 
-    double movementXPower = relativeXToPoint / (Math.abs(relativeXToPoint) + Math.abs(relativeYToPoint));
-    double movementYPower = relativeYToPoint / (Math.abs(relativeXToPoint) + Math.abs(relativeYToPoint));
+    //    double movementXPower =
+    //        relativeXToPoint / (Math.abs(relativeXToPoint) + Math.abs(relativeYToPoint));
+    //    double movementYPower =
+    //        relativeYToPoint / (Math.abs(relativeXToPoint) + Math.abs(relativeYToPoint));
 
-    movement_x = movementXPower * speed;
-    movement_y = movementYPower * speed;
+    movement_x = relativeXToPoint * speed;
+    movement_y = relativeYToPoint * speed;
 
     double relativeTurnAngle = relativeAngleToPoint + preferredAngle;
 
@@ -47,19 +59,19 @@ public class PathFollower {
     return new double[] {movement_x, movement_y, movement_turn};
   }
 
-  boolean done = false;
   public double[] followCurve(double followAngle, Pose2d pose, double speed, double turnSpeed) {
-    Vector2d followPoint;
     Vector2d point = getLookAheadPoint(pose);
     lookAheadPoint = point;
+    System.out.println("stage: " + getStage(lookAheadPoint));
 
-    System.out.println(getStage(lookAheadPoint));
-
-    if(!done && getStage(lookAheadPoint).equals("extend")) {
-      done = true;
-      followPoint =  path.get(path.size() - 2).end;
-    } else {
-      followPoint = point;
+    String f = getStage(lookAheadPoint);
+    if (!hasReachedEnd) {
+      if (f.equals("extend")) {
+        followPoint = path.get(path.size() - 2).end;
+        hasReachedEnd = true;
+      } else {
+        followPoint = point;
+      }
     }
 
     return goToPoint(followPoint, pose, followAngle, speed, turnSpeed);
@@ -71,7 +83,7 @@ public class PathFollower {
         return segment.label;
       }
     }
-    return "none";
+    return "none: " + point;
   }
 
   public Vector2d getLookAheadPoint() {
