@@ -14,10 +14,12 @@ public class MyOpMode extends OpMode {
 
   @Override
   public void init() {
-    path = t.addPoint(new Vector2d(100, 30), "moving forward")
-            .addPoint(new Vector2d(30, 200), "moving forward")
-            .addPoint(new Vector2d(200, 300), "moving forward")
-            .create();
+    //    path = t.addPoint(new Vector2d(100, 30), "moving forward")
+    //            .addPoint(new Vector2d(30, 200), "moving forward")
+    //            .addPoint(new Vector2d(200, 300), "moving forward")
+    //            .create();
+
+    path = t.addPoint(new Vector2d(15, 200), "moving forward").create();
 
     ComputerDebugging.sendPaths(path);
     ComputerDebugging.sendPacket();
@@ -30,14 +32,11 @@ public class MyOpMode extends OpMode {
     ComputerDebugging.sendPaths(path);
 
     double[] powers = pathFollower.followCurve(0, Robot.robotPos, 0.5, 2);
+
     ComputerDebugging.sendPoint(pathFollower.lookAheadPoint);
-    //double[] powers =
-    //    pathFollower.goToPoint(new Vector2d(100, 100), Robot.robotPos, 0, 0.25, 0.25);
-    System.out.println("powers: " + powers[0] + ", " + powers[1] + ", " + powers[2]);
+
     Robot.x = powers[0];
     Robot.y = powers[1];
     Robot.c = powers[2];
-    // pathFollower.update(fixPos);
-
   }
 }

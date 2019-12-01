@@ -33,9 +33,7 @@ public class PathFollower {
 
     double relativeYToPoint = Math.cos(relativeAngleToPoint) * dist;
     double relativeXToPoint = Math.sin(relativeAngleToPoint) * dist;
-    System.out.println("heading: " + fixedHeading);
-    System.out.println("rel: " + Math.toDegrees(relativeAngleToPoint) + ", hypit: " + dist);
-    System.out.println("relx: " + relativeXToPoint + ", " + "rely: " + relativeYToPoint);
+
     double movementXPower = relativeXToPoint / (Math.abs(relativeXToPoint) + Math.abs(relativeYToPoint));
     double movementYPower = relativeYToPoint / (Math.abs(relativeXToPoint) + Math.abs(relativeYToPoint));
 
@@ -49,10 +47,31 @@ public class PathFollower {
     return new double[] {movement_x, movement_y, movement_turn};
   }
 
+  boolean done = false;
   public double[] followCurve(double followAngle, Pose2d pose, double speed, double turnSpeed) {
+    Vector2d followPoint;
     Vector2d point = getLookAheadPoint(pose);
     lookAheadPoint = point;
-    return goToPoint(new Vector2d(point.getX(), point.getY()), pose, followAngle, speed, turnSpeed);
+
+    System.out.println(getStage(lookAheadPoint));
+
+    if(!done && getStage(lookAheadPoint).equals("extend")) {
+      done = true;
+      followPoint =  path.get(path.size() - 2).end;
+    } else {
+      followPoint = point;
+    }
+
+    return goToPoint(followPoint, pose, followAngle, speed, turnSpeed);
+  }
+
+  public String getStage(Vector2d point) {
+    for (PathSegment segment : this.path) {
+      if (segment.start.dist(point) + segment.end.dist(point) == segment.start.dist(segment.end)) {
+        return segment.label;
+      }
+    }
+    return "none";
   }
 
   public Vector2d getLookAheadPoint() {
@@ -70,14 +89,14 @@ public class PathFollower {
     // Loop through the path and find all intersections
     for (int i = 0; i < path.size(); i++) {
       ArrayList<Vector2d> intersectionsinPath =
-              MyMath.lineCircleIntersection(
-                      pose.pos(), lookAheadDist, path.get(i).start, path.get(i).end);
+          MyMath.lineCircleIntersection(
+              pose.pos(), lookAheadDist, path.get(i).start, path.get(i).end);
 
       double closestAngle = 1000000;
       for (Vector2d intersection : intersectionsinPath) {
         double angle =
-                Math.toDegrees(
-                        Math.atan2(intersection.getY() - pose.getY(), intersection.getX() - pose.getX()));
+            Math.toDegrees(
+                Math.atan2(intersection.getY() - pose.getY(), intersection.getX() - pose.getX()));
 
         double angleFix = Math.toDegrees(pose.getHeading()) + 90;
         double newAngle = angleFix < 0 ? 360 + angleFix : angleFix;

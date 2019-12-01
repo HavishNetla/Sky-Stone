@@ -28,6 +28,14 @@ public class PathBuilder {
   }
 
   public ArrayList<PathSegment> create() {
+    PathSegment seg = path.get(path.size() - 1);
+
+    double dX = seg.end.getX() - seg.start.getX();
+    double dY = seg.end.getY() - seg.start.getY();
+
+    PathSegment newPoint = new PathSegment(seg.end, new Vector2d(seg.end.getX() + dX, seg.end.getY() + dY), "extend");
+
+    path.add(newPoint);
     return path;
   }
 }

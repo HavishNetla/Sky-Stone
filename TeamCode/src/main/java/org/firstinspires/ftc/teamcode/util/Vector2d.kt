@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.util
 
+import kotlin.math.pow
+import kotlin.math.sqrt
+
 class Vector2d(var x: Double, var y: Double) {
 
     // =============================================
@@ -46,6 +49,10 @@ class Vector2d(var x: Double, var y: Double) {
         // 10 * 0              + 0
         val newY = x * Math.sin(angle) + y * Math.cos(angle)
         return Vector2d(newX, newY)
+    }
+
+    fun dist(other: Vector2d): Double {
+        return sqrt((this.x - other.x).pow(2.0) + (this.y - other.y).pow(2.0))
     }
 
     override fun toString(): String {
