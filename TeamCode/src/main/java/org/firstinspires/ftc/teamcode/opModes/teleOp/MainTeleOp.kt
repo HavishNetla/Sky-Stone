@@ -15,9 +15,10 @@ class MainTeleOp : OpMode() {
     private lateinit var computerDebugging: ComputerDebugging
     var t = PathBuilder(Pose2d(15.0, 15.0, 0.0))
 
-    var path = t.addPoint(Vector2d((61 * 2).toDouble(), 30.48 * 2), "moving forward")
-            .addPoint(Vector2d((30 * 2).toDouble(), 45.72 * 2), "moving forward")
-            .addPoint(Vector2d(45.72 * 2, 152.4 * 2), "moving forward")
+    var path = t
+            .addPoint(Vector2d(200.0, 30.0), "moving forward")
+//            .addPoint(Vector2d(30.0 * 2, 45.72 * 2), "moving forward")
+//            .addPoint(Vector2d(45.72 * 2, 152.4 * 2), "moving forward")
             .create()
 
 
@@ -34,21 +35,23 @@ class MainTeleOp : OpMode() {
     }
 
     override fun loop() {
+        ComputerDebugging.sendPaths(path)
         robot.update()
 
-        //pathFollower.update(robot.drive.position)
-
-        ComputerDebugging.sendPaths(path)
-
         val powers = pathFollower.followCurve(0.0, robot.drive.position, 0.5, 2.0)
-//        val powers = PathFollower.goToPoint(Vector2d(15.0, 100.0), robot.drive.position, 0.0, 0.5, 2.0)
 
         robot.drive.setVelocity(
-                Vector2d(powers[0], powers[1]), powers[2])
+                Vector2d(0.0, powers[1]), 0.0)
+
+        telemetry.addData("x", powers[0])
+        telemetry.addData("y", powers[1])
+        telemetry.addData("c", powers[2])
+
+        telemetry.addData("pos", robot.drive.position)
 
         var fixPos = Pose2d(robot.drive.position.x, robot.drive.position.y, robot.drive.position.heading * (180 / Math.PI))
+
         ComputerDebugging.sendRobotLocation(fixPos)
-        //ComputerDebugging.sendNoClear(robot.drive.position.pos())
         ComputerDebugging.sendPoint(pathFollower.getLookAheadPoint(robot.drive.position))
         ComputerDebugging.sendPacket()
     }

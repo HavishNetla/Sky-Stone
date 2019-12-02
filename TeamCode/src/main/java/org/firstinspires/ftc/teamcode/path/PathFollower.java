@@ -59,10 +59,9 @@ public class PathFollower {
     return new double[] {movement_x, movement_y, movement_turn};
   }
 
-  public double[] followCurve(double followAngle, Pose2d pose, double speed, double turnSpeed) {
+  public double[] followCurve(double    followAngle, Pose2d pose, double speed, double turnSpeed) {
     Vector2d point = getLookAheadPoint(pose);
     lookAheadPoint = point;
-    System.out.println("stage: " + getStage(lookAheadPoint));
 
     String f = getStage(lookAheadPoint);
     if (!hasReachedEnd) {
