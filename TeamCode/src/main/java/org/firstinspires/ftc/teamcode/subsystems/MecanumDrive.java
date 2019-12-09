@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.localization.ThreeWheelLocalizer;
 import org.firstinspires.ftc.teamcode.path.PathFollower;
 import org.firstinspires.ftc.teamcode.path.PathSegment;
 import org.firstinspires.ftc.teamcode.util.Pose2d;
+import org.firstinspires.ftc.teamcode.util.StringUtils;
 import org.firstinspires.ftc.teamcode.util.Vector2d;
 
 import java.util.ArrayList;
@@ -170,9 +171,9 @@ public class MecanumDrive extends Subsystem {
     return localizerMode;
   }
 
-  public String getF() {
-    return "f";
-  }
+//  public String getStatus() {
+//    return StringUtils.caption("Power", power) + StringUtils.caption("Has Block", hasBlock);
+//  }
 
   @Override
   public void update() {

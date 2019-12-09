@@ -15,6 +15,7 @@ public class Robot implements OpModeManagerNotifier.Notifications {
   // Subsystems
   public MecanumDrive drive;
   public EncoderTest encoderTest;
+  public Intake intake;
 
   private List<Subsystem> subsystems;
   private OpModeManagerImpl opModeManager;
@@ -46,6 +47,9 @@ public class Robot implements OpModeManagerNotifier.Notifications {
     subsystems.add(drive);
 
     encoderTest = new EncoderTest(opMode.hardwareMap);
+    subsystems.add(encoderTest);
+
+    intake = new Intake(opMode.hardwareMap);
     subsystems.add(encoderTest);
 
     subsystemUpdateExecutor = ThreadPool.newSingleThreadExecutor("subsystem update");
