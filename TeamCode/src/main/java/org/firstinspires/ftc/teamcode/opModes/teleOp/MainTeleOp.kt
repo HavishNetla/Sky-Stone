@@ -32,22 +32,26 @@ class MainTeleOp : OpMode() {
 
         ComputerDebugging.sendPaths(path)
         ComputerDebugging.sendPacket()
+        robot.drive.resetEncoders()
+
     }
 
     override fun loop() {
-        ComputerDebugging.sendPaths(path)
+        //ComputerDebugging.sendPaths(path)
         robot.update()
 
-        val powers = pathFollower.followCurve(0.0, robot.drive.position, 0.5, 2.0)
+        robot.drive.setVelocity(Vector2d(gamepad1.left_stick_x.toDouble(), gamepad1.left_stick_y.toDouble()), gamepad1.right_stick_x.toDouble())
 
-        robot.drive.setVelocity(
-                Vector2d(0.0, powers[1]), 0.0)
-
-        telemetry.addData("x", powers[0])
-        telemetry.addData("y", powers[1])
-        telemetry.addData("c", powers[2])
-
-        telemetry.addData("pos", robot.drive.position)
+//        val powers = pathFollower.followCurve(0.0, robot.drive.position, 0.5, 2.0)
+//
+//        robot.drive.setVelocity(
+//                Vector2d(0.0, powers[1]), 0.0)
+//
+//        telemetry.addData("x", powers[0])
+//        telemetry.addData("y", powers[1])
+//        telemetry.addData("c", powers[2])
+//
+//        telemetry.addData("pos", robot.drive.position)
 
         var fixPos = Pose2d(robot.drive.position.x, robot.drive.position.y, robot.drive.position.heading * (180 / Math.PI))
 

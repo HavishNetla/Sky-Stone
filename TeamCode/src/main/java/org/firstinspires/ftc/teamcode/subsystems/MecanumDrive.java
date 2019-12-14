@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.localization.ThreeWheelLocalizer;
 import org.firstinspires.ftc.teamcode.path.PathFollower;
 import org.firstinspires.ftc.teamcode.path.PathSegment;
 import org.firstinspires.ftc.teamcode.util.Pose2d;
-import org.firstinspires.ftc.teamcode.util.StringUtils;
 import org.firstinspires.ftc.teamcode.util.Vector2d;
 
 import java.util.ArrayList;
@@ -17,19 +16,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-
 public class MecanumDrive extends Subsystem {
 
-  public enum Mode {
-    OPEN_LOOP,
-    FOLLOW_PATH,
-  }
-
-  public enum LocalizerMode {
-    THREE_WHEEL_LOCALIZER,
-    NONE,
-  }
-
+  int loopCount = 0;
   private DcMotor frontLeft;
   private DcMotor frontRight;
   private DcMotor backLeft;
@@ -39,7 +28,7 @@ public class MecanumDrive extends Subsystem {
   private LocalizerMode localizerMode = LocalizerMode.THREE_WHEEL_LOCALIZER;
   private Vector2d targetPower = new Vector2d(0, 0);
   private double targetC = 0;
-  private double[] powers = new double[]{0,0,0,0};
+  private double[] powers = new double[] {0, 0, 0, 0};
   private Pose2d position;
   private ThreeWheelLocalizer localizer;
   private Telemetry telemetry;
@@ -63,14 +52,16 @@ public class MecanumDrive extends Subsystem {
     backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+
+    frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     this.telemetry = telemetry;
 
     resetEncoders();
   }
-
-  // ===============================================================================================
-
-  // ===============================================================================================
 
   // Odometry
   public List<Double> getTrackingWheelPositions() {
@@ -79,9 +70,12 @@ public class MecanumDrive extends Subsystem {
     return Arrays.asList(
         -frontLeft.getCurrentPosition() * ratio,
         -frontRight.getCurrentPosition() * ratio,
-        -backLeft.getCurrentPosition() * ratio
-    );
+        -backLeft.getCurrentPosition() * ratio);
   }
+
+  // ===============================================================================================
+
+  // ===============================================================================================
 
   public Pose2d getPosition() {
     double ratio = (Math.PI * 5.08) / 1440;
@@ -95,15 +89,13 @@ public class MecanumDrive extends Subsystem {
   public void followPath(ArrayList<PathSegment> path) {
     setMode(Mode.FOLLOW_PATH);
 
-    pathfollower = new PathFollower(path,19.685 * 2.54);
+    pathfollower = new PathFollower(path, 19.685 * 2.54);
   }
 
-  int loopCount = 0;
   public boolean isRobotStuck() {
-    //loop for 100 loop counts
-    if (loopCount < 100) {
+    // loop for 100 loop counts
+    if (loopCount < 100) {}
 
-    }
     loopCount++;
 
     return false;
@@ -119,41 +111,48 @@ public class MecanumDrive extends Subsystem {
     frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
   }
+
   public void setVelocity(Vector2d vel, double omega) {
     internalSetVelocity(vel, omega);
     setMode(Mode.OPEN_LOOP);
 
     telemetry.addData("vel", vel);
+    telemetry.addData("c", omega);
   }
 
   private void internalSetVelocity(Vector2d vel, double omega) {
     targetPower = vel;
     targetC = omega;
   }
-    // ===============================================================================================
 
   private void updatePowers() {
-    powers[0] = targetPower.getY() + targetPower.getX() + targetC;
-    powers[1] = targetPower.getY() - targetPower.getX() - targetC;
-    powers[2] = targetPower.getY() - targetPower.getX() + targetC;
-    powers[3] = targetPower.getY() + targetPower.getX() - targetC;
+    powers[0] = targetPower.getY() - targetPower.getX() - targetC;
+    powers[1] = targetPower.getY() + targetPower.getX() + targetC;
+    powers[2] = targetPower.getY() + targetPower.getX() - targetC;
+    powers[3] = targetPower.getY() - targetPower.getX() + targetC;
 
-    double max =
-        Collections.max(
-            Arrays.asList(
-                1.0,
-                Math.abs(powers[0]),
-                Math.abs(powers[1]),
-                Math.abs(powers[2]),
-                Math.abs(powers[3])));
+    telemetry.addData("0", powers[0]);
+    telemetry.addData("1", powers[1]);
+    telemetry.addData("2", powers[2]);
+    telemetry.addData("3", powers[3]);
+
+//
+//    double max =
+//        Collections.max(
+//            Arrays.asList(
+//                1.0,
+//                Math.abs(powers[0]),
+//                Math.abs(powers[1]),
+//                Math.abs(powers[2]),
+//                Math.abs(powers[3])));
   }
 
   // GETTERS =======================================================================================
   public double[] getPowers() {
     return powers;
   }
+  // ===============================================================================================
 
   public Mode getMode() {
     return mode;
@@ -170,10 +169,6 @@ public class MecanumDrive extends Subsystem {
   public LocalizerMode getLocalizer() {
     return localizerMode;
   }
-
-//  public String getStatus() {
-//    return StringUtils.caption("Power", power) + StringUtils.caption("Has Block", hasBlock);
-//  }
 
   @Override
   public void update() {
@@ -195,12 +190,23 @@ public class MecanumDrive extends Subsystem {
         break;
     }
 
-    updatePowers();
     frontLeft.setPower(powers[0]);
     frontRight.setPower(powers[1]);
     backLeft.setPower(powers[2]);
     backRight.setPower(powers[3]);
   }
+
+  public enum Mode {
+    OPEN_LOOP,
+    FOLLOW_PATH,
+  }
+
+  //  public String getStatus() {
+  //    return StringUtils.caption("Power", power) + StringUtils.caption("Has Block", hasBlock);
+  //  }
+
+  public enum LocalizerMode {
+    THREE_WHEEL_LOCALIZER,
+    NONE,
+  }
 }
-
-

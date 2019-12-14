@@ -27,7 +27,7 @@ public class ThreeWheelLocalizer {
   public static double dTheta = 0;
   double x = 15, y = 15, theta = 0.0;
   Telemetry telemetry;
-  private double chassisWidth = 38.5; // cm
+  private double chassisWidth = 34.235; // cm
   private Pose2d poseEstimate;
   private List<Double> lastWheelPositions;
   private MecanumDrive drive;
@@ -45,7 +45,7 @@ public class ThreeWheelLocalizer {
   public Pose2d update() {
     List<Double> wheelPositions = drive.getTrackingWheelPositions();
     if (!lastWheelPositions.isEmpty()) {
-      double c = 11 * 2 * Math.PI;
+      double c = 3  * 2 * Math.PI;
       double dL = wheelPositions.get(0) - lastWheelPositions.get(0);
       double dR = wheelPositions.get(1) - lastWheelPositions.get(1);
 
