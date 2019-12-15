@@ -16,6 +16,8 @@ public class PathFollower {
   public static double ogDist;
   public static boolean hasReachedEnd = false;
   public static Vector2d followPoint = new Vector2d(0.0, 0.0);
+  public static double relTurnAngle = 0;
+
   static double movement_x, movement_y, movement_turn;
   boolean done = false;
   private ArrayList<PathSegment> path;
@@ -36,30 +38,31 @@ public class PathFollower {
     }
 
     double dist = Math.hypot(goal.getX() - pose.getX(), goal.getY() - pose.getY()) / ogDist;
-    double fixedHeading = pose.getHeading();
+
     double absoluteAngleToTarget = Math.atan2(goal.getY() - pose.getY(), goal.getX() - pose.getX());
 
-    double relativeAngleToPoint = AngleWrap(fixedHeading - absoluteAngleToTarget);
+    double relativeAngleToPoint = AngleWrap(pose.getHeading() - absoluteAngleToTarget);
 
-    double relativeYToPoint = Math.cos(relativeAngleToPoint) * dist;
-    double relativeXToPoint = Math.sin(relativeAngleToPoint) * dist;
+    double relativeYToPoint = Math.sin(relativeAngleToPoint) * dist;
+    double relativeXToPoint = Math.cos(relativeAngleToPoint) * dist;
 
     //    double movementXPower =
     //        relativeXToPoint / (Math.abs(relativeXToPoint) + Math.abs(relativeYToPoint));
     //    double movementYPower =
     //        relativeYToPoint / (Math.abs(relativeXToPoint) + Math.abs(relativeYToPoint));
 
-    movement_x = relativeXToPoint * speed;
-    movement_y = relativeYToPoint * speed;
+    movement_x = relativeXToPoint;
+    movement_y = relativeYToPoint;
 
     double relativeTurnAngle = relativeAngleToPoint + preferredAngle;
+    relTurnAngle = relativeTurnAngle;
 
-    movement_turn = Range.clip((relativeTurnAngle / Math.toRadians(30)), -1, 1) * turnSpeed;
+    movement_turn = Range.clip((relativeTurnAngle / Math.toRadians(30)), -1, 1) /* turnSpeed*/;
 
-    return new double[] {movement_x, movement_y, movement_turn};
+    return new double[] {movement_x * speed, movement_y * speed, movement_turn * speed};
   }
 
-  public double[] followCurve(double    followAngle, Pose2d pose, double speed, double turnSpeed) {
+  public double[] followCurve(double followAngle, Pose2d pose, double speed, double turnSpeed) {
     Vector2d point = getLookAheadPoint(pose);
     lookAheadPoint = point;
 

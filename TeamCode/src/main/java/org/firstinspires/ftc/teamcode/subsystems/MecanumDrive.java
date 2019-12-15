@@ -70,7 +70,7 @@ public class MecanumDrive extends Subsystem {
     return Arrays.asList(
         -frontLeft.getCurrentPosition() * ratio,
         -frontRight.getCurrentPosition() * ratio,
-        -backLeft.getCurrentPosition() * ratio);
+        backLeft.getCurrentPosition() * ratio);
   }
 
   // ===============================================================================================
@@ -122,7 +122,9 @@ public class MecanumDrive extends Subsystem {
   }
 
   private void internalSetVelocity(Vector2d vel, double omega) {
-    targetPower = vel;
+    targetPower = new Vector2d(vel.getY(), -vel.getX());
+
+    targetPower = targetPower.rotated(position.getHeading());
     targetC = omega;
   }
 

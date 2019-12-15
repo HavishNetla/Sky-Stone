@@ -23,7 +23,7 @@ public class ComputerDebugging {
   }
 
   public static void sendInit() {
-    messageBuilder.append("CLEARINIT:");
+    messageBuilder.append("CLEARINIT:%");
   }
 
   public static void sendRobotLocation(Pose2d pose) {
@@ -52,6 +52,7 @@ public class ComputerDebugging {
 
         if(i == path.size() - 1) {
           messageBuilder.append("%");
+          System.out.println("ffff");
           sendPaths1(path.get(i));
         }
     }
@@ -77,6 +78,12 @@ public class ComputerDebugging {
     messageBuilder.append("POINT1:");
     messageBuilder.append(point.toString());
 
+    messageBuilder.append("%");
+  }
+
+  public static void sendLog(String message) {
+    messageBuilder.append("DEBUG:");
+    messageBuilder.append(message);
     messageBuilder.append("%");
   }
 
