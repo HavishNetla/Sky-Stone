@@ -20,23 +20,24 @@ class MainTeleOp : OpMode() {
 
     var path = t
             .addPoint(Vector2d(15.0, 200.0), "moving forward")
+            .addPoint(Vector2d(200.0, 200.0), "moving forward")
 //            .addPoint(Vector2d(30.0 * 2, 45.72 * 2), "moving forward")
 //            .addPoint(Vector2d(45.72 * 2, 152.4 * 2), "moving forward")
             .create()
 
 
-    val pathFollower = PathFollower(path, 10.0)
+    val pathFollower = PathFollower(path, 35.0)
 
     override fun init() {
         robot = Robot(this, this.telemetry)
         robot.start()
-
+lKm7
         computerDebugging = ComputerDebugging()
 
         ComputerDebugging.sendPaths(path)
-        //ComputerDebugging.sendPacket()
-        robot.drive.resetEncoders()
+        ComputerDebugging.sendPacket()
 
+        robot.drive.resetEncoders()
     }
 
     override fun loop() {
@@ -46,15 +47,12 @@ class MainTeleOp : OpMode() {
 //        robot.drive.setVelocity(Vector2d(gamepad1.left_stick_x.toDouble(), gamepad1.left_stick_y.toDouble()), gamepad1.right_stick_x.toDouble())
 
         val powers = pathFollower.followCurve(0.0, robot.drive.position, 0.25, 2.0)
+//        val powers = PathFollower.goToPoint(Vector2d(15.0, 50.0), robot.drive.position, 0.0, 0.5, 0.25)
 
-//        robot.drive.setVelocity(
-//                Vector2d(-powers[0], powers[1]), 0.0)
+        robot.drive.setVelocity(
+                Vector2d(powers[1], -powers[0]), powers[1])
 
         var fixPos = Pose2d(robot.drive.position.x, robot.drive.position.y, robot.drive.position.heading * (180 / Math.PI))
-
-        telemetry.addData("left", robot.drive.trackingWheelPositions[0])
-        telemetry.addData("right", robot.drive.trackingWheelPositions[1])
-        telemetry.addData("center", robot.drive.trackingWheelPositions[2])
 
         ComputerDebugging.sendRobotLocation(fixPos)
         ComputerDebugging.sendPoint(pathFollower.getLookAheadPoint(robot.drive.position))
