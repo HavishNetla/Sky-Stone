@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.util.Vector2d;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class MecanumDrive extends Subsystem {
@@ -33,6 +32,7 @@ public class MecanumDrive extends Subsystem {
   private ThreeWheelLocalizer localizer;
   private Telemetry telemetry;
   private double f = 0;
+
   public MecanumDrive(HardwareMap map, Telemetry telemetry) {
     frontLeft = map.get(DcMotor.class, "FL");
     frontRight = map.get(DcMotor.class, "FR");
@@ -51,7 +51,6 @@ public class MecanumDrive extends Subsystem {
     frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
 
     frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -122,9 +121,7 @@ public class MecanumDrive extends Subsystem {
   }
 
   private void internalSetVelocity(Vector2d vel, double omega) {
-    targetPower = new Vector2d(vel.getY(), -vel.getX());
-
-    targetPower = targetPower.rotated(position.getHeading());
+    targetPower = vel;
     targetC = omega;
   }
 
@@ -139,15 +136,15 @@ public class MecanumDrive extends Subsystem {
     telemetry.addData("2", powers[2]);
     telemetry.addData("3", powers[3]);
 
-//
-//    double max =
-//        Collections.max(
-//            Arrays.asList(
-//                1.0,
-//                Math.abs(powers[0]),
-//                Math.abs(powers[1]),
-//                Math.abs(powers[2]),
-//                Math.abs(powers[3])));
+    //
+    //    double max =
+    //        Collections.max(
+    //            Arrays.asList(
+    //                1.0,
+    //                Math.abs(powers[0]),
+    //                Math.abs(powers[1]),
+    //                Math.abs(powers[2]),
+    //                Math.abs(powers[3])));
   }
 
   // GETTERS =======================================================================================

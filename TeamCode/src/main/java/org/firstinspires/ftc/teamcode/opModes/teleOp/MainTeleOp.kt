@@ -47,8 +47,8 @@ class MainTeleOp : OpMode() {
 
         val powers = pathFollower.followCurve(0.0, robot.drive.position, 0.25, 2.0)
 
-        robot.drive.setVelocity(
-                Vector2d(-powers[0], powers[1]), 0.0)
+//        robot.drive.setVelocity(
+//                Vector2d(-powers[0], powers[1]), 0.0)
 
         var fixPos = Pose2d(robot.drive.position.x, robot.drive.position.y, robot.drive.position.heading * (180 / Math.PI))
 
