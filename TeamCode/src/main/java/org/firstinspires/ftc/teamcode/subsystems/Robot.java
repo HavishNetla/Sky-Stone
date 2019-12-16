@@ -12,95 +12,85 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 public class Robot implements OpModeManagerNotifier.Notifications {
-  // Subsystems
-  public MecanumDrive drive;
-  public EncoderTest encoderTest;
-  //public Intake intake;
+    // Subsystems
+    public MecanumDrive drive;
+    public EncoderTest encoderTest;
+    //public Intake intake;
 
-  private List<Subsystem> subsystems;
-  private OpModeManagerImpl opModeManager;
-  private ExecutorService subsystemUpdateExecutor;
+    private List<Subsystem> subsystems;
+    private OpModeManagerImpl opModeManager;
+    private ExecutorService subsystemUpdateExecutor;
 
-  private boolean started = false;
-  private Telemetry telemetry;
-  private int count = 0;
-  // Run the "update" function for every subsytem
-  private Runnable subsystemUpdateRunnable =
-          new Runnable() {
-            @Override
-            public void run() {
-              while (!Thread.currentThread().isInterrupted()) {
-                for (Subsystem subsystem : subsystems) {
-                  //subsystem.update();
-                  telemetry.addData("32", Thread.currentThread().isInterrupted());
+    private boolean started = false;
+    private Telemetry telemetry;
+    private int count = 0;
+    // Run the "update" function for every subsytem
+    private Runnable subsystemUpdateRunnable =
+            new Runnable() {
+                @Override
+                public void run() {
+                    while (!Thread.currentThread().isInterrupted()) {
+                        for (Subsystem subsystem : subsystems) {
+                            subsystem.update();
+                            //telemetry.addData("32", Thread.currentThread().isInterrupted());
+                        }
+                    }
                 }
-                count++;
-              }
-            }
-          };
+            };
 
-  public Robot(OpMode opMode, Telemetry telemetry) {
-    subsystems = new ArrayList<>();
+    public Robot(OpMode opMode, Telemetry telemetry) {
+        subsystems = new ArrayList<>();
 
-    // Init subsystems
-    drive = new MecanumDrive(opMode.hardwareMap, telemetry);
-    subsystems.add(drive);
+        // Init subsystems
+        drive = new MecanumDrive(opMode.hardwareMap, telemetry);
+        subsystems.add(drive);
 
-    encoderTest = new EncoderTest(opMode.hardwareMap);
-    subsystems.add(encoderTest);
+        encoderTest = new EncoderTest(opMode.hardwareMap);
+        subsystems.add(encoderTest);
 
 //    intake = new Intake(opMode.hardwareMap);
 //    subsystems.add(encoderTest);
 
-    subsystemUpdateExecutor = ThreadPool.newSingleThreadExecutor("subsystem update");
-    this.telemetry = telemetry;
-  }
-
-  // Starts subsystem executor
-  public void start() {
-    telemetry.addData("58", "started");
-    if (true) {
-      //subsystemUpdateExecutor.submit(subsystemUpdateRunnable);
-      //subsystemUpdateRunnable.run();
-
-      //while(true) {
-      //  telemetry.addData("f", "f1123");
-      //}
-      //started = true;
+        subsystemUpdateExecutor = ThreadPool.newSingleThreadExecutor("subsystem update");
+        this.telemetry = telemetry;
     }
-  }
 
-  public void update() {
-    for (Subsystem subsystem : subsystems) {
-      subsystem.update();
-      //telemetry.addData("32", Thread.currentThread().isInterrupted());
+    // Starts subsystem executor
+    public void start() {
+        subsystemUpdateExecutor.submit(subsystemUpdateRunnable);
+        subsystemUpdateRunnable.run();
     }
-  }
 
-  // Shuts down subsystem executor
-  private void stop() {
-    if (subsystemUpdateExecutor != null) {
-      subsystemUpdateExecutor.shutdownNow();
-      subsystemUpdateExecutor = null;
+    public void update() {
+        for (Subsystem subsystem : subsystems) {
+            subsystem.update();
+        }
     }
-  }
 
-  // ===============================================
-
-  @Override
-  public void onOpModePreInit(OpMode opMode) {
-  }
-
-  @Override
-  public void onOpModePreStart(OpMode opMode) {
-  }
-
-  @Override
-  public void onOpModePostStop(OpMode opMode) {
-    stop();
-    if (opModeManager != null) {
-      opModeManager.unregisterListener(this);
-      opModeManager = null;
+    // Shuts down subsystem executor
+    private void stop() {
+        if (subsystemUpdateExecutor != null) {
+            subsystemUpdateExecutor.shutdownNow();
+            subsystemUpdateExecutor = null;
+        }
     }
-  }
+
+    // ===============================================
+
+    @Override
+    public void onOpModePreInit(OpMode opMode) {
+    }
+
+    @Override
+    public void onOpModePreStart(OpMode opMode) {
+    }
+
+    @Override
+    public void onOpModePostStop(OpMode opMode) {
+        stop();
+        if (opModeManager != null) {
+            opModeManager.unregisterListener(this);
+            opModeManager = null;
+        }
+    }
 }

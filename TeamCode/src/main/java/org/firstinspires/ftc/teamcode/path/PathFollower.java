@@ -130,8 +130,7 @@ public class PathFollower {
      * @param pose The current pose of the robot
      * @return the left and right powers
      */
-    public double[] update(Pose2d pose) {
-        double[] test = new double[] {1, 1};
-        return test;
+    public double[] update(double followAngle, Pose2d pose, double speed, double turnSpeed) {
+        return followCurve(followAngle, pose, speed, turnSpeed);
     }
 }

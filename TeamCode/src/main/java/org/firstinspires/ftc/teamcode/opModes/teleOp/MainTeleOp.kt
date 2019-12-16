@@ -5,10 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.computerDebuging.ComputerDebugging
 import org.firstinspires.ftc.teamcode.path.PathBuilder
 import org.firstinspires.ftc.teamcode.path.PathFollower
+import org.firstinspires.ftc.teamcode.path.PathSegment
 import org.firstinspires.ftc.teamcode.subsystems.Robot
 import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
 import java.text.DecimalFormat
+import java.util.ArrayList
 
 @TeleOp(name = "Mecanum Drive", group = "T")
 class MainTeleOp : OpMode() {
@@ -16,9 +18,9 @@ class MainTeleOp : OpMode() {
     private lateinit var computerDebugging: ComputerDebugging
     private var df = DecimalFormat("#.##")
 
-    var t = PathBuilder(Pose2d(15.0, 15.0, 0.0))
+    private var t = PathBuilder(Pose2d(15.0, 15.0, 0.0))
 
-    var path = t
+    private var path: ArrayList<PathSegment> = t
             .addPoint(Vector2d(15.0, 200.0), "moving forward")
             .addPoint(Vector2d(200.0, 200.0), "moving forward")
 //            .addPoint(Vector2d(30.0 * 2, 45.72 * 2), "moving forward")
@@ -26,12 +28,11 @@ class MainTeleOp : OpMode() {
             .create()
 
 
-    val pathFollower = PathFollower(path, 35.0)
-
+    private lateinit var pathFollower: PathFollower
     override fun init() {
         robot = Robot(this, this.telemetry)
         robot.start()
-lKm7
+        pathFollower = PathFollower(path, 35.0)
         computerDebugging = ComputerDebugging()
 
         ComputerDebugging.sendPaths(path)
