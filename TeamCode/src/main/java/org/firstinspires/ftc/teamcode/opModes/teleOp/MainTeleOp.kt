@@ -6,11 +6,12 @@ import org.firstinspires.ftc.teamcode.computerDebuging.ComputerDebugging
 import org.firstinspires.ftc.teamcode.path.PathBuilder
 import org.firstinspires.ftc.teamcode.path.PathFollower
 import org.firstinspires.ftc.teamcode.path.PathSegment
+import org.firstinspires.ftc.teamcode.subsystems.MecanumDrive
 import org.firstinspires.ftc.teamcode.subsystems.Robot
 import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
 import java.text.DecimalFormat
-import java.util.ArrayList
+import java.util.*
 
 @TeleOp(name = "Mecanum Drive", group = "T")
 class MainTeleOp : OpMode() {
@@ -26,18 +27,25 @@ class MainTeleOp : OpMode() {
 //            .addPoint(Vector2d(30.0 * 2, 45.72 * 2), "moving forward")
 //            .addPoint(Vector2d(45.72 * 2, 152.4 * 2), "moving forward")
             .create()
-
-
+    private lateinit var powers: DoubleArray
     private lateinit var pathFollower: PathFollower
+
     override fun init() {
         robot = Robot(this, this.telemetry)
-        robot.start()
-        pathFollower = PathFollower(path, 35.0)
+        pathFollower = PathFollower(path, 55.0)
         computerDebugging = ComputerDebugging()
 
         ComputerDebugging.sendPaths(path)
         ComputerDebugging.sendPacket()
+    }
 
+    override fun init_loop() {
+        robot.update()
+        telemetry.addData("position", robot.drive.position)
+        telemetry.addData("lookahead point", pathFollower.lookAheadPoint)
+    }
+
+    override fun start() {
         robot.drive.resetEncoders()
     }
 
@@ -45,23 +53,28 @@ class MainTeleOp : OpMode() {
         // ComputerDebugging.sendPaths(path)
         robot.update()
 
-//        robot.drive.setVelocity(Vector2d(gamepad1.left_stick_x.toDouble(), gamepad1.left_stick_y.toDouble()), gamepad1.right_stick_x.toDouble())
+//      robot.drive.setVelocity(Vector2d(gamepad1.left_stick_x.toDouble(), gamepad1.left_stick_y.toDouble()), gamepad1.right_stick_x.toDouble())
 
-        val powers = pathFollower.followCurve(0.0, robot.drive.position, 0.25, 2.0)
-//        val powers = PathFollower.goToPoint(Vector2d(15.0, 50.0), robot.drive.position, 0.0, 0.5, 0.25)
-
-        robot.drive.setVelocity(
-                Vector2d(powers[1], -powers[0]), powers[1])
-
+        robot.drive.followPath(path, pathFollower)
         var fixPos = Pose2d(robot.drive.position.x, robot.drive.position.y, robot.drive.position.heading * (180 / Math.PI))
 
         ComputerDebugging.sendRobotLocation(fixPos)
         ComputerDebugging.sendPoint(pathFollower.getLookAheadPoint(robot.drive.position))
         ComputerDebugging.sendLog("\nPosition - " + robot.drive.position.toString() +
-                "\nPowers - " + df.format(powers[0]) + ", " + df.format(powers[1]) + ", " + df.format(powers[2]) +
                 "\nPowersg - " + df.format(gamepad1.left_stick_x) + ", " + df.format(gamepad1.left_stick_y) + ", " + df.format(gamepad1.right_stick_x) +
                 "\nRelTurn - " + PathFollower.relTurnAngle
         )
         ComputerDebugging.sendPacket()
+
+        telemetry.addData("position", robot.drive.position)
+        telemetry.addData("powers", "" + MecanumDrive.pathPowers[0] + ", " + MecanumDrive.pathPowers[1] + ", " + MecanumDrive.pathPowers[2])
+        telemetry.addData("lookahead point", pathFollower.lookAheadPoint)
+    }
+
+    override fun stop() {
+        robot.stop()
+        powers = doubleArrayOf(0.0, 0.0, 0.0)
+
+
     }
 }

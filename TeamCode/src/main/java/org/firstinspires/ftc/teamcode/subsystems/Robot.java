@@ -51,7 +51,7 @@ public class Robot implements OpModeManagerNotifier.Notifications {
 //    intake = new Intake(opMode.hardwareMap);
 //    subsystems.add(encoderTest);
 
-        subsystemUpdateExecutor = ThreadPool.newSingleThreadExecutor("subsystem update");
+        //subsystemUpdateExecutor = ThreadPool.newSingleThreadExecutor("subsystem update");
         this.telemetry = telemetry;
     }
 
@@ -68,7 +68,7 @@ public class Robot implements OpModeManagerNotifier.Notifications {
     }
 
     // Shuts down subsystem executor
-    private void stop() {
+    public void stop() {
         if (subsystemUpdateExecutor != null) {
             subsystemUpdateExecutor.shutdownNow();
             subsystemUpdateExecutor = null;
