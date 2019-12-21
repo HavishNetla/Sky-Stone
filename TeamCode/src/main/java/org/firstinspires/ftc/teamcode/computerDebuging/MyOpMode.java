@@ -10,18 +10,14 @@ import java.util.ArrayList;
 
 public class MyOpMode extends OpMode {
   public static ArrayList<PathSegment> path;
-  public static PathBuilder t = new PathBuilder(new Pose2d(200.0, 200.0, Math.toRadians(-45)));
+  public static PathBuilder t = new PathBuilder(new Pose2d(15.0, 15.0, Math.toRadians(90)));
 
   @Override
   public void init() {
-    //        path = t.addPoint(new Vector2d(61 * 2, 30.48 * 2), "moving forward")
-    //                .addPoint(new Vector2d(30 * 2, 45.72 * 2), "moving forward")
-    //                .addPoint(new Vector2d(45.72 * 2, 152.4 * 2), "moving forward")
-    //                .create();
-
-    path = t.addPoint(new Vector2d(200.0, 30.0), "moving forward").create();
-
-    //    path = t.addPoint(new Vector2d(15, 200), "moving forward").create();
+    path =
+        t.addPoint(new Vector2d(15, 100.0), "moving forward")
+            .addPoint(new Vector2d(100.0, 100.0), "f")
+            .create();
 
     ComputerDebugging.sendPaths(path);
     ComputerDebugging.sendPacket();
@@ -33,16 +29,13 @@ public class MyOpMode extends OpMode {
 
     ComputerDebugging.sendPaths(path);
 
-    //    double[] powers = pathFollower.followCurve(0, Robot.robotPos, 0.5, 2);
-    double[] powers =
-        PathFollower.goToPoint(new Vector2d(15.0, 200.0), Robot.robotPos, 0, 0.5, 2.0);
-
+    double[] powers = pathFollower.followCurve(0, Robot.robotPos, 0.5, 2);
     ComputerDebugging.sendPoint(pathFollower.lookAheadPoint);
 
     System.out.println("Pos: " + Robot.robotPos);
     System.out.println("0: " + powers[0] + ", 1:" + powers[1] + ", 2:" + powers[2]);
-    Robot.x = powers[0];
-    Robot.y = powers[1];
+    Robot.x = powers[1];
+    Robot.y = powers[0];
     Robot.c = powers[2];
   }
 }

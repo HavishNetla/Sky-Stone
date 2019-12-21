@@ -9,7 +9,7 @@ public class Robot {
   private long lastTime = 0;
 
   public Robot() {
-    robotPos = new Pose2d(300, 400, Math.toRadians(-45));
+    robotPos = new Pose2d(15, 15, Math.toRadians(90));
   }
 
   public void update() {

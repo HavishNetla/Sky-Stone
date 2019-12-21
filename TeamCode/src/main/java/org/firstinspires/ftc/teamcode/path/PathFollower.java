@@ -13,26 +13,34 @@ import static org.firstinspires.ftc.teamcode.util.MyMath.AngleWrap;
 public class PathFollower {
   public static Vector2d lookAheadPoint;
   public static boolean first = true;
+  public static Vector2d powers = new Vector2d(0, 0);
   public static double ogDist;
   public static boolean hasReachedEnd = false;
   public static Vector2d followPoint = new Vector2d(0.0, 0.0);
   public static double relTurnAngle = 0;
-
   static double movement_x, movement_y, movement_turn;
+  private static boolean ended = false;
   boolean done = false;
   private ArrayList<PathSegment> path;
   private double lookAheadDist;
-
+  public static boolean isDone = false;
   public PathFollower(ArrayList<PathSegment> path, double lookAheadDist) {
     this.lookAheadDist = lookAheadDist;
     this.path = path;
     lookAheadPoint = path.get(0).start;
     hasReachedEnd = false;
+    ended = false;
+    isDone = false;
+  }
+
+  public boolean getStatus() {
+    return isDone;
   }
 
   public static double[] goToPoint(
       Vector2d goal, Pose2d pose, double preferredAngle, double speed, double turnSpeed) {
 
+    Vector2d pointToTurn;
     if (first) {
       ogDist = Math.hypot(goal.getX() - pose.getX(), goal.getY() - pose.getY());
       first = false;
@@ -41,11 +49,15 @@ public class PathFollower {
     double dist = Math.hypot(goal.getX() - pose.getX(), goal.getY() - pose.getY()) / ogDist;
 
     double absoluteAngleToTarget = Math.atan2(goal.getY() - pose.getY(), goal.getX() - pose.getX());
-
     double relativeAngleToPoint = AngleWrap(pose.getHeading() - absoluteAngleToTarget);
+    relTurnAngle = relativeAngleToPoint;
 
-    double relativeYToPoint = Math.sin(relativeAngleToPoint) * dist;
-    double relativeXToPoint = Math.cos(relativeAngleToPoint) * dist;
+    double relativeYToPoint;
+    double relativeXToPoint;
+
+    relativeYToPoint = Math.sin(relativeAngleToPoint) * dist;
+    relativeXToPoint = Math.cos(relativeAngleToPoint) * dist;
+    powers = new Vector2d(relativeXToPoint, relativeYToPoint);
 
     //    double movementXPower =
     //        relativeXToPoint / (Math.abs(relativeXToPoint) + Math.abs(relativeYToPoint));
@@ -58,7 +70,14 @@ public class PathFollower {
     double relativeTurnAngle = relativeAngleToPoint + preferredAngle;
     relTurnAngle = relativeTurnAngle;
 
-    movement_turn = Range.clip((relativeTurnAngle / Math.toRadians(30)), -1, 1) /* turnSpeed*/;
+    if (ended == false) {
+      if (Math.abs(Math.hypot(goal.getX() - pose.getX(), goal.getY() - pose.getY())) < 10) {
+        ended = true;
+        movement_turn = 0;
+      } else {
+        movement_turn = Range.clip((relativeTurnAngle / Math.toRadians(30)), -1, 1) /* turnSpeed*/;
+      }
+    }
 
     return new double[] {movement_x * speed, movement_y * speed, movement_turn * speed};
   }

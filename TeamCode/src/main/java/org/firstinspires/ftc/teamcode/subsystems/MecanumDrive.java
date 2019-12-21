@@ -33,6 +33,7 @@ public class MecanumDrive extends Subsystem {
   private double followAngle = 0;
   private double pathSpeed = 0.5;
   private double turnSpeed = 0.75;
+  private boolean isPathFollowingDone = false;
 
   public MecanumDrive(HardwareMap map, Telemetry telemetry) {
     frontLeft = map.get(DcMotor.class, "FL");
@@ -111,9 +112,6 @@ public class MecanumDrive extends Subsystem {
   public void setVelocity(Vector2d vel, double omega) {
     internalSetVelocity(vel, omega);
     setMode(Mode.OPEN_LOOP);
-
-    telemetry.addData("vel", vel);
-    telemetry.addData("c", omega);
   }
 
   private void internalSetVelocity(Vector2d vel, double omega) {
@@ -131,16 +129,6 @@ public class MecanumDrive extends Subsystem {
     telemetry.addData("1", powers[1]);
     telemetry.addData("2", powers[2]);
     telemetry.addData("3", powers[3]);
-
-    //
-    //    double max =
-    //        Collections.max(
-    //            Arrays.asList(
-    //                1.0,
-    //                Math.abs(powers[0]),
-    //                Math.abs(powers[1]),
-    //                Math.abs(powers[2]),
-    //                Math.abs(powers[3])));
   }
 
   // GETTERS =======================================================================================
@@ -171,6 +159,24 @@ public class MecanumDrive extends Subsystem {
     this.turnSpeed = turnSpeed;
   }
 
+  public boolean getPathStatus() {
+    return isPathFollowingDone;
+  }
+
+  public void stop() {
+    internalSetVelocity(new Vector2d(0, 0), 0);
+  }
+
+  public void waitForPathFollower() {
+    while (!Thread.currentThread().isInterrupted() && getMode() == Mode.FOLLOW_PATH) {
+      try {
+        Thread.sleep(5);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      }
+    }
+  }
+
   @Override
   public void update() {
     // update odometry position
@@ -185,12 +191,19 @@ public class MecanumDrive extends Subsystem {
     switch (mode) {
       case OPEN_LOOP:
         updatePowers();
-        telemetry.addData("ffffffffff", "ffffffffff");
         break;
       case FOLLOW_PATH:
         pathPowers = pathfollower.update(followAngle, position, pathSpeed, turnSpeed);
-        setVelocity(new Vector2d(pathPowers[1], -pathPowers[0]), pathPowers[2]);
+        isPathFollowingDone = pathfollower.getStatus();
+
+        if (!isPathFollowingDone) {
+          internalSetVelocity(new Vector2d(pathPowers[1], -pathPowers[0]), pathPowers[2]);
+        } else {
+          stop();
+        }
+        telemetry.addData("status", isPathFollowingDone);
         updatePowers();
+
         break;
     }
 
