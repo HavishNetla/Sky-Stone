@@ -71,7 +71,7 @@ public class UdpServer implements Runnable {
     try (DatagramSocket serverSocket = new DatagramSocket()) {
       DatagramPacket datagramPacket =
           new DatagramPacket(
-              message.getBytes(), message.length(), InetAddress.getByName("192.168.49.221"), clientPort);
+              message.getBytes(), message.length(), InetAddress.getByName("192.168.49.189"), clientPort);
       //192.168.49.221
       serverSocket.send(datagramPacket);
 

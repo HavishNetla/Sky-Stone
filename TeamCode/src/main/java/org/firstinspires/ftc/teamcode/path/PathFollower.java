@@ -79,6 +79,10 @@ public class PathFollower {
       }
     }
 
+    if(movement_x < 0.2 && movement_y < 0.2) {
+      isDone = true;
+    }
+
     return new double[] {movement_x * speed, movement_y * speed, movement_turn * speed};
   }
 

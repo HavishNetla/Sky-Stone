@@ -21,9 +21,11 @@ public class Robot implements OpModeManagerNotifier.Notifications {
   private OpModeManagerImpl opModeManager;
   private ExecutorService subsystemUpdateExecutor;
 
-  private boolean started = false;
+  private boolean started;
   private Telemetry telemetry;
-  private int count = 0;
+
+  private OpMode opMode;
+
   // Run the "update" function for every subsytem
   private Runnable subsystemUpdateRunnable =
       new Runnable() {
@@ -33,6 +35,8 @@ public class Robot implements OpModeManagerNotifier.Notifications {
             for (Subsystem subsystem : subsystems) {
               subsystem.update();
             }
+
+            System.out.println("statut: " + Thread.currentThread().isInterrupted());
           }
         }
       };
@@ -54,6 +58,7 @@ public class Robot implements OpModeManagerNotifier.Notifications {
     this.telemetry = telemetry;
 
     this.started = false;
+    this.opMode = opMode;
   }
 
   // Starts subsystem executor
@@ -65,14 +70,9 @@ public class Robot implements OpModeManagerNotifier.Notifications {
     }
   }
 
-  public void update() {
-    //        for (Subsystem subsystem : subsystems) {
-    //            subsystem.update();
-    //        }
-  }
-
   // Shuts down subsystem executor
   public void stop() {
+    System.out.println("statut: STOPED THE ROBOT");
     if (subsystemUpdateExecutor != null) {
       subsystemUpdateExecutor.shutdownNow();
       subsystemUpdateExecutor = null;
@@ -89,6 +89,7 @@ public class Robot implements OpModeManagerNotifier.Notifications {
 
   @Override
   public void onOpModePostStop(OpMode opMode) {
+    System.out.println("statut: STOPEED THE DAMN ROBOT");
     stop();
     if (opModeManager != null) {
       opModeManager.unregisterListener(this);

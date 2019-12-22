@@ -6,7 +6,6 @@ import org.firstinspires.ftc.teamcode.computerDebuging.ComputerDebugging
 import org.firstinspires.ftc.teamcode.path.PathBuilder
 import org.firstinspires.ftc.teamcode.path.PathFollower
 import org.firstinspires.ftc.teamcode.path.PathSegment
-import org.firstinspires.ftc.teamcode.subsystems.MecanumDrive
 import org.firstinspires.ftc.teamcode.subsystems.Robot
 import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
@@ -53,15 +52,8 @@ class MainTeleOp : OpMode() {
 
     override fun loop() {
         //robot.update()
+        robot.drive.setVelocity(Vector2d(gamepad1.left_stick_x.toDouble(), gamepad1.left_stick_y.toDouble()), gamepad1.right_stick_x.toDouble())
 
-//      robot.drive.setVelocity(Vector2d(gamepad1.left_stick_x.toDouble(), gamepad1.left_stick_y.toDouble()), gamepad1.right_stick_x.toDouble())
-
-        robot.drive.followPath(path, pathFollower)
-
-        robot.drive.waitForPathFollower()
-//
-//        robot.drive.followPath(path1, pathFollower1)
-//        robot.drive.waitForPathFollower()
 
         var fixPos = Pose2d(robot.drive.position.x, robot.drive.position.y, robot.drive.position.heading * (180 / Math.PI))
 
@@ -74,9 +66,9 @@ class MainTeleOp : OpMode() {
         )
         ComputerDebugging.sendPacket()
 
-        telemetry.addData("mode", robot.drive.pathStatus)
-        telemetry.addData("powers", "" + MecanumDrive.pathPowers[0] + ", " + MecanumDrive.pathPowers[1] + ", " + MecanumDrive.pathPowers[2])
-        telemetry.addData("lookahead point", pathFollower.lookAheadPoint)
+        telemetry.addData("left", robot.drive.trackingWheelPositions[0])
+        telemetry.addData("right", robot.drive.trackingWheelPositions[1])
+        telemetry.addData("center", robot.drive.trackingWheelPositions[2])
     }
 
     override fun stop() {

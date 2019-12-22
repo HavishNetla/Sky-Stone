@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -21,6 +22,11 @@ public class MecanumDrive extends Subsystem {
   private DcMotor frontRight;
   private DcMotor backLeft;
   private DcMotor backRight;
+
+  private DcMotor left;
+  private DcMotor right;
+  private DcMotor center;
+
   private PathFollower pathfollower;
   private Mode mode = Mode.OPEN_LOOP;
   private LocalizerMode localizerMode = LocalizerMode.THREE_WHEEL_LOCALIZER;
@@ -40,6 +46,10 @@ public class MecanumDrive extends Subsystem {
     frontRight = map.get(DcMotor.class, "FR");
     backLeft = map.get(DcMotor.class, "BL");
     backRight = map.get(DcMotor.class, "BR");
+
+    left = map.get(DcMotor.class, "L");
+    right = map.get(DcMotor.class, "R");
+    center = map.get(DcMotor.class, "C");
 
     setMode(Mode.OPEN_LOOP);
     setMode(LocalizerMode.THREE_WHEEL_LOCALIZER);
@@ -69,9 +79,9 @@ public class MecanumDrive extends Subsystem {
     double ratio = (Math.PI * 5.08) / 1440;
 
     return Arrays.asList(
-        -frontLeft.getCurrentPosition() * ratio,
-        -frontRight.getCurrentPosition() * ratio,
-        backLeft.getCurrentPosition() * ratio);
+        left.getCurrentPosition() * ratio,
+        -right.getCurrentPosition() * ratio,
+        -center.getCurrentPosition() * ratio);
   }
 
   // ===============================================================================================
@@ -107,6 +117,10 @@ public class MecanumDrive extends Subsystem {
     frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+    left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    center.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
   }
 
   public void setVelocity(Vector2d vel, double omega) {
@@ -124,11 +138,6 @@ public class MecanumDrive extends Subsystem {
     powers[1] = targetPower.getY() + targetPower.getX() + targetC;
     powers[2] = targetPower.getY() + targetPower.getX() - targetC;
     powers[3] = targetPower.getY() - targetPower.getX() + targetC;
-
-    telemetry.addData("0", powers[0]);
-    telemetry.addData("1", powers[1]);
-    telemetry.addData("2", powers[2]);
-    telemetry.addData("3", powers[3]);
   }
 
   // GETTERS =======================================================================================
@@ -167,13 +176,14 @@ public class MecanumDrive extends Subsystem {
     internalSetVelocity(new Vector2d(0, 0), 0);
   }
 
-  public void waitForPathFollower() {
-    while (!Thread.currentThread().isInterrupted() && getMode() == Mode.FOLLOW_PATH) {
+  public void waitForPathFollower(LinearOpMode opMode) {
+    while (opMode.opModeIsActive() && getMode() == Mode.FOLLOW_PATH) {
       try {
         Thread.sleep(5);
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
       }
+      System.out.println("statut 1: " + opMode.opModeIsActive());
     }
   }
 
@@ -201,7 +211,6 @@ public class MecanumDrive extends Subsystem {
         } else {
           stop();
         }
-        telemetry.addData("status", isPathFollowingDone);
         updatePowers();
 
         break;
