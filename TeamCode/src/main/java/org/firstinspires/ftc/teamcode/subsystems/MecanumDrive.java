@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -17,222 +16,221 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MecanumDrive extends Subsystem {
-  public static double[] pathPowers = new double[] {0, 0, 0};
-  private DcMotor frontLeft;
-  private DcMotor frontRight;
-  private DcMotor backLeft;
-  private DcMotor backRight;
+    public static double[] pathPowers = new double[]{0, 0, 0};
+    private DcMotor frontLeft;
+    private DcMotor frontRight;
+    private DcMotor backLeft;
+    private DcMotor backRight;
 
-  private DcMotor left;
-  private DcMotor right;
-  private DcMotor center;
+    private DcMotor left;
+    private DcMotor right;
+    private DcMotor center;
 
-  private PathFollower pathfollower;
-  private Mode mode = Mode.OPEN_LOOP;
-  private LocalizerMode localizerMode = LocalizerMode.THREE_WHEEL_LOCALIZER;
-  private Vector2d targetPower = new Vector2d(0, 0);
-  private double targetC = 0;
-  private double[] powers = new double[] {0, 0, 0, 0};
-  private Pose2d position;
-  private ThreeWheelLocalizer localizer;
-  private Telemetry telemetry;
-  private double followAngle = 0;
-  private double pathSpeed = 0.5;
-  private double turnSpeed = 0.75;
-  private boolean isPathFollowingDone = false;
+    private PathFollower pathfollower;
+    private Mode mode = Mode.OPEN_LOOP;
+    private LocalizerMode localizerMode = LocalizerMode.THREE_WHEEL_LOCALIZER;
+    private Vector2d targetPower = new Vector2d(0, 0);
+    private double targetC = 0;
+    private double[] powers = new double[]{0, 0, 0, 0};
+    private Pose2d position;
+    private ThreeWheelLocalizer localizer;
+    private Telemetry telemetry;
+    private double followAngle = 0;
+    private double pathSpeed = 0.5;
+    private double turnSpeed = 0.75;
+    private boolean isPathFollowingDone = false;
 
-  public MecanumDrive(HardwareMap map, Telemetry telemetry) {
-    frontLeft = map.get(DcMotor.class, "FL");
-    frontRight = map.get(DcMotor.class, "FR");
-    backLeft = map.get(DcMotor.class, "BL");
-    backRight = map.get(DcMotor.class, "BR");
+    public MecanumDrive(HardwareMap map, Telemetry telemetry) {
+        frontLeft = map.get(DcMotor.class, "FL");
+        frontRight = map.get(DcMotor.class, "FR");
+        backLeft = map.get(DcMotor.class, "BL");
+        backRight = map.get(DcMotor.class, "BR");
 
-    left = map.get(DcMotor.class, "L");
-    right = map.get(DcMotor.class, "R");
-    center = map.get(DcMotor.class, "C");
+        left = map.get(DcMotor.class, "L");
+        right = map.get(DcMotor.class, "R");
+        center = map.get(DcMotor.class, "C");
 
-    setMode(Mode.OPEN_LOOP);
-    setMode(LocalizerMode.THREE_WHEEL_LOCALIZER);
+        setMode(Mode.OPEN_LOOP);
+        setMode(LocalizerMode.THREE_WHEEL_LOCALIZER);
 
-    localizer = new ThreeWheelLocalizer(this, telemetry);
+        localizer = new ThreeWheelLocalizer(this, telemetry);
 
-    frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-    backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
-    frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-    frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-    frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-    backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-    backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-    this.telemetry = telemetry;
+        this.telemetry = telemetry;
 
-    resetEncoders();
-  }
-
-  // Odometry
-  public List<Double> getTrackingWheelPositions() {
-    double ratio = (Math.PI * 5.08) / 1440;
-
-    return Arrays.asList(
-        left.getCurrentPosition() * ratio,
-        -right.getCurrentPosition() * ratio,
-        -center.getCurrentPosition() * ratio);
-  }
-
-  // ===============================================================================================
-
-  // ===============================================================================================
-
-  public Pose2d getPosition() {
-    double ratio = (Math.PI * 5.08) / 1440;
-    return new Pose2d(position.getX(), position.getY(), position.getHeading());
-  }
-
-  public void setPosition(Pose2d pos) {
-    localizer.setEstimatedPosition(pos);
-  }
-
-  public void followPath(ArrayList<PathSegment> path, PathFollower pf) {
-    setMode(Mode.FOLLOW_PATH);
-
-    pathfollower = pf;
-  }
-
-  public boolean isRobotStuck() {
-    return false;
-  }
-
-  public void resetEncoders() {
-    frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-    frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-    left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    center.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-  }
-
-  public void setVelocity(Vector2d vel, double omega) {
-    internalSetVelocity(vel, omega);
-    setMode(Mode.OPEN_LOOP);
-  }
-
-  private void internalSetVelocity(Vector2d vel, double omega) {
-    targetPower = vel;
-    targetC = omega;
-  }
-
-  private void updatePowers() {
-    powers[0] = targetPower.getY() - targetPower.getX() - targetC;
-    powers[1] = targetPower.getY() + targetPower.getX() + targetC;
-    powers[2] = targetPower.getY() + targetPower.getX() - targetC;
-    powers[3] = targetPower.getY() - targetPower.getX() + targetC;
-  }
-
-  // GETTERS =======================================================================================
-  public double[] getPowers() {
-    return powers;
-  }
-  // ===============================================================================================
-
-  public Mode getMode() {
-    return mode;
-  }
-
-  private void setMode(Mode mode) {
-    this.mode = mode;
-  }
-
-  private void setMode(LocalizerMode mode) {
-    this.localizerMode = mode;
-  }
-
-  public LocalizerMode getLocalizer() {
-    return localizerMode;
-  }
-
-  public void setLocalizerConfig(double followAngle, double speed, double turnSpeed) {
-    this.followAngle = followAngle;
-    this.pathSpeed = speed;
-    this.turnSpeed = turnSpeed;
-  }
-
-  public boolean getPathStatus() {
-    return isPathFollowingDone;
-  }
-
-  public void stop() {
-    internalSetVelocity(new Vector2d(0, 0), 0);
-  }
-
-  public void waitForPathFollower(LinearOpMode opMode) {
-    while (opMode.opModeIsActive() && getMode() == Mode.FOLLOW_PATH) {
-      try {
-        Thread.sleep(5);
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-      }
-      System.out.println("statut 1: " + opMode.opModeIsActive());
-    }
-  }
-
-  @Override
-  public void update() {
-    // update odometry position
-    switch (localizerMode) {
-      case THREE_WHEEL_LOCALIZER:
-        position = localizer.update();
-        break;
-      case NONE:
-        break;
+        resetEncoders();
     }
 
-    switch (mode) {
-      case OPEN_LOOP:
-        updatePowers();
-        break;
-      case FOLLOW_PATH:
-        pathPowers = pathfollower.update(followAngle, position, pathSpeed, turnSpeed);
-        isPathFollowingDone = pathfollower.getStatus();
+    // Odometry
+    public List<Double> getTrackingWheelPositions() {
+        double ratio = (Math.PI * 5.08) / 1440;
 
-        if (!isPathFollowingDone) {
-          internalSetVelocity(new Vector2d(pathPowers[1], -pathPowers[0]), pathPowers[2]);
-        } else {
-          stop();
+        return Arrays.asList(
+                left.getCurrentPosition() * ratio,
+                -right.getCurrentPosition() * ratio,
+                -center.getCurrentPosition() * ratio);
+    }
+
+    // ===============================================================================================
+
+    // ===============================================================================================
+
+    public Pose2d getPosition() {
+        double ratio = (Math.PI * 5.08) / 1440;
+        return new Pose2d(position.getX(), position.getY(), position.getHeading());
+    }
+
+    public void setPosition(Pose2d pos) {
+        localizer.setEstimatedPosition(pos);
+    }
+
+    public void followPath(ArrayList<PathSegment> path, PathFollower pf) {
+        setMode(Mode.FOLLOW_PATH);
+
+        pathfollower = pf;
+    }
+
+    public boolean isRobotStuck() {
+        return false;
+    }
+
+    public void resetEncoders() {
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        center.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void setVelocity(Vector2d vel, double omega) {
+        internalSetVelocity(vel, omega);
+        setMode(Mode.OPEN_LOOP);
+    }
+
+    private void internalSetVelocity(Vector2d vel, double omega) {
+        targetPower = vel;
+        targetC = omega;
+    }
+
+    private void updatePowers() {
+        powers[0] = targetPower.getY() - targetPower.getX() - targetC;
+        powers[1] = targetPower.getY() + targetPower.getX() + targetC;
+        powers[2] = targetPower.getY() + targetPower.getX() - targetC;
+        powers[3] = targetPower.getY() - targetPower.getX() + targetC;
+    }
+
+    // GETTERS =======================================================================================
+    public double[] getPowers() {
+        return powers;
+    }
+    // ===============================================================================================
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    private void setMode(Mode mode) {
+        this.mode = mode;
+    }
+
+    private void setMode(LocalizerMode mode) {
+        this.localizerMode = mode;
+    }
+
+    public LocalizerMode getLocalizer() {
+        return localizerMode;
+    }
+
+    public void setLocalizerConfig(double followAngle, double speed, double turnSpeed) {
+        this.followAngle = followAngle;
+        this.pathSpeed = speed;
+        this.turnSpeed = turnSpeed;
+    }
+
+    public boolean getPathStatus() {
+        return isPathFollowingDone;
+    }
+
+    public void stop() {
+        internalSetVelocity(new Vector2d(0, 0), 0);
+    }
+
+    public void waitForPathFollower() {
+        while (!Thread.currentThread().isInterrupted() && getMode() == Mode.FOLLOW_PATH) {
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
-        updatePowers();
-
-        break;
     }
 
-    frontLeft.setPower(powers[0]);
-    frontRight.setPower(powers[1]);
-    backLeft.setPower(powers[2]);
-    backRight.setPower(powers[3]);
-  }
+    @Override
+    public void update() {
+        // update odometry position
+        switch (localizerMode) {
+            case THREE_WHEEL_LOCALIZER:
+                position = localizer.update();
+                break;
+            case NONE:
+                break;
+        }
 
-  public enum Mode {
-    OPEN_LOOP,
-    FOLLOW_PATH,
-  }
+        switch (mode) {
+            case OPEN_LOOP:
+                updatePowers();
+                break;
+            case FOLLOW_PATH:
+                pathPowers = pathfollower.update(followAngle, position, pathSpeed, turnSpeed);
+                isPathFollowingDone = pathfollower.getStatus();
 
-  //  public String getStatus() {
-  //    return StringUtils.caption("Power", power) + StringUtils.caption("Has Block", hasBlock);
-  //  }
+                if (!isPathFollowingDone) {
+                    internalSetVelocity(new Vector2d(pathPowers[1], -pathPowers[0]), pathPowers[2]);
+                } else {
+                    stop();
+                }
+                updatePowers();
 
-  public enum LocalizerMode {
-    THREE_WHEEL_LOCALIZER,
-    NONE,
-  }
+                break;
+        }
+
+        frontLeft.setPower(powers[0]);
+        frontRight.setPower(powers[1]);
+        backLeft.setPower(powers[2]);
+        backRight.setPower(powers[3]);
+    }
+
+    public enum Mode {
+        OPEN_LOOP,
+        FOLLOW_PATH,
+    }
+
+    //  public String getStatus() {
+    //    return StringUtils.caption("Power", power) + StringUtils.caption("Has Block", hasBlock);
+    //  }
+
+    public enum LocalizerMode {
+        THREE_WHEEL_LOCALIZER,
+        NONE,
+    }
 }
