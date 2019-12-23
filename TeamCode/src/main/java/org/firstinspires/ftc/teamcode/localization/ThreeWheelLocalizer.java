@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class ThreeWheelLocalizer {
   public static double dTheta = 0;
-  double x = 15, y = 15, theta = Math.PI / 2;
+  double x = 20.32, y = 139.7, theta = 0.0;
   Telemetry telemetry;
   private double chassisWidth = 34.235; // cm
   private Pose2d poseEstimate;
@@ -39,7 +39,7 @@ public class ThreeWheelLocalizer {
     lastWheelPositions = Collections.emptyList();
 
     // poseEstimate = new Pose2d(143, 143, MyMath.toRadians(135));
-    poseEstimate = new Pose2d(15, 15, Math.PI / 2);
+    poseEstimate = new Pose2d(20.32, 139.7, 0);
   }
 
   public Pose2d update() {

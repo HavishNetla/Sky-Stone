@@ -24,13 +24,17 @@ public class PathFollower {
   private ArrayList<PathSegment> path;
   private double lookAheadDist;
   public static boolean isDone = false;
-  public PathFollower(ArrayList<PathSegment> path, double lookAheadDist) {
+  private String name;
+
+  public PathFollower(ArrayList<PathSegment> path, double lookAheadDist, String name) {
     this.lookAheadDist = lookAheadDist;
     this.path = path;
     lookAheadPoint = path.get(0).start;
     hasReachedEnd = false;
     ended = false;
     isDone = false;
+
+    this.name = name;
   }
 
   public boolean getStatus() {
@@ -156,5 +160,9 @@ public class PathFollower {
    */
   public double[] update(double followAngle, Pose2d pose, double speed, double turnSpeed) {
     return followCurve(followAngle, pose, speed, turnSpeed);
+  }
+
+  public String getName() {
+    return this.name;
   }
 }

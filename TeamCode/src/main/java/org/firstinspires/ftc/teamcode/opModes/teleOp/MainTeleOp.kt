@@ -35,7 +35,7 @@ class MainTeleOp : OpMode() {
 
     override fun init() {
         robot = Robot(this, this.telemetry)
-        pathFollower = PathFollower(path, 55.0)
+//        pathFollower = PathFollower(path, 55.0)
         //pathFollower1 = PathFollower(path1, 55.0)
         computerDebugging = ComputerDebugging()
 

@@ -23,6 +23,6 @@ abstract class AutoOpMode : LinearOpMode() {
         }
 
         run()
-        robot.stop()
+        //robot.stop()
     }
 }

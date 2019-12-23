@@ -14,90 +14,91 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 public class Robot implements OpModeManagerNotifier.Notifications {
-    // Subsystems
-    public MecanumDrive drive;
-    public EncoderTest encoderTest;
-    // public Intake intake;
+  // Subsystems
+  public MecanumDrive drive;
+  public EncoderTest encoderTest;
+  public Lift lift;
+  // public Intake intake;
 
-    private List<Subsystem> subsystems;
-    private OpModeManagerImpl opModeManager;
-    private ExecutorService subsystemUpdateExecutor;
+  private List<Subsystem> subsystems;
+  private OpModeManagerImpl opModeManager;
+  private ExecutorService subsystemUpdateExecutor;
 
-    private boolean started;
+  private boolean started;
 
-    // Run the "update" function for every subsytem
-    private Runnable subsystemUpdateRunnable = new Runnable() {
+  // Run the "update" function for every subsytem
+  private Runnable subsystemUpdateRunnable =
+      new Runnable() {
         @Override
         public void run() {
-            while (!Thread.currentThread().isInterrupted()) {
-                for (Subsystem subsystem : subsystems) {
-                    subsystem.update();
-                }
-
-                System.out.println("statut: " + Thread.currentThread().isInterrupted());
+          while (!Thread.currentThread().isInterrupted()) {
+            for (Subsystem subsystem : subsystems) {
+              subsystem.update();
             }
+          }
         }
-    };
+      };
 
-    public Robot(OpMode opMode, Telemetry telemetry) {
-        subsystems = new ArrayList<>();
+  public Robot(OpMode opMode, Telemetry telemetry) {
+    subsystems = new ArrayList<>();
 
-        // Init subsystems
-        drive = new MecanumDrive(opMode.hardwareMap, telemetry);
-        subsystems.add(drive);
+    // Init subsystems
+    drive = new MecanumDrive(opMode.hardwareMap, telemetry);
+    subsystems.add(drive);
 
-        encoderTest = new EncoderTest(opMode.hardwareMap);
-        subsystems.add(encoderTest);
+    encoderTest = new EncoderTest(opMode.hardwareMap);
+    subsystems.add(encoderTest);
 
-        //    intake = new Intake(opMode.hardwareMap);
-        //    subsystems.add(encoderTest);
+    lift = new Lift(opMode.hardwareMap, telemetry);
+    subsystems.add(lift);
 
-        Activity activity = (Activity) opMode.hardwareMap.appContext;
-        opModeManager = OpModeManagerImpl.getOpModeManagerOfActivity(activity);
-        if (opModeManager != null) {
-            opModeManager.registerListener(this);
-        }
+    //    intake = new Intake(opMode.hardwareMap);
+    //    subsystems.add(encoderTest);
 
-        subsystemUpdateExecutor = ThreadPool.newSingleThreadExecutor("subsystem update");
-
-        this.started = false;
+    Activity activity = (Activity) opMode.hardwareMap.appContext;
+    opModeManager = OpModeManagerImpl.getOpModeManagerOfActivity(activity);
+    if (opModeManager != null) {
+      opModeManager.registerListener(this);
     }
 
-    // Starts subsystem executor
-    public void start() {
-        if (!started) {
-            subsystemUpdateExecutor.execute(subsystemUpdateRunnable);
+    subsystemUpdateExecutor = ThreadPool.newSingleThreadExecutor("subsystem update");
 
-            started = true;
-        }
+    this.started = false;
+  }
+
+  // Starts subsystem executor
+  public void start() {
+    if (!started) {
+      subsystemUpdateExecutor.execute(subsystemUpdateRunnable);
+
+      started = true;
     }
+  }
 
-    // Shuts down subsystem executor
-    public void stop() {
-        System.out.println("statut: STOPED THE ROBOT");
-        if (subsystemUpdateExecutor != null) {
-            subsystemUpdateExecutor.shutdownNow();
-            subsystemUpdateExecutor = null;
-        }
+  // Shuts down subsystem executor
+  public void stop() {
+    System.out.println("statut: STOPED THE ROBOT");
+    if (subsystemUpdateExecutor != null) {
+      subsystemUpdateExecutor.shutdownNow();
+      subsystemUpdateExecutor = null;
     }
+  }
 
-    // ===============================================
+  // ===============================================
 
-    @Override
-    public void onOpModePreInit(OpMode opMode) {
+  @Override
+  public void onOpModePreInit(OpMode opMode) {}
+
+  @Override
+  public void onOpModePreStart(OpMode opMode) {}
+
+  @Override
+  public void onOpModePostStop(OpMode opMode) {
+    System.out.println("statut: STOPEED THE DAMN ROBOT");
+    stop();
+    if (opModeManager != null) {
+      opModeManager.unregisterListener(this);
+      opModeManager = null;
     }
-
-    @Override
-    public void onOpModePreStart(OpMode opMode) {
-    }
-
-    @Override
-    public void onOpModePostStop(OpMode opMode) {
-        System.out.println("statut: STOPEED THE DAMN ROBOT");
-        stop();
-        if (opModeManager != null) {
-            opModeManager.unregisterListener(this);
-            opModeManager = null;
-        }
-    }
+  }
 }

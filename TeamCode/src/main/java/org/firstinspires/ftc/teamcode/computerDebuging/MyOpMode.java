@@ -25,7 +25,7 @@ public class MyOpMode extends OpMode {
 
   @Override
   public void loop() {
-    PathFollower pathFollower = new PathFollower(path, 10.0);
+    PathFollower pathFollower = new PathFollower(path, 10.0, "asd");
 
     ComputerDebugging.sendPaths(path);
 

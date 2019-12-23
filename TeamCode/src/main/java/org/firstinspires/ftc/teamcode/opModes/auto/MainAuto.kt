@@ -9,31 +9,30 @@ import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
 import java.util.*
 
-@Autonomous(name = "Pure Pursuit Auto", group = "A")
-class PurePursuitAuto : AutoOpMode() {
+@Autonomous(name = "Main Auto", group = "A")
+class MainAuto : AutoOpMode() {
     private lateinit var pathFollower: PathFollower
     private lateinit var pathFollower1: PathFollower
     private lateinit var computerDebugging: ComputerDebugging
 
 
-    private var t = PathBuilder(Pose2d(15.0, 15.0, 0.0))
-
+    private var t = PathBuilder(Pose2d(20.32, 139.7, 0.0))
     private var path: ArrayList<PathSegment> = t
-            .addPoint(Vector2d(15.0, 150.0), "moving forward")
-            .addPoint(Vector2d(200.0, 150.0), "moving forward")
+            .addPoint(Vector2d(104.14, 99.06), "moving forward")
             .create()
 
-    private var t1 = PathBuilder(Pose2d(200.0, 150.0, 0.0))
-    private var path1: ArrayList<PathSegment> = t
-            .addPoint(Vector2d(200.0, 300.0), "moving forward")
-            .addPoint(Vector2d(300.0, 300.0), "moving forward")
+    private var t1 = PathBuilder(Pose2d(104.14, 99.06, 0.0))
+    private var path1: ArrayList<PathSegment> = t1
+            .addPoint(Vector2d(88.9, 132.08), "moving forward")
+            .addPoint(Vector2d(88.9, 220.98), "moving forward")
             .create()
 
     override fun setup() {
-//        pathFollower = PathFollower(path, 55.0)
+        pathFollower = PathFollower(path, 55.0, "FIrst")
+        pathFollower1 = PathFollower(path1, 55.0, "Second")
         //pathFollower1 = PathFollower(path1, 55.0)
-        computerDebugging = ComputerDebugging()
 
+        computerDebugging = ComputerDebugging()
         ComputerDebugging.sendPaths(path)
         ComputerDebugging.sendPacket()
     }
@@ -42,7 +41,9 @@ class PurePursuitAuto : AutoOpMode() {
         robot.drive.followPath(path, pathFollower)
         robot.drive.waitForPathFollower()
 
+        System.out.println("statut: done step 1")
         robot.drive.followPath(path1, pathFollower1)
+        System.out.println("statut: started step 2")
         robot.drive.waitForPathFollower()
     }
 }
