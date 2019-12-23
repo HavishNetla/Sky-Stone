@@ -15,7 +15,6 @@ class MainAuto : AutoOpMode() {
     private lateinit var pathFollower1: PathFollower
     private lateinit var computerDebugging: ComputerDebugging
 
-
     private var t = PathBuilder(Pose2d(20.32, 139.7, 0.0))
     private var path: ArrayList<PathSegment> = t
             .addPoint(Vector2d(104.14, 99.06), "moving forward")
@@ -38,12 +37,12 @@ class MainAuto : AutoOpMode() {
     }
 
     override fun run() {
-        robot.drive.followPath(path, pathFollower)
+        robot.drive.followPath(pathFollower)
         robot.drive.waitForPathFollower()
 
-        System.out.println("statut: done step 1")
-        robot.drive.followPath(path1, pathFollower1)
-        System.out.println("statut: started step 2")
+        println("statut: done step 1")
+        robot.drive.followPath(pathFollower1)
+        println("statut: started step 2")
         robot.drive.waitForPathFollower()
     }
 }
