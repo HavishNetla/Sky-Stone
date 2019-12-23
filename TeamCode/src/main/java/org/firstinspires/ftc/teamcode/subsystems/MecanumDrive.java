@@ -203,7 +203,7 @@ public class MecanumDrive extends Subsystem {
                     internalSetVelocity(new Vector2d(pathPowers[1], -pathPowers[0]), pathPowers[2]);
                 } else {
                     stop();
-                    System.out.println("statut: DONE");
+                    System.out.println("statut: DONE" + pathfollower.getName());
                 }
                 updatePowers();
 
