@@ -39,10 +39,10 @@ class PurePursuitAuto : AutoOpMode() {
     }
 
     override fun run() {
-        robot.drive.followPath(path, pathFollower)
+        robot.drive.followPath(pathFollower)
         robot.drive.waitForPathFollower()
 
-        robot.drive.followPath(path1, pathFollower1)
+        robot.drive.followPath(pathFollower1)
         robot.drive.waitForPathFollower()
     }
 }

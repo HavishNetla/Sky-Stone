@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.util.Vector2d
 import java.text.DecimalFormat
 import java.util.*
 
-@TeleOp(name = "Mecanum Drive", group = "T")
-class MainTeleOp : OpMode() {
+@TeleOp(name = "Encoder Test", group = "T")
+class EncoderTest : OpMode() {
     private lateinit var robot: Robot
     private lateinit var computerDebugging: ComputerDebugging
     private var df = DecimalFormat("#.##")
@@ -44,6 +44,10 @@ class MainTeleOp : OpMode() {
 
 
         var fixPos = Pose2d(robot.drive.position.x, robot.drive.position.y, robot.drive.position.heading * (180 / Math.PI))
+
+        telemetry.addData("Left", robot.drive.trackingWheelPositions[0])
+        telemetry.addData("Right", robot.drive.trackingWheelPositions[1])
+        telemetry.addData("Center", robot.drive.trackingWheelPositions[2])
 
         ComputerDebugging.sendRobotLocation(fixPos)
         ComputerDebugging.sendLog("\nPosition - " + robot.drive.position.toString() +

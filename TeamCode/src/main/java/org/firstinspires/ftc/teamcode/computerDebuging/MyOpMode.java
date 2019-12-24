@@ -30,7 +30,7 @@ public class MyOpMode extends OpMode {
     ComputerDebugging.sendPaths(path);
 
     double[] powers = pathFollower.followCurve(0, Robot.robotPos, 0.5, 2);
-    ComputerDebugging.sendPoint(pathFollower.lookAheadPoint);
+    ComputerDebugging.sendPoint(pathFollower.getLookAheadPoint());
 
     System.out.println("Pos: " + Robot.robotPos);
     System.out.println("0: " + powers[0] + ", 1:" + powers[1] + ", 2:" + powers[2]);
