@@ -17,16 +17,24 @@ import java.util.List;
 
 public class MecanumDrive extends Subsystem {
   public static double[] pathPowers = new double[] {0, 0, 0};
+
+  // Drive Motors
   private DcMotor frontLeft;
   private DcMotor frontRight;
   private DcMotor backLeft;
   private DcMotor backRight;
 
+  // Encoder Wheels
   private DcMotor left;
   private DcMotor right;
   private DcMotor center;
 
+  // Foundation Grabber
   private Servo foundationGrabber;
+
+  // Auxiliary block picker upper
+  private Servo rotater;
+  private Servo grabber;
 
   private DigitalChannel touchSensor;
 
@@ -44,6 +52,8 @@ public class MecanumDrive extends Subsystem {
   private double turnSpeed = 0.75;
   private boolean isPathFollowingDone = false;
   private double foundationGrabberPosition = 0.5;
+  private double rotaterPos = 0.0;
+  private double grabberPos = 0.0;
 
   public MecanumDrive(HardwareMap map, Telemetry telemetry) {
     frontLeft = map.get(DcMotor.class, "FL");
@@ -54,6 +64,9 @@ public class MecanumDrive extends Subsystem {
     left = map.get(DcMotor.class, "L");
     right = map.get(DcMotor.class, "R");
     center = map.get(DcMotor.class, "C");
+
+    rotater = map.get(Servo.class, "CR");
+    grabber = map.get(Servo.class, "CG");
 
     // foundationGrabber = map.get(Servo.class, "FG");
 
@@ -80,6 +93,9 @@ public class MecanumDrive extends Subsystem {
     this.telemetry = telemetry;
 
     resetEncoders();
+
+    setRotaterPos(0.5);
+    setGrabberPos(0.3);
   }
 
   // Odometry
@@ -87,7 +103,7 @@ public class MecanumDrive extends Subsystem {
     double ratio = (Math.PI * 5.08) / 1440;
 
     return Arrays.asList(
-        left.getCurrentPosition() * ratio,
+        -left.getCurrentPosition() * ratio,
         -right.getCurrentPosition() * ratio,
         -center.getCurrentPosition() * ratio);
   }
@@ -197,8 +213,42 @@ public class MecanumDrive extends Subsystem {
     foundationGrabberPosition = 0.0;
   }
 
+  public void setRotaterPos(double pos) {
+    rotaterPos = pos;
+  }
+
+  public void setGrabberPos(double pos) {
+    grabberPos = pos;
+  }
+
   public boolean getTouchSensorState() {
     return touchSensor.getState();
+  }
+
+  public void grabBlock() {
+    setRotaterPos(1.0);
+    setGrabberPos(0.55);
+    delay((long) 1.0);
+    setGrabberPos(0.3);
+    delay((long) 1.0);
+  }
+
+  public void stowBlock() {
+    setRotaterPos(0.5);
+    setGrabberPos(0.3);
+    delay((long) 1.0);
+  }
+
+  public void releaseBlock() {
+    setGrabberPos(0.55);
+  }
+
+  public void delay(long s) {
+    try {
+      Thread.sleep(s * 1000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
@@ -226,7 +276,6 @@ public class MecanumDrive extends Subsystem {
         } else {
           stop();
         }
-        System.out.println("statut: " + Math.toDegrees(pathfollower.getRelativeAngleToPoint()));
         updatePowers();
 
         break;
@@ -238,6 +287,8 @@ public class MecanumDrive extends Subsystem {
     backRight.setPower(powers[3]);
 
     // foundationGrabber.setPosition(foundationGrabberPosition);
+    rotater.setPosition(rotaterPos);
+    grabber.setPosition(grabberPos);
   }
 
   public enum Mode {

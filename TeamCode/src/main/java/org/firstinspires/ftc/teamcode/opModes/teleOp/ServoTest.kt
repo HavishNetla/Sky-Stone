@@ -37,9 +37,34 @@ class ServoTest : OpMode() {
 //        }
 //        robot.lift.spinRotater(Lift.ROTATER_POSITION.RIGHT)
 
+//        robot.intake.power = gamepad1.left_stick_x.toDouble()
+//        telemetry.addData("intake", robot.intake.power)
+//        telemetry.addData("touchSensor", robot.drive.touchSensorState)
+
+//        if(gamepad1.a) {
+//            robot.drive.setRotaterPos(1.0)
+//        } else {
+//            robot.drive.setRotaterPos(0.5)
+//        }
+//
+//        if(gamepad1.b) {
+//            robot.drive.setGrabberPos(0.3)
+//        } else {
+//            robot.drive.setGrabberPos(0.6)
+//        }
+
+        if (gamepad1.a) {
+            robot.drive.grabBlock()
+        }
+
+        if (gamepad1.b) {
+            robot.drive.releaseBlock()
+        }
+
+        if (gamepad1.y) {
+            robot.drive.stowBlock()
+        }
         robot.intake.power = gamepad1.left_stick_x.toDouble()
-        telemetry.addData("intake", robot.intake.power)
-        telemetry.addData("touchSensor", robot.drive.touchSensorState)
 
     }
 }

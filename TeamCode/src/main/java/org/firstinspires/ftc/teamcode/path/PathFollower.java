@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import static org.firstinspires.ftc.teamcode.util.MyMath.AngleWrap;
 
 public class PathFollower {
+  double followAngle1 = 0.0;
+  double speed1 = 0.0;
+  double turnSpeed1 = 0.0;
   private double movement_x, movement_y, movement_turn;
   private Vector2d lookAheadPoint;
   private boolean first = true;
@@ -55,7 +58,6 @@ public class PathFollower {
     double absoluteAngleToTarget = Math.atan2(goal.getY() - pose.getY(), goal.getX() - pose.getX());
     double relativeAngleToPoint = AngleWrap(pose.getHeading() - absoluteAngleToTarget);
     relTurnAngle = relativeAngleToPoint;
-
     double relativeYToPoint;
     double relativeXToPoint;
 
@@ -73,6 +75,12 @@ public class PathFollower {
 
     double relativeTurnAngle = relativeAngleToPoint + preferredAngle;
     relTurnAngle = relativeTurnAngle;
+    System.out.println(
+        "statut: "
+            + "angle: "
+            + Math.toDegrees(pose.getHeading())
+            + " rel: "
+            + Math.toDegrees(relTurnAngle));
 
     if (ended == false) {
 
@@ -106,16 +114,20 @@ public class PathFollower {
         followPoint = path.get(path.size() - 2).end;
         hasReachedEnd = true;
       } else {
+        followAngle1 = f.followAngle;
+        speed1 = f.speed;
+        turnSpeed1 = f.turnSpeed;
+
         followPoint = point;
       }
     }
 
-    return goToPoint(followPoint, pose, f.followAngle, f.speed, f.turnSpeed);
+    return goToPoint(followPoint, pose, followAngle1, speed1, turnSpeed1);
   }
 
   public int getStage(Vector2d point) {
 
-    for(int i = 0 ; i < this.path.size(); i++) {
+    for (int i = 0; i < this.path.size(); i++) {
       PathSegment segment = path.get(i);
       if (segment.start.dist(point) + segment.end.dist(point) == segment.start.dist(segment.end)) {
         return i;

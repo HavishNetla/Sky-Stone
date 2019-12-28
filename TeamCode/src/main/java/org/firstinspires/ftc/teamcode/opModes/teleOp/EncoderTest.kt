@@ -48,16 +48,14 @@ class EncoderTest : OpMode() {
         telemetry.addData("Left", robot.drive.trackingWheelPositions[0])
         telemetry.addData("Right", robot.drive.trackingWheelPositions[1])
         telemetry.addData("Center", robot.drive.trackingWheelPositions[2])
+        telemetry.addData("pos", robot.drive.position)
+
 
         ComputerDebugging.sendRobotLocation(fixPos)
         ComputerDebugging.sendLog("\nPosition - " + robot.drive.position.toString() +
                 "\nPowersg - " + df.format(gamepad1.left_stick_x) + ", " + df.format(gamepad1.left_stick_y) + ", " + df.format(gamepad1.right_stick_x)
         )
         ComputerDebugging.sendPacket()
-
-        telemetry.addData("left", robot.drive.trackingWheelPositions[0])
-        telemetry.addData("right", robot.drive.trackingWheelPositions[1])
-        telemetry.addData("center", robot.drive.trackingWheelPositions[2])
     }
 
     override fun stop() {
