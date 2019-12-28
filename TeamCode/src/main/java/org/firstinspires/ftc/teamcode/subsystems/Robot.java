@@ -18,7 +18,7 @@ public class Robot implements OpModeManagerNotifier.Notifications {
   public MecanumDrive drive;
   public EncoderTest encoderTest;
   public Lift lift;
-  // public Intake intake;
+  public Intake intake;
 
   private List<Subsystem> subsystems;
   private OpModeManagerImpl opModeManager;
@@ -52,8 +52,8 @@ public class Robot implements OpModeManagerNotifier.Notifications {
     lift = new Lift(opMode.hardwareMap, telemetry);
     subsystems.add(lift);
 
-    //    intake = new Intake(opMode.hardwareMap);
-    //    subsystems.add(encoderTest);
+    intake = new Intake(opMode.hardwareMap);
+    subsystems.add(intake);
 
     Activity activity = (Activity) opMode.hardwareMap.appContext;
     opModeManager = OpModeManagerImpl.getOpModeManagerOfActivity(activity);

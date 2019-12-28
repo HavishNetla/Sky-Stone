@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -26,6 +27,8 @@ public class MecanumDrive extends Subsystem {
   private DcMotor center;
 
   private Servo foundationGrabber;
+
+  private DigitalChannel touchSensor;
 
   private PathFollower pathfollower;
   private Mode mode = Mode.OPEN_LOOP;
@@ -52,7 +55,9 @@ public class MecanumDrive extends Subsystem {
     right = map.get(DcMotor.class, "R");
     center = map.get(DcMotor.class, "C");
 
-    foundationGrabber = map.get(Servo.class, "FG");
+    // foundationGrabber = map.get(Servo.class, "FG");
+
+    touchSensor = map.get(DigitalChannel.class, "CT");
 
     setMode(Mode.OPEN_LOOP);
     setMode(LocalizerMode.THREE_WHEEL_LOCALIZER);
@@ -114,6 +119,10 @@ public class MecanumDrive extends Subsystem {
     left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     center.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+    left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    center.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
   }
 
   public void setVelocity(Vector2d vel, double omega) {
@@ -188,6 +197,10 @@ public class MecanumDrive extends Subsystem {
     foundationGrabberPosition = 0.0;
   }
 
+  public boolean getTouchSensorState() {
+    return touchSensor.getState();
+  }
+
   @Override
   public void update() {
     // update odometry position
@@ -224,7 +237,7 @@ public class MecanumDrive extends Subsystem {
     backLeft.setPower(powers[2]);
     backRight.setPower(powers[3]);
 
-    foundationGrabber.setPosition(foundationGrabberPosition);
+    // foundationGrabber.setPosition(foundationGrabberPosition);
   }
 
   public enum Mode {

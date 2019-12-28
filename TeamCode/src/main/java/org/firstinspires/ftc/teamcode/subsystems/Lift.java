@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -11,6 +12,8 @@ public class Lift extends Subsystem {
   private Servo rotater;
   private Servo grabber;
 
+  private DcMotor liftMotor;
+
   private double linkagePos = 0.0;
   private double rotaterPos = 0.0;
   private double grabberPos = 0.0;
@@ -20,6 +23,7 @@ public class Lift extends Subsystem {
     rotater = map.get(Servo.class, "LR");
     grabber = map.get(Servo.class, "LG");
 
+//    liftMotor = map.get(DcMotor.class, "LM");
     this.telemetry = telemetry;
   }
 

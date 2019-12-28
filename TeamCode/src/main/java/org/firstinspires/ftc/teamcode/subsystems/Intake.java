@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.util.StringUtils;
@@ -8,12 +9,15 @@ import org.firstinspires.ftc.teamcode.util.StringUtils;
 public class Intake extends Subsystem {
   private DcMotor left;
   private DcMotor right;
+
   private double power = 0;
   private boolean hasBlock = false;
 
   public Intake(HardwareMap map) {
-    left = map.get(DcMotor.class, "LI");
-    right = map.get(DcMotor.class, "RI");
+    left = map.get(DcMotor.class, "R");
+    right = map.get(DcMotor.class, "L");
+
+    right.setDirection(DcMotorSimple.Direction.REVERSE);
   }
 
   public void setPower(double power) {
