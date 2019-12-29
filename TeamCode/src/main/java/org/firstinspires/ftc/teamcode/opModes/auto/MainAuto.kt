@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.computerDebuging.ComputerDebugging
 import org.firstinspires.ftc.teamcode.path.PathBuilder
 import org.firstinspires.ftc.teamcode.path.PathFollower
 import org.firstinspires.ftc.teamcode.path.PathSegment
+import org.firstinspires.ftc.teamcode.path.Paths
 import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
 import java.util.*
@@ -49,6 +50,8 @@ class MainAuto : AutoOpMode() {
             .addPoint(Vector2d(78.9, 160.88), Math.toRadians(0.0), 0.25, 0.7, "moving forward")
             .create()
 
+    private var paths: Paths = Paths()
+
     override fun setup() {
         pathFollower = PathFollower(path, 55.0, "FIrst")
         pathFollower1 = PathFollower(path1, 55.0, "Second")
@@ -62,7 +65,7 @@ class MainAuto : AutoOpMode() {
     }
 
     override fun run() {
-        robot.drive.followPath(pathFollower)
+        robot.drive.followPath(paths.getPathToBlock(0))
         robot.drive.setLocalizerConfig(Math.toRadians(0.0), 0.5, 0.75)
         robot.drive.waitForPathFollower()
 

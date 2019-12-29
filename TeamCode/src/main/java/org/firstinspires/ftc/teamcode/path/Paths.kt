@@ -4,7 +4,6 @@ import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
 import java.util.*
 
-private var t = PathBuilder(Pose2d(20.32, 81.7, 0.0))
 
 data class PathPoint(val point: Vector2d, val followAngle: Double, val speed: Double, val turnSpeed: Double, val label: String)
 
@@ -18,7 +17,8 @@ private var blockPositions: List<PathPoint> = listOf(
 )
 
 class Paths() {
-    fun getPathToBlock(index: Int): ArrayList<PathSegment> {
+    fun getPathToBlock(index: Int): PathFollower {
+        var t = PathBuilder(Pose2d(20.32, 81.7, 0.0))
         var path: ArrayList<PathSegment> = t
                 .addPoint(Vector2d(blockPositions[index].point.x - 30, blockPositions[index].point.y),
                         blockPositions[index].followAngle,
@@ -33,6 +33,6 @@ class Paths() {
                 )
                 .create()
 
-        return path
+        return PathFollower(path, 55.0, "FIrst")
     }
 }
