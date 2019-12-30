@@ -33,16 +33,16 @@ class MainAuto : AutoOpMode() {
             .addPoint(blockPositions[0], Math.toRadians(70.0), 0.3, 0.75, "moving forward")
             .create()
 
-    private var t1 = PathBuilder(Pose2d(104.14, 99.06, 0.0))
+    private var t1 = PathBuilder(Pose2d(103.14, 84.625, 0.0))
     private var path1: ArrayList<PathSegment> = t1
-            .addPoint(Vector2d(88.9, 132.08), Math.toRadians(-90.0), 0.25, 0.25, "moving forward")
-            .addPoint(Vector2d(88.9, 220.98), Math.toRadians(-90.0), 0.25, 0.25, "moving forward")
-            .addPoint(Vector2d(88.9, 299.72), Math.toRadians(-90.0), 0.25, 0.25, "moving forward")
+            .addPoint(Vector2d(80.0, 132.08), -Math.PI, 0.25, 0.25, "moving forward1")
+            .addPoint(Vector2d(80.0, 220.98), -Math.PI, 0.25, 0.25, "moving forward2")
+            .addPoint(Vector2d(105.0, 320.72), -Math.PI, 0.25, 0.25, "moving forward3")
             .create()
 
-    private var t2 = PathBuilder(Pose2d(88.9, 299.72, 0.0))
+    private var t2 = PathBuilder(Pose2d(105.0, 320.72, 0.0))
     private var path2: ArrayList<PathSegment> = t2
-            .addPoint(Vector2d(65.14, 289.72), Math.toRadians(-175.0), 0.25, 2.0, "moving forward")
+            .addPoint(Vector2d(65.14, 289.72), Math.toRadians(-175.0), 0.25, 2.0, "moving forward2")
             .create()
 
     private var t3 = PathBuilder(Pose2d(65.14, 289.72, 0.0))
@@ -65,24 +65,33 @@ class MainAuto : AutoOpMode() {
     }
 
     override fun run() {
-        robot.drive.followPath(paths.getPathToBlock(0))
-        robot.drive.setLocalizerConfig(Math.toRadians(0.0), 0.5, 0.75)
+        robot.drive.followPath(paths.getPathToBlock(3))
+        robot.drive.setLocalizerConfig(Math.toRadians(0.0), 0.5, 0.75, true)
         robot.drive.waitForPathFollower()
 
         robot.drive.grabBlock()
         robot.drive.stowBlock()
 
+        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position))
 
-//        robot.drive.followPath(pathFollower1)
-//        robot.drive.setLocalizerConfig(Math.toRadians(-90.0), 0.25, 0.25)
-//        robot.drive.waitForPathFollower()
+        robot.drive.setLocalizerConfig(Math.toRadians(180.0), 0.25, 0.25, false)
+        robot.drive.waitForPathFollower()
+
+        robot.drive.releaseBlock()
+        robot.drive.stowBlock()
+
+        // SECOND BLOCK
+        robot.drive.followPath(paths.secondBlock(robot.drive.position))
+        robot.drive.setLocalizerConfig(Math.toRadians(180.0), 0.25, 0.25, true)
+
+        robot.drive.waitForPathFollower()
 //
-//        robot.drive.followPath(pathFollower2)
-//        robot.drive.setLocalizerConfig(Math.toRadians(-175.0), 0.25, 2.0)
-//        robot.drive.waitForPathFollower()
+//        robot.drive.grabBlock()
+//        robot.drive.stowBlock()
 //
-//        robot.drive.followPath(pathFollower3)
-//        robot.drive.setLocalizerConfig(Math.toRadians(0.0), 0.25, 0.75)
-//        robot.drive.waitForPathFollower()
+//        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position))
+//
+//        robot.drive.releaseBlock()
+//        robot.drive.stowBlock()
     }
 }

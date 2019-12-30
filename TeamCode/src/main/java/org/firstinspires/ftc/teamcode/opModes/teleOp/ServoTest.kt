@@ -16,19 +16,19 @@ class ServoTest : OpMode() {
     }
 
     override fun loop() {
-//        if (gamepad1.a) {
-//            robot.lift.grap()
-//        } else {
-//            robot.lift.open()
-//        }
-//
-//        if (gamepad1.b) {
-//            pos += 0.001
-//        } else if (gamepad1.y) {
-//            pos -= 0.001
-//        }
-//        telemetry.addData("pos",  pos)
-//        robot.lift.setLinkagePos(pos)
+        if (gamepad1.a) {
+            robot.lift.grap()
+        } else {
+            robot.lift.open()
+        }
+
+        if (gamepad1.b) {
+            pos += 0.001
+        } else if (gamepad1.y) {
+            pos -= 0.001
+        }
+        telemetry.addData("pos",  pos)
+        robot.lift.setLinkagePos(pos)
 
 //        if(gamepad1.a) {
 //            robot.drive.grabFoundation()

@@ -54,6 +54,7 @@ public class MecanumDrive extends Subsystem {
   private double foundationGrabberPosition = 0.5;
   private double rotaterPos = 0.0;
   private double grabberPos = 0.0;
+  private boolean turn = true;
 
   public MecanumDrive(HardwareMap map, Telemetry telemetry) {
     frontLeft = map.get(DcMotor.class, "FL");
@@ -180,10 +181,11 @@ public class MecanumDrive extends Subsystem {
     return localizerMode;
   }
 
-  public void setLocalizerConfig(double followAngle, double speed, double turnSpeed) {
+  public void setLocalizerConfig(double followAngle, double speed, double turnSpeed, boolean turn) {
     this.followAngle = followAngle;
     this.pathSpeed = speed;
     this.turnSpeed = turnSpeed;
+    this.turn = turn;
   }
 
   public boolean getPathStatus() {
@@ -240,7 +242,9 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void releaseBlock() {
+    setRotaterPos(0.8);
     setGrabberPos(0.55);
+    delay((long) 1.0);
   }
 
   public void delay(long s) {
@@ -272,7 +276,8 @@ public class MecanumDrive extends Subsystem {
         isPathFollowingDone = pathfollower.getStatus();
 
         if (!isPathFollowingDone) {
-          internalSetVelocity(new Vector2d(pathPowers[1], -pathPowers[0]), pathPowers[2]);
+          internalSetVelocity(
+              new Vector2d(pathPowers[1], -pathPowers[0]), turn ? pathPowers[2] : 0);
         } else {
           stop();
         }

@@ -44,16 +44,12 @@ class MainTeleOp : OpMode() {
 
 
         var fixPos = Pose2d(robot.drive.position.x, robot.drive.position.y, robot.drive.position.heading * (180 / Math.PI))
-
-        ComputerDebugging.sendRobotLocation(fixPos)
-        ComputerDebugging.sendLog("\nPosition - " + robot.drive.position.toString() +
-                "\nPowersg - " + df.format(gamepad1.left_stick_x) + ", " + df.format(gamepad1.left_stick_y) + ", " + df.format(gamepad1.right_stick_x)
-        )
-        ComputerDebugging.sendPacket()
-
         telemetry.addData("left", robot.drive.trackingWheelPositions[0])
         telemetry.addData("right", robot.drive.trackingWheelPositions[1])
         telemetry.addData("center", robot.drive.trackingWheelPositions[2])
+
+        robot.intake.power = gamepad2.left_stick_x.toDouble()
+
     }
 
     override fun stop() {

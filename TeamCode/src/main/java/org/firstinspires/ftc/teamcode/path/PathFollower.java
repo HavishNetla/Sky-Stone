@@ -75,12 +75,6 @@ public class PathFollower {
 
     double relativeTurnAngle = relativeAngleToPoint + preferredAngle;
     relTurnAngle = relativeTurnAngle;
-    System.out.println(
-        "statut: "
-            + "angle: "
-            + Math.toDegrees(pose.getHeading())
-            + " rel: "
-            + Math.toDegrees(relTurnAngle));
 
     if (ended == false) {
 
@@ -104,11 +98,11 @@ public class PathFollower {
   }
 
   public double[] followCurve(double followAngle, Pose2d pose, double speed, double turnSpeed) {
-    Vector2d point = getLookAheadPoint(pose);
+    Vector2d point = getLookAheadPoint(pose, this.path.get(0).followAngle);
     lookAheadPoint = point;
 
     PathSegment f = this.path.get(getStage(lookAheadPoint));
-
+    System.out.println("statut: " + lookAheadPoint);
     if (!hasReachedEnd) {
       if (f.label == "extend") {
         followPoint = path.get(path.size() - 2).end;
@@ -119,6 +113,7 @@ public class PathFollower {
         turnSpeed1 = f.turnSpeed;
 
         followPoint = point;
+        System.out.println("statut: followAngle: " + followAngle1);
       }
     }
 
@@ -144,7 +139,7 @@ public class PathFollower {
    * @param pose The current Pose of the robot
    * @return The point for the robot to move towards
    */
-  public Vector2d getLookAheadPoint(Pose2d pose) {
+  public Vector2d getLookAheadPoint(Pose2d pose, double followAngle) {
     Vector2d point = path.get(0).start;
     lookAheadPoint = point;
 
@@ -160,7 +155,7 @@ public class PathFollower {
             Math.toDegrees(
                 Math.atan2(intersection.getY() - pose.getY(), intersection.getX() - pose.getX()));
 
-        double angleFix = Math.toDegrees(pose.getHeading()) + 90;
+        double angleFix = Math.toDegrees(pose.getHeading() + followAngle) + 90;
         double newAngle = angleFix < 0 ? 360 + angleFix : angleFix;
         double deltaAngle = Math.abs(angle - newAngle);
 
