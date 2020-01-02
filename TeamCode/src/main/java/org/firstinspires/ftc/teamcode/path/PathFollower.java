@@ -58,6 +58,7 @@ public class PathFollower {
     double absoluteAngleToTarget = Math.atan2(goal.getY() - pose.getY(), goal.getX() - pose.getX());
     double relativeAngleToPoint = AngleWrap(pose.getHeading() - absoluteAngleToTarget);
     relTurnAngle = relativeAngleToPoint;
+
     double relativeYToPoint;
     double relativeXToPoint;
 
@@ -77,7 +78,6 @@ public class PathFollower {
     relTurnAngle = relativeTurnAngle;
 
     if (ended == false) {
-
       if (Math.abs(Math.hypot(goal.getX() - pose.getX(), goal.getY() - pose.getY())) < 10) {
         ended = true;
         movement_turn = 0;
@@ -155,7 +155,7 @@ public class PathFollower {
             Math.toDegrees(
                 Math.atan2(intersection.getY() - pose.getY(), intersection.getX() - pose.getX()));
 
-        double angleFix = Math.toDegrees(pose.getHeading() + followAngle) + 90;
+        double angleFix = Math.toDegrees(pose.getHeading()) + 90;
         double newAngle = angleFix < 0 ? 360 + angleFix : angleFix;
         double deltaAngle = Math.abs(angle - newAngle);
 
@@ -167,6 +167,22 @@ public class PathFollower {
       }
     }
     return point;
+  }
+
+  public double[] turn(Pose2d pose, double angle) {
+    double error = angle - pose.getHeading();
+    System.out.println(
+        "status1: "
+            + Math.toDegrees(error)
+            + " goal: "
+            + Math.toDegrees(angle)
+            + " current: "
+            + Math.toDegrees(pose.getHeading()));
+    if (Math.abs(error) < 1) {
+      isDone = true;
+      return new double[] {0, 0, 0};
+    }
+    return new double[] {0, 0, -error / 10};
   }
 
   /**

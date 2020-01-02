@@ -1,44 +1,62 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.PIDController;
 
 public class Lift extends Subsystem {
+  double scalar = 1.0;
   private Telemetry telemetry;
-
   private DigitalChannel touchSensor;
-
   private Servo linkage;
   private Servo rotater;
   private Servo grabber;
-
-  private DcMotor liftMotor;
-
+  private Servo capStone;
+  private DcMotorEx liftMotor;
   private double linkagePos = 0.0;
   private double rotaterPos = 0.0;
   private double grabberPos = 0.0;
   private double liftPower = 0.0;
+  private double capStonePos = 0.0;
 
   public Lift(HardwareMap map, Telemetry telemetry) {
     linkage = map.get(Servo.class, "LL");
     rotater = map.get(Servo.class, "LR");
     grabber = map.get(Servo.class, "LG");
+    capStone = map.get(Servo.class, "SS");
 
-    liftMotor = map.get(DcMotor.class, "LM");
+    liftMotor = map.get(DcMotorEx.class, "LM");
 
     touchSensor = map.get(DigitalChannel.class, "LT");
     this.telemetry = telemetry;
 
     liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-    // `liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    // liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
     setRotaterPos(1.0);
     setLinkagePos(0.36);
+    open();
+    stowCap();
+
+    PIDFCoefficients newPIDF = new PIDFCoefficients(5.0, 0.0, 0.0, 0.0);
+    liftMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, newPIDF);
+
+    liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    liftMotor.setTargetPosition(-800);
+    liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+  }
+
+  public void stowCap() {
+    setCapstonePosition(0.6);
+  }
+
+  public void openCap() {
+    setCapstonePosition(0.8);
   }
 
   public void setLinkagePos(double pos) {
@@ -72,10 +90,15 @@ public class Lift extends Subsystem {
   }
 
   public void lift(double power) {
+    if (-power < 0.0) {
+      scalar = 0.3;
+    } else {
+      scalar = 0.5;
+    }
     if (touchSensor.getState() && -power < 0.0) {
       liftPower = 0.0;
     } else {
-      liftPower = power;
+      liftPower = power * scalar;
     }
   }
 
@@ -93,20 +116,45 @@ public class Lift extends Subsystem {
     return liftMotor.getCurrentPosition();
   }
 
+  public void setCapstonePosition(double pos) {
+    this.capStonePos = pos;
+  }
+
+  public String getPID() {
+    PIDFCoefficients pidOrig = liftMotor.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION);
+
+    return ("P,I,D (orig): "
+        + " "
+        + pidOrig.p
+        + ", "
+        + pidOrig.i
+        + ", "
+        + pidOrig.d
+        + ", "
+        + pidOrig.f);
+  }
+
   @Override
   public void update() {
     linkage.setPosition(linkagePos);
     // rotater.setPosition(rotaterPos);
     grabber.setPosition(grabberPos);
+    capStone.setPosition(capStonePos);
 
-    if (Math.abs(liftPower) < 0.001 && !touchSensor.getState()) {
-      if (Math.abs(liftMotor.getCurrentPosition()) < 540) {
-        liftPower = 0.1;
-      } else {
-        liftPower = 0.00021 * liftMotor.getCurrentPosition() - 0.01272065;
-      }
+    //    if (Math.abs(liftPower) < 0.001 && !touchSensor.getState()) {
+    //      if (Math.abs(liftMotor.getCurrentPosition()) < 440) {
+    //        liftPower = 0.3;
+    //      } else {
+    //        liftPower = 0.0003 * liftMotor.getCurrentPosition() - 0.04272065;
+    //      }
+    //    }
+
+    if (liftMotor.isBusy()) {
+      liftMotor.setPower(0.5);
+    } else {
+      liftMotor.setPower(0);
     }
-    liftMotor.setPower(liftPower);
+    // liftMotor.setPower(liftPower);
   }
 
   public enum ROTATER_POSITION {

@@ -46,9 +46,6 @@ public class Robot implements OpModeManagerNotifier.Notifications {
     drive = new MecanumDrive(opMode.hardwareMap, telemetry);
     subsystems.add(drive);
 
-    encoderTest = new EncoderTest(opMode.hardwareMap);
-    subsystems.add(encoderTest);
-
     lift = new Lift(opMode.hardwareMap, telemetry);
     subsystems.add(lift);
 

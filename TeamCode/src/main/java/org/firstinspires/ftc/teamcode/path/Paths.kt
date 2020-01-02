@@ -2,18 +2,17 @@ package org.firstinspires.ftc.teamcode.path
 
 import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
-import java.util.*
 
 
 data class PathPoint(val point: Vector2d, val followAngle: Double, val speed: Double, val turnSpeed: Double, val label: String)
 
 private var blockPositions: List<PathPoint> = listOf(
-        PathPoint(Vector2d(103.14, 23.668), Math.toRadians(65.0), 0.3, 0.3, "first block"),
-        PathPoint(Vector2d(103.14, 43.985), Math.toRadians(71.25), 0.3, 0.3, "second block"),
-        PathPoint(Vector2d(103.14, 64.305), Math.toRadians(77.5), 0.3, 0.3, "third block"),
-        PathPoint(Vector2d(103.14, 84.625), Math.toRadians(83.75), 0.3, 0.3, "fourth block"),
-        PathPoint(Vector2d(103.14, 104.945), Math.toRadians(90.0), 0.3, 0.3, "fifth block"),
-        PathPoint(Vector2d(103.14, 125.265), Math.toRadians(99.25), 0.3, 0.3, "sixth block")
+        PathPoint(Vector2d(99.14, 23.668), Math.toRadians(65.0), 0.3, 0.3, "first block"),
+        PathPoint(Vector2d(99.14, 43.985), Math.toRadians(71.25), 0.3, 0.3, "second block"),
+        PathPoint(Vector2d(99.14, 64.305), Math.toRadians(77.5), 0.3, 0.3, "third block"),
+        PathPoint(Vector2d(99.14, 84.625), Math.toRadians(83.75), 0.3, 0.3, "fourth block"),
+        PathPoint(Vector2d(99.14, 104.945), Math.toRadians(90.0), 0.3, 0.3, "fifth block"),
+        PathPoint(Vector2d(99.14, 125.265), Math.toRadians(99.25), 0.3, 0.3, "sixth block")
 )
 
 class Paths {
@@ -21,7 +20,7 @@ class Paths {
     fun getPathToBlock(index: Int): PathFollower {
         userInput = index
 
-        var t = PathBuilder(Pose2d(20.32, 81.7, 0.0))
+        var t = PathBuilder(Pose2d(18.32, 81.7, 0.0))
         var path: ArrayList<PathSegment> = t
                 .addPoint(blockPositions[index].point,
                         blockPositions[index].followAngle,
@@ -35,21 +34,21 @@ class Paths {
         return PathFollower(path, 55.0, "FIrst")
     }
 
-    fun secondBlock(pose: Pose2d): PathFollower {
-        return moveFromPlatformToBlock(pose, userInput - 1)
+    fun secondBlock(pose: Pose2d, loc: Int): PathFollower {
+        return moveFromPlatformToBlock(pose, loc)
     }
 
     fun moveFromPlatformToBlock(pose: Pose2d, index: Int): PathFollower {
         var t = PathBuilder(pose)
         var path: ArrayList<PathSegment> = t
-                .addPoint(Vector2d(80.0, 132.08), 0.0, 0.25, 0.25, "moving forward1")
-                .addPoint(blockPositions[index].point,
+                .addPoint(Vector2d(blockPositions[index].point.x - 5, blockPositions[index].point.y),
                         0.0,
                         blockPositions[index].speed,
                         0.75
                         ,
                         "123123"
-                ).create()
+                )
+                .create()
 
         return PathFollower(path, 55.0, "FIrst1")
     }
@@ -57,11 +56,49 @@ class Paths {
     fun moveTowardsPlatfrom(pose: Pose2d): PathFollower {
         var t = PathBuilder(pose)
         var path: ArrayList<PathSegment> = t
-                .addPoint(Vector2d(80.0, 132.08), -Math.PI, 0.25, 0.25, "moving forward1")
-                .addPoint(Vector2d(80.0, 220.98), -Math.PI, 0.25, 0.25, "moving forward2")
-                .addPoint(Vector2d(105.0, 320.72), -Math.PI, 0.25, 0.25, "moving forward3")
+                .addPoint(Vector2d(78.0, 132.08), -Math.PI, 0.4, 0.25, "moving forward1")
+                .addPoint(Vector2d(78.0, 220.98), -Math.PI, 0.4, 0.25, "moving forward2")
+                .addPoint(Vector2d(100.0, 320.72), -Math.PI, 0.25, 0.25, "moving forward3")
                 .create()
 
         return PathFollower(path, 55.0, "FIrst1")
+    }
+
+    fun moveTowardsPlatfrom2(pose: Pose2d): PathFollower {
+        var t = PathBuilder(pose)
+        var path: ArrayList<PathSegment> = t
+                .addPoint(Vector2d(78.0, 132.08), -Math.PI, 0.25, 0.25, "moving forward1")
+                .addPoint(Vector2d(78.0, 220.98), -Math.PI, 0.25, 0.25, "moving forward2")
+                .addPoint(Vector2d(103.0, 300.72), -Math.PI, 0.25, 0.25, "moving forward3")
+                .create()
+
+        return PathFollower(path, 55.0, "FIrst1")
+    }
+
+    fun grabFoundation(pose: Pose2d): PathFollower {
+        var t = PathBuilder(pose)
+        var path: ArrayList<PathSegment> = t
+                .addPoint(Vector2d(pose.x - 20, pose.y), -Math.PI, 0.25, 0.25, "moving forward1")
+                .create()
+
+        return PathFollower(path, 55.0, "FIrst1")
+    }
+
+    fun moveFoundation(pose: Pose2d): PathFollower {
+        var t = PathBuilder(pose)
+        var path: ArrayList<PathSegment> = t
+                .addPoint(Vector2d(30.48 * 2.5, 9 * 30.48), 0.0, 0.4, 0.0, "moving forward1")
+                .create()
+
+        return PathFollower(path, 40.0, "FIrst1")
+    }
+
+    fun park(pose: Pose2d): PathFollower {
+        var t = PathBuilder(pose)
+        var path: ArrayList<PathSegment> = t
+                .addPoint(Vector2d(30.48 * 2, 6 * 30.48), 0.0, 0.4, 0.0, "moving forwarasd")
+                .create()
+
+        return PathFollower(path, 40.0, "FIASR1")
     }
 }

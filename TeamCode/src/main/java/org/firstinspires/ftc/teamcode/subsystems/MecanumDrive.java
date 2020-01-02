@@ -17,27 +17,25 @@ import java.util.List;
 
 public class MecanumDrive extends Subsystem {
   public static double[] pathPowers = new double[] {0, 0, 0};
-
+  public static boolean moveToFoundation = false;
+  public static boolean moveToEnd = false;
+  public static boolean moveOutALittle = false;
+  private double angleToTurn = 0.0;
   // Drive Motors
   private DcMotor frontLeft;
   private DcMotor frontRight;
   private DcMotor backLeft;
   private DcMotor backRight;
-
   // Encoder Wheels
   private DcMotor left;
   private DcMotor right;
   private DcMotor center;
-
   // Foundation Grabber
   private Servo foundationGrabber;
-
   // Auxiliary block picker upper
   private Servo rotater;
   private Servo grabber;
-
   private DigitalChannel touchSensor;
-
   private PathFollower pathfollower;
   private Mode mode = Mode.OPEN_LOOP;
   private LocalizerMode localizerMode = LocalizerMode.THREE_WHEEL_LOCALIZER;
@@ -55,6 +53,8 @@ public class MecanumDrive extends Subsystem {
   private double rotaterPos = 0.0;
   private double grabberPos = 0.0;
   private boolean turn = true;
+  private boolean turnFunc = false;
+  private boolean specialAngle = false;
 
   public MecanumDrive(HardwareMap map, Telemetry telemetry) {
     frontLeft = map.get(DcMotor.class, "FL");
@@ -69,7 +69,7 @@ public class MecanumDrive extends Subsystem {
     rotater = map.get(Servo.class, "CR");
     grabber = map.get(Servo.class, "CG");
 
-    // foundationGrabber = map.get(Servo.class, "FG");
+    foundationGrabber = map.get(Servo.class, "FG");
 
     touchSensor = map.get(DigitalChannel.class, "CT");
 
@@ -97,6 +97,7 @@ public class MecanumDrive extends Subsystem {
 
     setRotaterPos(0.5);
     setGrabberPos(0.3);
+    openFoundationGrabber();
   }
 
   // Odometry
@@ -208,11 +209,12 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void grabFoundation() {
-    foundationGrabberPosition = 1.0;
+    foundationGrabberPosition = 0.9;
+    delay((long) 1.0);
   }
 
   public void openFoundationGrabber() {
-    foundationGrabberPosition = 0.0;
+    foundationGrabberPosition = 0.5;
   }
 
   public void setRotaterPos(double pos) {
@@ -255,6 +257,16 @@ public class MecanumDrive extends Subsystem {
     }
   }
 
+  public void setSpecialAngle(boolean option) {
+    this.specialAngle = option;
+    System.out.println("statut2: uh");
+  }
+
+  public void turn(double angle) {
+    this.angleToTurn = angle;
+    this.turnFunc = true;
+  }
+
   @Override
   public void update() {
     // update odometry position
@@ -271,14 +283,36 @@ public class MecanumDrive extends Subsystem {
         updatePowers();
         break;
       case FOLLOW_PATH:
-        pathPowers = pathfollower.update(followAngle, position, pathSpeed, turnSpeed);
-
-        isPathFollowingDone = pathfollower.getStatus();
+        if (moveOutALittle) {
+          pathPowers = pathfollower.goToPoint(new Vector2d(90.0, 300.72), position, 0.0, 0.3, 0);
+          isPathFollowingDone = pathfollower.getStatus();
+        } else if (moveToEnd) {
+          pathPowers = pathfollower.goToPoint(new Vector2d(30.48 * 3.5, 6 * 30.48), position, 0.0, 0.3, 0);
+          isPathFollowingDone = pathfollower.getStatus();
+        } else if (turnFunc) {
+          pathPowers = pathfollower.turn(position, angleToTurn);
+          isPathFollowingDone = pathfollower.getStatus();
+        } else {
+          if (moveToFoundation) {
+            pathPowers =
+                pathfollower.goToPoint(new Vector2d(110, 300.72), position, Math.PI, 0.3, 0);
+            isPathFollowingDone = pathfollower.getStatus();
+          } else if (specialAngle) {
+            pathPowers =
+                pathfollower.goToPoint(new Vector2d(80.0, 132.08), position, 0.0, 0.5 , 0.5);
+            isPathFollowingDone = pathfollower.getStatus();
+          } else {
+            pathPowers = pathfollower.update(followAngle, position, pathSpeed, turnSpeed);
+            isPathFollowingDone = pathfollower.getStatus();
+          }
+        }
 
         if (!isPathFollowingDone) {
           internalSetVelocity(
-              new Vector2d(pathPowers[1], -pathPowers[0]), turn ? pathPowers[2] : 0);
+              new Vector2d(pathPowers[1], -pathPowers[0]), turn || turnFunc ? pathPowers[2] : 0);
         } else {
+          moveOutALittle = false;
+          turnFunc = false;
           stop();
         }
         updatePowers();
@@ -291,7 +325,7 @@ public class MecanumDrive extends Subsystem {
     backLeft.setPower(powers[2]);
     backRight.setPower(powers[3]);
 
-    // foundationGrabber.setPosition(foundationGrabberPosition);
+    foundationGrabber.setPosition(foundationGrabberPosition);
     rotater.setPosition(rotaterPos);
     grabber.setPosition(grabberPos);
   }

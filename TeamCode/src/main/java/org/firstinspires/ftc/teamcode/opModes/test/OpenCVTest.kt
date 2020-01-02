@@ -9,6 +9,15 @@ import org.firstinspires.ftc.teamcode.vision.FrameGrabber
 class OpenCVTest : OpMode() {
     var frameGrabber = FrameGrabber()
 
+    enum class BlockPos {
+        ZERO_THREE,
+        ONE_FOUR,
+        TWO_FIVE,
+        NONE,
+    }
+
+    var blockPos: BlockPos = BlockPos.NONE
+
     override fun init() {
         frameGrabber.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
         frameGrabber.enable()
@@ -34,6 +43,29 @@ class OpenCVTest : OpMode() {
 
         telemetry.addData(
                 "stat", frameGrabber.statusLeft.toString() + ", " + frameGrabber.statusRight)
+
+        var sL = frameGrabber.statusLeft.toString()
+        var sR = frameGrabber.statusRight.toString()
+        blockPos = if (sL == "YELLOW" && sR == "YELLOW") {
+            BlockPos.ZERO_THREE
+        } else if (sL == "YELLOW" && sR == "BLACK") {
+            BlockPos.ONE_FOUR
+        } else if (sL == "BLACK" && sR == "YELLOW") {
+            BlockPos.TWO_FIVE
+        } else {
+            BlockPos.NONE
+        }
+        telemetry.addData("Block positions", blockPos)
+
+        /*
+        blue: none -> posA
+        blue: back,yellow -> posC
+        blue: yellow, black -> posB
+
+        red: none -> posA
+        red: black.yellow -> posB
+        red: yellow,black -> posC
+         */
     }
 
     override fun start() {
@@ -43,4 +75,6 @@ class OpenCVTest : OpMode() {
     override fun loop() {
         telemetry.addData("STATUS", "RUNNING OPENCV TEST")
     }
+
+
 }
