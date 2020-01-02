@@ -16,7 +16,14 @@ private var blockPositions: List<PathPoint> = listOf(
 )
 
 class Paths {
-    var userInput = 0;
+    var userInput = 0
+
+    /**
+     * Returns the path to get to a given block
+     *
+     * @param index the location of the block
+     * @return the path to the block
+     */
     fun getPathToBlock(index: Int): PathFollower {
         userInput = index
 
@@ -34,16 +41,18 @@ class Paths {
         return PathFollower(path, 55.0, "FIrst")
     }
 
+    /**
+     * Returns the path to get to a given block the SECOND time
+     *
+     * @param index the location of the block
+     * @return the path to the block
+     */
     fun secondBlock(pose: Pose2d, loc: Int): PathFollower {
-        return moveFromPlatformToBlock(pose, loc)
-    }
-
-    fun moveFromPlatformToBlock(pose: Pose2d, index: Int): PathFollower {
         var t = PathBuilder(pose)
         var path: ArrayList<PathSegment> = t
-                .addPoint(Vector2d(blockPositions[index].point.x - 5, blockPositions[index].point.y),
+                .addPoint(Vector2d(blockPositions[loc].point.x - 5, blockPositions[loc].point.y),
                         0.0,
-                        blockPositions[index].speed,
+                        blockPositions[loc].speed,
                         0.75
                         ,
                         "123123"
@@ -53,6 +62,12 @@ class Paths {
         return PathFollower(path, 55.0, "FIrst1")
     }
 
+    /**
+     * Returns the path to get to the building foundation
+     *
+     * @param pose the position of the robot
+     * @return the path to the foundation
+     */
     fun moveTowardsPlatfrom(pose: Pose2d): PathFollower {
         var t = PathBuilder(pose)
         var path: ArrayList<PathSegment> = t
@@ -64,17 +79,9 @@ class Paths {
         return PathFollower(path, 55.0, "FIrst1")
     }
 
-    fun moveTowardsPlatfrom2(pose: Pose2d): PathFollower {
-        var t = PathBuilder(pose)
-        var path: ArrayList<PathSegment> = t
-                .addPoint(Vector2d(78.0, 132.08), -Math.PI, 0.25, 0.25, "moving forward1")
-                .addPoint(Vector2d(78.0, 220.98), -Math.PI, 0.25, 0.25, "moving forward2")
-                .addPoint(Vector2d(103.0, 300.72), -Math.PI, 0.25, 0.25, "moving forward3")
-                .create()
-
-        return PathFollower(path, 55.0, "FIrst1")
-    }
-
+    /**
+     * @deprecated
+     */
     fun grabFoundation(pose: Pose2d): PathFollower {
         var t = PathBuilder(pose)
         var path: ArrayList<PathSegment> = t
@@ -84,6 +91,12 @@ class Paths {
         return PathFollower(path, 55.0, "FIrst1")
     }
 
+    /**
+     * Returns the path to move the foundation
+     *
+     * @param pose the position of the robot
+     * @return the path to move the foundation
+     */
     fun moveFoundation(pose: Pose2d): PathFollower {
         var t = PathBuilder(pose)
         var path: ArrayList<PathSegment> = t
@@ -93,6 +106,9 @@ class Paths {
         return PathFollower(path, 40.0, "FIrst1")
     }
 
+    /**
+     * @deprecated
+     */
     fun park(pose: Pose2d): PathFollower {
         var t = PathBuilder(pose)
         var path: ArrayList<PathSegment> = t

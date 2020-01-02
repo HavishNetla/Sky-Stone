@@ -8,10 +8,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.localization.ThreeWheelLocalizer;
+import org.firstinspires.ftc.teamcode.path.PathBuilder;
 import org.firstinspires.ftc.teamcode.path.PathFollower;
+import org.firstinspires.ftc.teamcode.path.PathSegment;
 import org.firstinspires.ftc.teamcode.util.Pose2d;
 import org.firstinspires.ftc.teamcode.util.Vector2d;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,6 +58,13 @@ public class MecanumDrive extends Subsystem {
   private boolean turn = true;
   private boolean turnFunc = false;
   private boolean specialAngle = false;
+
+  private Vector2d pointToGoTo;
+  private double goToPreferredAngle;
+  private double goToSpeed;
+  private double goToTurnSpeed;
+
+  private double turnToAngle;
 
   public MecanumDrive(HardwareMap map, Telemetry telemetry) {
     frontLeft = map.get(DcMotor.class, "FL");
@@ -129,6 +139,34 @@ public class MecanumDrive extends Subsystem {
     setMode(Mode.FOLLOW_PATH);
   }
 
+  public void goToPoint(Vector2d goal, double preferredAngle, double speed, double turnSpeed) {
+    PathBuilder t = new PathBuilder(position);
+    ArrayList<PathSegment> path =
+        t.addPoint(new Vector2d(0.0, 0.0), 0.0, 0.0, 0.0, "THIS IS NOT BIENG USED").create();
+
+    PathFollower pf = new PathFollower(path, 55, "NOT BIENG USED");
+
+    this.isPathFollowingDone = false;
+    this.pathfollower = pf;
+
+    this.pointToGoTo = goal;
+    this.goToPreferredAngle = preferredAngle;
+    this.goToSpeed = speed;
+    this.goToTurnSpeed = turnSpeed;
+    setMode(Mode.GO_TO_POINT);
+  }
+
+  public void turn(double angle) {
+    PathBuilder t = new PathBuilder(position);
+    ArrayList<PathSegment> path =
+        t.addPoint(new Vector2d(0.0, 0.0), 0.0, 0.0, 0.0, "THIS IS NOT BIENG USED").create();
+
+    PathFollower pf = new PathFollower(path, 55, "NOT BIENG USED");
+
+    this.pathfollower = pf;
+    this.turnToAngle = angle;
+  }
+
   public boolean isRobotStuck() {
     return false;
   }
@@ -182,10 +220,7 @@ public class MecanumDrive extends Subsystem {
     return localizerMode;
   }
 
-  public void setLocalizerConfig(double followAngle, double speed, double turnSpeed, boolean turn) {
-    this.followAngle = followAngle;
-    this.pathSpeed = speed;
-    this.turnSpeed = turnSpeed;
+  public void setLocalizerConfig(boolean turn) {
     this.turn = turn;
   }
 
@@ -262,11 +297,6 @@ public class MecanumDrive extends Subsystem {
     System.out.println("statut2: uh");
   }
 
-  public void turn(double angle) {
-    this.angleToTurn = angle;
-    this.turnFunc = true;
-  }
-
   @Override
   public void update() {
     // update odometry position
@@ -280,45 +310,46 @@ public class MecanumDrive extends Subsystem {
 
     switch (mode) {
       case OPEN_LOOP:
-        updatePowers();
         break;
       case FOLLOW_PATH:
-        if (moveOutALittle) {
-          pathPowers = pathfollower.goToPoint(new Vector2d(90.0, 300.72), position, 0.0, 0.3, 0);
-          isPathFollowingDone = pathfollower.getStatus();
-        } else if (moveToEnd) {
-          pathPowers = pathfollower.goToPoint(new Vector2d(30.48 * 3.5, 6 * 30.48), position, 0.0, 0.3, 0);
-          isPathFollowingDone = pathfollower.getStatus();
-        } else if (turnFunc) {
-          pathPowers = pathfollower.turn(position, angleToTurn);
-          isPathFollowingDone = pathfollower.getStatus();
-        } else {
-          if (moveToFoundation) {
-            pathPowers =
-                pathfollower.goToPoint(new Vector2d(110, 300.72), position, Math.PI, 0.3, 0);
-            isPathFollowingDone = pathfollower.getStatus();
-          } else if (specialAngle) {
-            pathPowers =
-                pathfollower.goToPoint(new Vector2d(80.0, 132.08), position, 0.0, 0.5 , 0.5);
-            isPathFollowingDone = pathfollower.getStatus();
-          } else {
-            pathPowers = pathfollower.update(followAngle, position, pathSpeed, turnSpeed);
-            isPathFollowingDone = pathfollower.getStatus();
-          }
-        }
+        pathPowers = pathfollower.update(position);
+        isPathFollowingDone = pathfollower.getStatus();
 
         if (!isPathFollowingDone) {
           internalSetVelocity(
               new Vector2d(pathPowers[1], -pathPowers[0]), turn || turnFunc ? pathPowers[2] : 0);
         } else {
-          moveOutALittle = false;
-          turnFunc = false;
           stop();
         }
-        updatePowers();
+        break;
+      case GO_TO_POINT:
+        pathPowers =
+            pathfollower.goToPoint(
+                this.pointToGoTo,
+                position,
+                this.goToPreferredAngle,
+                this.goToSpeed,
+                this.goToTurnSpeed);
+        isPathFollowingDone = pathfollower.getStatus();
 
+        if (!isPathFollowingDone) {
+          internalSetVelocity(new Vector2d(pathPowers[1], -pathPowers[0]), pathPowers[2]);
+        } else {
+          stop();
+        }
+        break;
+      case TURN:
+        pathPowers = pathfollower.turn(position, turnToAngle);
+        isPathFollowingDone = pathfollower.getStatus();
+
+        if (!isPathFollowingDone) {
+          internalSetVelocity(new Vector2d(0, 0), pathPowers[2]);
+        } else {
+          stop();
+        }
         break;
     }
+    updatePowers();
 
     frontLeft.setPower(powers[0]);
     frontRight.setPower(powers[1]);
@@ -333,6 +364,8 @@ public class MecanumDrive extends Subsystem {
   public enum Mode {
     OPEN_LOOP,
     FOLLOW_PATH,
+    GO_TO_POINT,
+    TURN,
   }
 
   //  public String getStatus() {

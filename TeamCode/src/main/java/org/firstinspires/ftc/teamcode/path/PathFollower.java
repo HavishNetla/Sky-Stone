@@ -97,7 +97,7 @@ public class PathFollower {
     return isDone;
   }
 
-  public double[] followCurve(double followAngle, Pose2d pose, double speed, double turnSpeed) {
+  public double[] followCurve(Pose2d pose) {
     Vector2d point = getLookAheadPoint(pose, this.path.get(0).followAngle);
     lookAheadPoint = point;
 
@@ -189,8 +189,8 @@ public class PathFollower {
    * @param pose The current pose of the robot
    * @return the left and right powers
    */
-  public double[] update(double followAngle, Pose2d pose, double speed, double turnSpeed) {
-    return followCurve(followAngle, pose, speed, turnSpeed);
+  public double[] update(Pose2d pose) {
+    return followCurve(pose);
   }
 
   public String getName() {

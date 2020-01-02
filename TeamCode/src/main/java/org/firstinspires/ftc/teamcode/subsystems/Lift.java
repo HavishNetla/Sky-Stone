@@ -43,12 +43,12 @@ public class Lift extends Subsystem {
     open();
     stowCap();
 
-    PIDFCoefficients newPIDF = new PIDFCoefficients(5.0, 0.0, 0.0, 0.0);
-    liftMotor.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, newPIDF);
+    PIDFCoefficients newPIDF = new PIDFCoefficients(5.0, 3.0, 0.0, 0.0);
+    liftMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_TO_POSITION, newPIDF);
 
-    liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    liftMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
     liftMotor.setTargetPosition(-800);
-    liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    liftMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
   }
 
   public void stowCap() {

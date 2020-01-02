@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.util.Vector2d
 import org.firstinspires.ftc.teamcode.vision.FrameGrabber
 import java.util.*
 
+@Deprecated(message = "look at BlueAuto.kt for not bad code")
 @Autonomous(name = "Main Auto", group = "A")
 class MainAuto : AutoOpMode() {
 
