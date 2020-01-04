@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ThreadPool;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
+import org.firstinspires.ftc.teamcode.util.Pose2d;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +40,11 @@ public class Robot implements OpModeManagerNotifier.Notifications {
         }
       };
 
-  public Robot(OpMode opMode, Telemetry telemetry) {
+  public Robot(Pose2d ogPos, OpMode opMode, Telemetry telemetry) {
     subsystems = new ArrayList<>();
 
     // Init subsystems
-    drive = new MecanumDrive(opMode.hardwareMap, telemetry);
+    drive = new MecanumDrive(ogPos, opMode.hardwareMap, telemetry);
     subsystems.add(drive);
 
     lift = new Lift(opMode.hardwareMap, telemetry);

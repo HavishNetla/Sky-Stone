@@ -32,14 +32,18 @@ public class ThreeWheelLocalizer {
   private List<Double> lastWheelPositions;
   private MecanumDrive drive;
 
-  public ThreeWheelLocalizer(MecanumDrive drive, Telemetry telemetry) {
+  public ThreeWheelLocalizer(MecanumDrive drive, Pose2d ogPos, Telemetry telemetry) {
     this.telemetry = telemetry;
     this.drive = drive;
 
     lastWheelPositions = Collections.emptyList();
 
-    // poseEstimate = new Pose2d(143, 143, MyMath.toRadians(135));
-    poseEstimate = new Pose2d(20.32, 81.7, -Math.PI / 2);
+    // poseEstimate = new Pose2d(20.32, 81.7, -Math.PI / 2);
+    poseEstimate = ogPos;
+
+    this.x = ogPos.getX();
+    this.y = ogPos.getY();
+    this.theta = ogPos.getHeading();
   }
 
   public Pose2d update() {

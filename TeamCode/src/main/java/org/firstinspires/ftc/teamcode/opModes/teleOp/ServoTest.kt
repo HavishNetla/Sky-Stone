@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.Gamepad
 import org.firstinspires.ftc.teamcode.subsystems.Robot
+import org.firstinspires.ftc.teamcode.util.Pose2d
 
 @TeleOp(name = "Servo Test", group = "T")
 class ServoTest : OpMode() {
@@ -13,7 +14,7 @@ class ServoTest : OpMode() {
     private var lastGamePad: Gamepad = Gamepad()
 
     override fun init() {
-        robot = Robot(this, this.telemetry)
+        robot = Robot(Pose2d(20.32, 81.7, -Math.PI / 2), this, this.telemetry)
         robot.start()
     }
 

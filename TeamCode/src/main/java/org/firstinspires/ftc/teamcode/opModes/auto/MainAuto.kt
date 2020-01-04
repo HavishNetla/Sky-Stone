@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.opModes.auto
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+/*import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.teamcode.computerDebuging.ComputerDebugging
 import org.firstinspires.ftc.teamcode.path.PathBuilder
@@ -205,4 +205,4 @@ class MainAuto : AutoOpMode() {
 
 
     }
-}
+}*/

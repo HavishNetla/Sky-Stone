@@ -3,14 +3,10 @@ package org.firstinspires.ftc.teamcode.opModes.teleOp
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.computerDebuging.ComputerDebugging
-import org.firstinspires.ftc.teamcode.path.PathBuilder
-import org.firstinspires.ftc.teamcode.path.PathFollower
-import org.firstinspires.ftc.teamcode.path.PathSegment
 import org.firstinspires.ftc.teamcode.subsystems.Robot
 import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
 import java.text.DecimalFormat
-import java.util.*
 
 @TeleOp(name = "Encoder Test", group = "T")
 class EncoderTest : OpMode() {
@@ -25,7 +21,7 @@ class EncoderTest : OpMode() {
     private lateinit var powers: DoubleArray
 
     override fun init() {
-        robot = Robot(this, this.telemetry)
+        robot = Robot(Pose2d(20.32, 81.7, -Math.PI / 2), this, this.telemetry)
 //        pathFollower = PathFollower(path, 55.0)
         //pathFollower1 = PathFollower(path1, 55.0)
         computerDebugging = ComputerDebugging()

@@ -3,11 +3,12 @@ package org.firstinspires.ftc.teamcode.opModes.auto
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.teamcode.path.Paths
+import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
 import org.firstinspires.ftc.teamcode.vision.FrameGrabber
 
-@Autonomous(name = "Main Auto", group = "A")
-class BlueAuto : AutoOpMode() {
+@Autonomous(name = "Blue Auto", group = "A")
+class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
 
     enum class BlockPos {
         ZERO_THREE,
@@ -102,7 +103,7 @@ class BlueAuto : AutoOpMode() {
 
 
         // Pick up the next skystone
-        robot.drive.followPath(paths.secondBlock(robot.drive.position, 3))
+        robot.drive.followPath(paths.secondBlock(robot.drive.position, blockLoc2))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 

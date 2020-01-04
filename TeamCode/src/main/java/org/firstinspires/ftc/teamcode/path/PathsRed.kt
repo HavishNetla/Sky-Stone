@@ -4,18 +4,16 @@ import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
 
 
-data class PathPoint(val point: Vector2d, val followAngle: Double, val speed: Double, val turnSpeed: Double, val label: String)
-
-var blockPositions: List<PathPoint> = listOf(
-        PathPoint(Vector2d(105.14, 23.668), Math.toRadians(65.0), 0.3, 0.3, "first block"),
-        PathPoint(Vector2d(105.14, 43.985), Math.toRadians(71.25), 0.3, 0.3, "second block"),
-        PathPoint(Vector2d(105.14, 64.305), Math.toRadians(77.5), 0.3, 0.3, "third block"),
-        PathPoint(Vector2d(105.14, 84.625), Math.toRadians(83.75), 0.3, 0.3, "fourth block"),
-        PathPoint(Vector2d(105.14, 104.945), Math.toRadians(90.0), 0.3, 0.3, "fifth block"),
-        PathPoint(Vector2d(105.14, 125.265), Math.toRadians(99.25), 0.3, 0.3, "sixth block")
+var blockPositionsRed: List<PathPoint> = listOf(
+        PathPoint(Vector2d(-116.14, 19.668), Math.toRadians(114.25), 0.3, 0.3, "first block"),
+        PathPoint(Vector2d(-116.14, 43.985), Math.toRadians(99.0 + 5), 0.3, 0.3, "second block"),
+        PathPoint(Vector2d(-116.14, 64.305), Math.toRadians(83.75 + 5), 0.3, 0.3, "third block"),
+        PathPoint(Vector2d(-116.14, 84.625), Math.toRadians(77.5 + 5), 0.3, 0.3, "fourth block"),
+        PathPoint(Vector2d(-116.14, 104.945), Math.toRadians(71.25 + 5), 0.3, 0.3, "fifth block"),
+        PathPoint(Vector2d(-116.14, 125.265), Math.toRadians(65.0 + 5), 0.3, 0.3, "sixth block")
 )
 
-class Paths {
+class PathsRed {
     var userInput = 0
 
     /**
@@ -51,7 +49,7 @@ class Paths {
         var t = PathBuilder(pose)
         var path: ArrayList<PathSegment> = t
                 .addPoint(Vector2d(blockPositions[loc].point.x - 5, blockPositions[loc].point.y),
-                        0.0,
+                        -Math.PI,
                         blockPositions[loc].speed,
                         0.75
                         ,
@@ -71,9 +69,9 @@ class Paths {
     fun moveTowardsPlatfrom(pose: Pose2d): PathFollower {
         var t = PathBuilder(pose)
         var path: ArrayList<PathSegment> = t
-                .addPoint(Vector2d(78.0, 132.08), -Math.PI, 0.4, 0.25, "moving forward1")
-                .addPoint(Vector2d(78.0, 220.98), -Math.PI, 0.4, 0.25, "moving forward2")
-                .addPoint(Vector2d(100.0, 320.72), -Math.PI, 0.25, 0.25, "moving forward3")
+                .addPoint(Vector2d(-78.0, 132.08), 0.0, 0.4, 0.25, "moving forward1")
+                .addPoint(Vector2d(-78.0, 220.98), 0.0, 0.4, 0.25, "moving forward2")
+                .addPoint(Vector2d(-100.0, 320.72), 0.0, 0.25, 0.25, "moving forward3")
                 .create()
 
         return PathFollower(path, 55.0, "FIrst1")
@@ -100,7 +98,7 @@ class Paths {
     fun moveFoundation(pose: Pose2d): PathFollower {
         var t = PathBuilder(pose)
         var path: ArrayList<PathSegment> = t
-                .addPoint(Vector2d(30.48 * 2.5, 9 * 30.48), 0.0, 0.4, 0.0, "moving forward1")
+                .addPoint(Vector2d(-30.48 * 2.5, 9 * 30.48), 0.0, 0.4, 0.0, "moving forward1")
                 .create()
 
         return PathFollower(path, 40.0, "FIrst1")

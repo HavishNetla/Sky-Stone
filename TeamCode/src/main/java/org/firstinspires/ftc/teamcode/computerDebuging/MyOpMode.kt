@@ -52,13 +52,13 @@ class MyOpMode : OpMode() {
 
         ComputerDebugging.sendPaths(path)
 
-        val powers = pathFollower.followCurve(0.0, Robot.robotPos, 0.5, 2.0)
+        //val powers = pathFollower.followCurve(0.0, Robot.robotPos, 0.5, 2.0)
         ComputerDebugging.sendPoint(pathFollower.lookAheadPoint)
 
         println("Pos: " + Robot.robotPos)
-        println("0: " + powers[0] + ", 1:" + powers[1] + ", 2:" + powers[2])
-        Robot.x = powers[1]
-        Robot.y = powers[0]
-        Robot.c = powers[2]
+//        println("0: " + powers[0] + ", 1:" + powers[1] + ", 2:" + powers[2])
+//        Robot.x = powers[1]
+//        Robot.y = powers[0]
+//        Robot.c = powers[2]
     }
 }

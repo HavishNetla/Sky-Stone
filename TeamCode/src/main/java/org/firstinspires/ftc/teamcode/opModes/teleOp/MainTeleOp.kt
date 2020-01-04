@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opModes.teleOp
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.subsystems.Robot
+import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.UtilToggle
 import org.firstinspires.ftc.teamcode.util.Vector2d
 import kotlin.math.pow
@@ -12,9 +13,12 @@ class MainTeleOp : OpMode() {
     private lateinit var robot: Robot
     private lateinit var powers: DoubleArray
     private val slowToggle = UtilToggle()    // Slows down drivetrain when on
+    private val dpadTogggleUp = UtilToggle()
+    private val dpadTogggleDown = UtilToggle()
+    private var liftPos: Int = 0
 
     override fun init() {
-        robot = Robot(this, this.telemetry)
+        robot = Robot(Pose2d(20.32, 81.7, -Math.PI / 2), this, this.telemetry)
 
         telemetry.addData("ff", "fff")
         robot.start()
@@ -28,7 +32,7 @@ class MainTeleOp : OpMode() {
         //robot.update()
 
         var scalar = 1.0
-        if (gamepad1.right_trigger > 0) {
+        if (gamepad1.right_trigger > 0 || gamepad1.a) {
             scalar = 0.2
         } else if (gamepad1.left_trigger > 0) {
             scalar = 0.5
@@ -78,13 +82,35 @@ class MainTeleOp : OpMode() {
 
         //===================================
 
-        if (gamepad2.dpad_up) {
+        if (gamepad2.left_bumper) {
             robot.lift.openCap()
-        } else if (gamepad2.dpad_down) {
+        } else if (gamepad2.right_bumper) {
             robot.lift.stowCap()
         }
 
+        if (gamepad1.a) {
+            robot.drive.grabFoundationTele()
+        } else {
+            robot.drive.openFoundationGrabber()
+        }
+
+        var statusUp = dpadTogggleUp.status(gamepad2.dpad_up)
+        var statusDown = dpadTogggleUp.status(gamepad2.dpad_down)
+
+        //robot.lift.setJoyStickPos(gamepad2.left_stick_y.toDouble())
+        //if (gamepad2.left_stick_y == 0.0f) {
+
+        //}
+
+        if (statusDown == UtilToggle.Status.COMPLETE) {
+            liftPos += 80
+        } else if (statusUp == UtilToggle.Status.COMPLETE) {
+            liftPos = 0
+        }
+        robot.lift.setLiftPos(liftPos)
+
         telemetry.addData("asd", robot.lift.pid)
+
 
     }
 

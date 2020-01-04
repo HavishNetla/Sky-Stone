@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.util
 
+import com.qualcomm.robotcore.util.Range
+
 class PIDController(var p: Double, var i: Double, var d: Double) {
     var integral: Double = 0.0
     var derivative: Double = 0.0
@@ -15,6 +17,6 @@ class PIDController(var p: Double, var i: Double, var d: Double) {
         prevDesired = desired
         prevIntegral = integral
 
-        return p * error + i * integral + d * derivative
+        return Range.clip((p * error + i * integral + d * derivative), -1.0, 1.0)
     }
 }

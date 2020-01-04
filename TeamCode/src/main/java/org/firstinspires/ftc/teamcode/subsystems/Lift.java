@@ -24,6 +24,10 @@ public class Lift extends Subsystem {
   private double grabberPos = 0.0;
   private double liftPower = 0.0;
   private double capStonePos = 0.0;
+  private int liftPos = 0;
+
+  private PIDController pidController = new PIDController(0.02, 0.0000, 0.00);
+  private double joyStickPower = 0.0;
 
   public Lift(HardwareMap map, Telemetry telemetry) {
     linkage = map.get(Servo.class, "LL");
@@ -43,20 +47,21 @@ public class Lift extends Subsystem {
     open();
     stowCap();
 
-    PIDFCoefficients newPIDF = new PIDFCoefficients(5.0, 3.0, 0.0, 0.0);
-    liftMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_TO_POSITION, newPIDF);
-
+    //    PIDFCoefficients newPIDF = new PIDFCoefficients(5.0, 3.0, 0.0, 0.0);
+    //    liftMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_TO_POSITION, newPIDF);
+    //
+    //    liftMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+    //    liftMotor.setTargetPosition(-800);
     liftMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-    liftMotor.setTargetPosition(-800);
-    liftMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+    liftMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
   }
 
   public void stowCap() {
-    setCapstonePosition(0.6);
+    setCapstonePosition(0.5);
   }
 
   public void openCap() {
-    setCapstonePosition(0.8);
+    setCapstonePosition(0.3);
   }
 
   public void setLinkagePos(double pos) {
@@ -90,15 +95,10 @@ public class Lift extends Subsystem {
   }
 
   public void lift(double power) {
-    if (-power < 0.0) {
-      scalar = 0.3;
-    } else {
-      scalar = 0.5;
-    }
     if (touchSensor.getState() && -power < 0.0) {
       liftPower = 0.0;
     } else {
-      liftPower = power * scalar;
+      liftPower = power;
     }
   }
 
@@ -134,6 +134,14 @@ public class Lift extends Subsystem {
         + pidOrig.f);
   }
 
+  public void setLiftPos(int pos) {
+    this.liftPos = pos;
+  }
+
+  public void setJoyStickPos(double power) {
+    this.joyStickPower = power;
+  }
+
   @Override
   public void update() {
     linkage.setPosition(linkagePos);
@@ -141,20 +149,13 @@ public class Lift extends Subsystem {
     grabber.setPosition(grabberPos);
     capStone.setPosition(capStonePos);
 
-    //    if (Math.abs(liftPower) < 0.001 && !touchSensor.getState()) {
-    //      if (Math.abs(liftMotor.getCurrentPosition()) < 440) {
-    //        liftPower = 0.3;
-    //      } else {
-    //        liftPower = 0.0003 * liftMotor.getCurrentPosition() - 0.04272065;
-    //      }
-    //    }
-
-    if (liftMotor.isBusy()) {
-      liftMotor.setPower(0.5);
+    if (!touchSensor.getState() || liftPos != 0) {
+      liftPower = -pidController.getError(liftPos, -liftMotor.getCurrentPosition());
     } else {
-      liftMotor.setPower(0);
+      liftPower = 0.0;
     }
-    // liftMotor.setPower(liftPower);
+
+    liftMotor.setPower(liftPower);
   }
 
   public enum ROTATER_POSITION {
