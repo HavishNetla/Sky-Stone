@@ -37,9 +37,9 @@ class MainTeleOp : OpMode() {
         } else if (gamepad1.left_trigger > 0) {
             scalar = 0.5
         }
-        var g1Lx = gamepad1.left_stick_x.toDouble() * scalar * 0.6
-        var g1Ly = gamepad1.left_stick_y.toDouble() * scalar * 0.6
-        var g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.4
+        var g1Lx = gamepad1.left_stick_x.toDouble() * scalar * 0.5
+        var g1Ly = gamepad1.left_stick_y.toDouble() * scalar * 0.5
+        var g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.35
 
         robot.drive.setVelocity(Vector2d(g1Lx.pow(1.0) * 0.8,
                 g1Ly.pow(1.0)) * 0.8,
@@ -75,7 +75,11 @@ class MainTeleOp : OpMode() {
             }
         }
 
-        robot.lift.lift(gamepad2.left_stick_y.toDouble())
+        if (gamepad2.left_stick_y.toDouble() > 0.0) {
+            robot.lift.lift(gamepad2.left_stick_y.toDouble() * 0.6 )
+        } else {
+            robot.lift.lift(gamepad2.left_stick_y.toDouble())
+        }
 
         telemetry.addData("touch sensor", robot.lift.touchSensorState)
         telemetry.addData("lift encoder", robot.lift.encoderValue)
@@ -102,12 +106,12 @@ class MainTeleOp : OpMode() {
 
         //}
 
-        if (statusDown == UtilToggle.Status.COMPLETE) {
-            liftPos += 80
-        } else if (statusUp == UtilToggle.Status.COMPLETE) {
-            liftPos = 0
-        }
-        robot.lift.setLiftPos(liftPos)
+//        if (statusDown == UtilToggle.Status.COMPLETE) {
+//            liftPos += 80
+//        } else if (statusUp == UtilToggle.Status.COMPLETE) {
+//            liftPos = 0
+//        }
+//        robot.lift.setLiftPos(liftPos)
 
         telemetry.addData("asd", robot.lift.pid)
 

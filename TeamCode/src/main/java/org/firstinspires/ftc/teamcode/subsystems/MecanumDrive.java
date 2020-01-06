@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.localization.ThreeWheelLocalizer;
@@ -245,14 +246,11 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void waitForPathFollower() {
-    while (!Thread.currentThread().isInterrupted() && getMode() == Mode.FOLLOW_PATH
-        || getMode() == Mode.GO_TO_POINT
-        || getMode() == Mode.TURN) {
-      try {
-        Thread.sleep(5);
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-      }
+    while (!Thread.currentThread().isInterrupted()
+        && (getMode() == Mode.FOLLOW_PATH
+            || getMode() == Mode.GO_TO_POINT
+            || getMode() == Mode.TURN)) {
+      delay((long) 0.005);
     }
     return;
   }
@@ -326,15 +324,15 @@ public class MecanumDrive extends Subsystem {
 
   public void releaseBlockRed() {
     setRotaterRedPos(1.0);
-    setGrabberRedPos(0.8);
+    setGrabberRedPos(1.0);
     delay((long) 1.0);
   }
 
   public void delay(long s) {
-    try {
-      Thread.sleep(s * 1000);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
+    ElapsedTime eTime = new ElapsedTime();
+
+    while (eTime.time() < s && !Thread.currentThread().isInterrupted()) {
+      telemetry.addData("delaying", Math.random());
     }
   }
 

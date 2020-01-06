@@ -26,15 +26,15 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         frameGrabber.enable()
         while (!isStarted) {
             when {
-                gamepad1.dpad_up -> frameGrabber.offset.y -= 0.001
-                gamepad1.dpad_down -> frameGrabber.offset.y += 0.001
-                gamepad1.dpad_left -> frameGrabber.offset.x -= 0.001
-                gamepad1.dpad_right -> frameGrabber.offset.x += 0.001
+                gamepad1.dpad_up -> frameGrabber.offset.y -= 0.002
+                gamepad1.dpad_down -> frameGrabber.offset.y += 0.002
+                gamepad1.dpad_left -> frameGrabber.offset.x -= 0.002
+                gamepad1.dpad_right -> frameGrabber.offset.x += 0.002
 
-                gamepad2.dpad_up -> frameGrabber.offset1.y -= 0.001
-                gamepad2.dpad_down -> frameGrabber.offset1.y += 0.001
-                gamepad2.dpad_left -> frameGrabber.offset1.x -= 0.001
-                gamepad2.dpad_right -> frameGrabber.offset1.x += 0.001
+                gamepad2.dpad_up -> frameGrabber.offset1.y -= 0.002
+                gamepad2.dpad_down -> frameGrabber.offset1.y += 0.002
+                gamepad2.dpad_left -> frameGrabber.offset1.x -= 0.002
+                gamepad2.dpad_right -> frameGrabber.offset1.x += 0.002
 
                 gamepad2.y -> frameGrabber.threshold++
                 gamepad2.a -> frameGrabber.threshold--
@@ -57,6 +57,7 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
                 BlockPos.NONE
             }
             telemetry.addData("Block positions", blockPos)
+            telemetry.update()
         }
         frameGrabber.disable()
     }
@@ -102,17 +103,23 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.waitForPathFollower()
 
 
-        // Pick up the next skystone
-        robot.drive.followPath(paths.secondBlock(robot.drive.position, blockLoc2))
-        robot.drive.setLocalizerConfig(true)
-        robot.drive.waitForPathFollower()
+        if (blockLoc2 == 5) {
+            robot.drive.goToPoint(Vector2d(103.14, 127.265), 0.0, 0.3, 0.3)
+            robot.drive.setLocalizerConfig(false)
+            robot.drive.waitForPathFollower()
+        } else {
+            // Pick up the next skystone
+            robot.drive.followPath(paths.secondBlock(robot.drive.position, blockLoc2))
+            robot.drive.setLocalizerConfig(true)
+            robot.drive.waitForPathFollower()
+        }
 
         // Grab and stow the block
         robot.drive.grabBlock()
         robot.drive.stowBlock()
 
         // Move to the bulding foundation
-        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position))
+        robot.drive.followPath(paths.moveTowardsPlatfrom2(robot.drive.position))
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
