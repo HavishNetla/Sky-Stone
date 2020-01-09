@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -39,6 +40,8 @@ public class MecanumDrive extends Subsystem {
   // Auxiliary block picker upper
   private Servo rotater;
   private Servo grabber;
+  private CRServo tapeCap;
+
   private DigitalChannel touchSensor;
   private PathFollower pathfollower;
   private Mode mode = Mode.OPEN_LOOP;
@@ -74,6 +77,8 @@ public class MecanumDrive extends Subsystem {
   private Servo rotaterRed;
   private Servo grabberRed;
 
+  private double tapeCapPower;
+
   public MecanumDrive(Pose2d ogPos, HardwareMap map, Telemetry telemetry) {
     frontLeft = map.get(DcMotor.class, "FL");
     frontRight = map.get(DcMotor.class, "FR");
@@ -86,6 +91,7 @@ public class MecanumDrive extends Subsystem {
 
     rotater = map.get(Servo.class, "CR");
     grabber = map.get(Servo.class, "CG");
+    tapeCap = map.get(CRServo.class, "TC");
 
     rotaterRed = map.get(Servo.class, "CRR");
     grabberRed = map.get(Servo.class, "CGR");
@@ -288,6 +294,10 @@ public class MecanumDrive extends Subsystem {
     return touchSensor.getState();
   }
 
+  public void setTapeCapPower(double power) {
+    this.tapeCapPower = power;
+  }
+
   public void grabBlock() {
     setRotaterPos(1.0);
     setGrabberPos(0.55);
@@ -407,6 +417,8 @@ public class MecanumDrive extends Subsystem {
 
     rotaterRed.setPosition(rotaterRedPos);
     grabberRed.setPosition(grabberRedPos);
+
+    tapeCap.setPower(tapeCapPower);
   }
 
   public enum Mode {

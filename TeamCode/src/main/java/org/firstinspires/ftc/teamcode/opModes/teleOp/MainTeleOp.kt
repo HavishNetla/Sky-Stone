@@ -116,6 +116,12 @@ class MainTeleOp : OpMode() {
         telemetry.addData("asd", robot.lift.pid)
 
 
+        if(gamepad1.b) {
+            robot.drive.setTapeCapPower(1.0)
+        } else {
+            robot.drive.setTapeCapPower(0.0)
+        }
+
     }
 
     override fun stop() {
