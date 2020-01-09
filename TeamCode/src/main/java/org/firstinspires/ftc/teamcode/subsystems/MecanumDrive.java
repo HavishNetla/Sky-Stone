@@ -40,7 +40,8 @@ public class MecanumDrive extends Subsystem {
   // Auxiliary block picker upper
   private Servo rotater;
   private Servo grabber;
-  private CRServo tapeCap;
+  private CRServo tapeCap1;
+  private CRServo tapeCap2;
 
   private DigitalChannel touchSensor;
   private PathFollower pathfollower;
@@ -91,7 +92,8 @@ public class MecanumDrive extends Subsystem {
 
     rotater = map.get(Servo.class, "CR");
     grabber = map.get(Servo.class, "CG");
-    tapeCap = map.get(CRServo.class, "TC");
+    tapeCap1 = map.get(CRServo.class, "TC1");
+    tapeCap2 = map.get(CRServo.class, "TC2");
 
     rotaterRed = map.get(Servo.class, "CRR");
     grabberRed = map.get(Servo.class, "CGR");
@@ -418,7 +420,8 @@ public class MecanumDrive extends Subsystem {
     rotaterRed.setPosition(rotaterRedPos);
     grabberRed.setPosition(grabberRedPos);
 
-    tapeCap.setPower(tapeCapPower);
+    tapeCap1.setPower(tapeCapPower);
+    tapeCap2.setPower(tapeCapPower);
   }
 
   public enum Mode {
