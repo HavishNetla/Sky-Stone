@@ -37,13 +37,36 @@ class MainTeleOp : OpMode() {
         } else if (gamepad1.left_trigger > 0) {
             scalar = 0.5
         }
-        var g1Lx = gamepad1.left_stick_x.toDouble() * scalar * 0.5
-        var g1Ly = gamepad1.left_stick_y.toDouble() * scalar * 0.5
+        var g1Lx = gamepad1.left_stick_x.toDouble() * scalar * 0.65
+        var g1Ly = gamepad1.left_stick_y.toDouble() * scalar * 0.65
         var g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.35
 
-        robot.drive.setVelocity(Vector2d(g1Lx.pow(1.0) * 0.8,
-                g1Ly.pow(1.0)) * 0.8,
-                g1Rx.pow(1.0) * 0.8
+        when {
+            gamepad1.dpad_up -> {
+                g1Lx = 0.0
+                g1Ly = -0.25 * scalar
+                g1Rx = 0.0
+            }
+            gamepad1.dpad_left -> {
+                g1Lx = -0.25 * scalar
+                g1Ly = 0.0
+                g1Rx = 0.0
+            }
+            gamepad1.dpad_right -> {
+                g1Lx = 0.25 * scalar
+                g1Ly = 0.0
+                g1Rx = 0.0
+            }
+            gamepad1.dpad_down -> {
+                g1Lx = 0.0
+                g1Ly = 0.25 * scalar
+                g1Rx = 0.0
+            }
+        }
+
+        robot.drive.setVelocity(Vector2d(g1Lx.pow(1.0),
+                g1Ly.pow(1.0)),
+                g1Rx.pow(1.0)
         )
 
         if (gamepad2.a) {
@@ -75,11 +98,8 @@ class MainTeleOp : OpMode() {
             }
         }
 
-        if (gamepad2.left_stick_y.toDouble() > 0.0) {
-            robot.lift.lift(gamepad2.left_stick_y.toDouble() * 0.6 )
-        } else {
-            robot.lift.lift(gamepad2.left_stick_y.toDouble())
-        }
+        robot.lift.lift(gamepad2.left_stick_y.toDouble())
+
 
         telemetry.addData("touch sensor", robot.lift.touchSensorState)
         telemetry.addData("lift encoder", robot.lift.encoderValue)
@@ -116,11 +136,12 @@ class MainTeleOp : OpMode() {
         telemetry.addData("asd", robot.lift.pid)
 
 
-        if(gamepad1.b) {
+        if (gamepad1.b) {
             robot.drive.setTapeCapPower(1.0)
         } else {
             robot.drive.setTapeCapPower(0.0)
         }
+
 
     }
 

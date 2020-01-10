@@ -149,7 +149,8 @@ public class Lift extends Subsystem {
     grabber.setPosition(grabberPos);
     capStone.setPosition(capStonePos);
 
-    liftMotor.setPower(pidController.getError(-450, liftMotor.getCurrentPosition()));
+    liftMotor.setPower(liftPower);
+    // liftMotor.setPower(pidController.getError(-450, liftMotor.getCurrentPosition()));
   }
 
   public enum ROTATER_POSITION {
