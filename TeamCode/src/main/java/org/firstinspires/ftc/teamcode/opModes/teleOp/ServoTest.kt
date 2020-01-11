@@ -19,11 +19,11 @@ class ServoTest : OpMode() {
     }
 
     override fun loop() {
-        if (gamepad1.a) {
-            robot.drive.grabFoundation()
-        } else {
-            robot.drive.openFoundationGrabber()
-        }
+//        if (gamepad1.a) {
+//            robot.drive.grabFoundation()
+//        } else {
+//            robot.drive.openFoundationGrabber()
+//        }
 
 
 //        telemetry.addData("pos", pos)
@@ -66,6 +66,20 @@ class ServoTest : OpMode() {
 //
 //        lastGamePad.copy(gamepad2)
 
+//        when {
+//            gamepad1.a -> robot.drive.grabBlock()
+//            gamepad1.b -> robot.drive.stowBlock()
+//            gamepad1.y -> robot.drive.releaseBlock()
+//        }
 
+//        robot.drive.grabBlock()
+//        robot.drive.stowBlock()
+//        robot.drive.releaseBlock()
+
+        //robot.drive.readyBlock()
+        //robot.drive.grabBlockRed()
+        robot.drive.grabBlockRed()
+        robot.drive.stowBlockRed()
+        robot.drive.releaseBlockRed()
     }
 }

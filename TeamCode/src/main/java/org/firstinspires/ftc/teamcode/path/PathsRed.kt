@@ -5,12 +5,12 @@ import org.firstinspires.ftc.teamcode.util.Vector2d
 
 
 var blockPositionsRed: List<PathPoint> = listOf(
-        PathPoint(Vector2d(-100.14, 19.668), Math.toRadians(114.25), 0.3, 0.3, "first block"),
-        PathPoint(Vector2d(-100.14, 43.985), Math.toRadians(99.0 + 5), 0.3, 0.3, "second block"),
-        PathPoint(Vector2d(-100.14, 64.305), Math.toRadians(83.75 + 5), 0.3, 0.3, "third block"),
-        PathPoint(Vector2d(-100.14, 84.625), Math.toRadians(77.5 + 5), 0.3, 0.3, "fourth block"),
-        PathPoint(Vector2d(-100.14, 104.945), Math.toRadians(71.25 + 5), 0.3, 0.3, "fifth block"),
-        PathPoint(Vector2d(-100.14, 125.265), Math.toRadians(65.0 + 5), 0.3, 0.3, "sixth block")
+        PathPoint(Vector2d(-115.14, 10.668), Math.toRadians(116.25), 0.3, 0.3, "first block"),
+        PathPoint(Vector2d(-113.14, 40.985), Math.toRadians(99.0 + 5), 0.3, 0.3, "second block"),
+        PathPoint(Vector2d(-113.14, 64.305), Math.toRadians(83.75 + 5), 0.3, 0.3, "third block"),
+        PathPoint(Vector2d(-113.14, 84.625), Math.toRadians(77.5 + 5), 0.3, 0.3, "fourth block"),
+        PathPoint(Vector2d(-113.14, 104.945), Math.toRadians(71.25 + 5), 0.3, 0.3, "fifth block"),
+        PathPoint(Vector2d(-113.14, 125.265), Math.toRadians(65.0 + 5), 0.3, 0.3, "sixth block")
 )
 
 class PathsRed {
@@ -72,7 +72,7 @@ class PathsRed {
                 .addPoint(Vector2d(-70.0, 192.00), 0.0, 0.4, 0.0, "moving forward0")
                 .addPoint(Vector2d(-78.0, 132.08), 0.0, 0.4, 0.25, "moving forward1")
                 .addPoint(Vector2d(-78.0, 220.98), 0.0, 0.4, 0.25, "moving forward2")
-                .addPoint(Vector2d(-100.0, 320.72), 0.0, 0.25, 0.25, "moving forward3")
+                .addPoint(Vector2d(-120.0, 320.72), 0.0, 0.25, 0.25, "moving forward3")
                 .create()
 
         return PathFollower(path, 55.0, "FIrst1")

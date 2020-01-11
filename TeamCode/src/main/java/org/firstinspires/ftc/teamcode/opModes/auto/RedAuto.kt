@@ -76,6 +76,7 @@ class RedAuto : AutoOpMode(Pose2d(-20.32, 81.7, Math.PI / 2)) {
             BlockPos.TWO_FIVE -> 5
             else -> 5
         }
+        robot.drive.readyBlockRed()
 
         // Robot moves towards the first skystone
         var pp = blockPositionsRed[blockLoc1]
@@ -95,22 +96,21 @@ class RedAuto : AutoOpMode(Pose2d(-20.32, 81.7, Math.PI / 2)) {
         // Robot releases the block and stows the arm
         robot.drive.releaseBlockRed()
         robot.drive.stowBlockRed()
-
         //==========================================================================================
         // SECOND BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
-        robot.drive.goToPoint(Vector2d(-70.0, 132.08), 0.0, 0.5, 0.5)
+        robot.drive.goToPoint(Vector2d(-70.0, 110.08), 0.0, 0.5, 0.5)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
+        robot.drive.readyBlockRed()
 
         // Pick up the next skystone
         pp = blockPositionsRed[blockLoc2]
-        robot.drive.goToPoint(Vector2d(pp.point.x + 20, pp.point.y), pp.followAngle, pp.speed, pp.turnSpeed)
+        robot.drive.goToPoint(Vector2d(pp.point.x + 10, pp.point.y), pp.followAngle, pp.speed, pp.turnSpeed)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
-
 
         // Grab and stow the block
         robot.drive.grabBlockRed()

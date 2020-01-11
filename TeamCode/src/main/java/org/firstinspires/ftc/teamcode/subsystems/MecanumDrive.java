@@ -124,8 +124,7 @@ public class MecanumDrive extends Subsystem {
 
     resetEncoders();
 
-    setRotaterPos(0.5);
-    setGrabberPos(0.3);
+    stowBlock();
     stowBlockRed();
     openFoundationGrabber();
   }
@@ -300,43 +299,55 @@ public class MecanumDrive extends Subsystem {
     this.tapeCapPower = power;
   }
 
+  public void readyBlock() {
+    setRotaterPos(0.82);
+    setGrabberPos(0.0);
+    delay((long) 1.0);
+  }
+
   public void grabBlock() {
     setRotaterPos(1.0);
-    setGrabberPos(0.55);
+    setGrabberPos(0.0);
     delay((long) 1.0);
-    setGrabberPos(0.3);
+    setGrabberPos(0.8);
     delay((long) 1.0);
   }
 
   public void stowBlock() {
-    setRotaterPos(0.5);
-    setGrabberPos(0.3);
+    setRotaterPos(0.3);
+    setGrabberPos(0.8);
     delay((long) 1.0);
   }
 
   public void releaseBlock() {
-    setRotaterPos(0.8);
-    setGrabberPos(0.55);
+    setRotaterPos(0.5);
+    setGrabberPos(0.0);
+    delay((long) 1.0);
+  }
+
+  public void readyBlockRed() {
+    setRotaterRedPos(0.93);
+    setGrabberRedPos(0.0);
     delay((long) 1.0);
   }
 
   public void grabBlockRed() {
-    setRotaterRedPos(1.0);
-    setGrabberRedPos(1.0);
+    setRotaterRedPos(0.96);
+    setGrabberRedPos(0.0);
     delay((long) 1.0);
-    setGrabberRedPos(0.8);
+    setGrabberRedPos(1.0);
     delay((long) 1.0);
   }
 
   public void stowBlockRed() {
-    setRotaterRedPos(0.5);
-    setGrabberRedPos(0.8);
+    setRotaterRedPos(0.58);
+    setGrabberRedPos(1.0);
     delay((long) 1.0);
   }
 
   public void releaseBlockRed() {
-    setRotaterRedPos(1.0);
-    setGrabberRedPos(1.0);
+    setRotaterRedPos(0.78);
+    setGrabberRedPos(0.0);
     delay((long) 1.0);
   }
 
