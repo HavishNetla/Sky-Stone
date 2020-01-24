@@ -171,13 +171,13 @@ public class PathFollower {
 
   public double[] turn(Pose2d pose, double angle) {
     double error = angle - pose.getHeading();
-    System.out.println(
-        "status1: "
-            + Math.toDegrees(error)
-            + " goal: "
-            + Math.toDegrees(angle)
-            + " current: "
-            + Math.toDegrees(pose.getHeading()));
+//    System.out.println(
+//        "status1: "
+//            + Math.toDegrees(error)
+//            + " goal: "
+//            + Math.toDegrees(angle)
+//            + " current: "
+//            + Math.toDegrees(pose.getHeading()));
     if (Math.abs(error) < 1) {
       isDone = true;
       return new double[] {0, 0, 0};

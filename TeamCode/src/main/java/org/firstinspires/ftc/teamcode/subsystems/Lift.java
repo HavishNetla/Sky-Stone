@@ -26,7 +26,7 @@ public class Lift extends Subsystem {
   private double capStonePos = 0.0;
   private int liftPos = 0;
 
-  private PIDController pidController = new PIDController(0.01, 0.0005, 0.001);
+  private PIDController pidController = new PIDController(0.01, 0.002, 0.002);
   private double joyStickPower = 0.0;
 
   public Lift(HardwareMap map, Telemetry telemetry) {
@@ -150,7 +150,7 @@ public class Lift extends Subsystem {
     capStone.setPosition(capStonePos);
 
     liftMotor.setPower(liftPower);
-    // liftMotor.setPower(pidController.getError(-450, liftMotor.getCurrentPosition()));
+    //    liftMotor.setPower(pidController.getError(liftPos, liftMotor.getCurrentPosition()));
   }
 
   public enum ROTATER_POSITION {

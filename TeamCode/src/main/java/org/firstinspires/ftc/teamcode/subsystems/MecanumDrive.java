@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -27,10 +28,10 @@ public class MecanumDrive extends Subsystem {
   public static boolean moveOutALittle = false;
   private double angleToTurn = 0.0;
   // Drive Motors
-  private DcMotor frontLeft;
-  private DcMotor frontRight;
-  private DcMotor backLeft;
-  private DcMotor backRight;
+  private DcMotorEx frontLeft;
+  private DcMotorEx frontRight;
+  private DcMotorEx backLeft;
+  private DcMotorEx backRight;
   // Encoder Wheels
   private DcMotor left;
   private DcMotor right;
@@ -81,10 +82,10 @@ public class MecanumDrive extends Subsystem {
   private double tapeCapPower;
 
   public MecanumDrive(Pose2d ogPos, HardwareMap map, Telemetry telemetry) {
-    frontLeft = map.get(DcMotor.class, "FL");
-    frontRight = map.get(DcMotor.class, "FR");
-    backLeft = map.get(DcMotor.class, "BL");
-    backRight = map.get(DcMotor.class, "BR");
+    frontLeft = map.get(DcMotorEx.class, "FL");
+    frontRight = map.get(DcMotorEx.class, "FR");
+    backLeft = map.get(DcMotorEx.class, "BL");
+    backRight = map.get(DcMotorEx.class, "BR");
 
     left = map.get(DcMotor.class, "L");
     right = map.get(DcMotor.class, "R");
@@ -122,11 +123,20 @@ public class MecanumDrive extends Subsystem {
 
     this.telemetry = telemetry;
 
+    frontLeft.setVelocityPIDFCoefficients(10.0, 3.0, 0.0, 0.0);
+    frontRight.setVelocityPIDFCoefficients(10.0, 3.0, 0.0, 0.0);
+    backLeft.setVelocityPIDFCoefficients(10.0, 3.0, 0.0, 0.0);
+    backRight.setVelocityPIDFCoefficients(10.0, 3.0, 0.0, 0.0);
+
     resetEncoders();
 
     stowBlock();
     stowBlockRed();
     openFoundationGrabber();
+  }
+
+  public String getPID() {
+    return "" + frontLeft.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
   }
 
   // Odometry
@@ -232,7 +242,7 @@ public class MecanumDrive extends Subsystem {
     this.mode = mode;
   }
 
-  private void setMode(LocalizerMode mode) {
+  public void setMode(LocalizerMode mode) {
     this.localizerMode = mode;
   }
 
@@ -272,6 +282,11 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void openFoundationGrabber() {
+    foundationGrabberPosition = 0.5;
+    delay((long) 1.0);
+  }
+
+  public void openFoundationGrabberTele() {
     foundationGrabberPosition = 0.5;
   }
 
@@ -349,6 +364,11 @@ public class MecanumDrive extends Subsystem {
     setRotaterRedPos(0.78);
     setGrabberRedPos(0.0);
     delay((long) 1.0);
+  }
+
+  public void stowBlockRedTele() {
+    setRotaterRedPos(0.5);
+    setGrabberRedPos(0.0);
   }
 
   public void delay(long s) {

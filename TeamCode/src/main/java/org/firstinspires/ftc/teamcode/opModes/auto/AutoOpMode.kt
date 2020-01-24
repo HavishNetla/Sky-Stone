@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opModes.auto
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.subsystems.Robot
+import org.firstinspires.ftc.teamcode.util.AutoTransitioner
 import org.firstinspires.ftc.teamcode.util.Pose2d
 
 abstract class AutoOpMode(ogPose: Pose2d) : LinearOpMode() {
@@ -19,6 +20,7 @@ abstract class AutoOpMode(ogPose: Pose2d) : LinearOpMode() {
 
         setup()
 
+        AutoTransitioner.transitionOnStop(this, "Mecanum Drive")
         waitForStart()
 
         if (isStopRequested) {

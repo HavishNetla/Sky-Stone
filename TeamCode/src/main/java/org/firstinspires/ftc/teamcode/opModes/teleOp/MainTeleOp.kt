@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opModes.teleOp
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import org.firstinspires.ftc.teamcode.subsystems.MecanumDrive
 import org.firstinspires.ftc.teamcode.subsystems.Robot
 import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.UtilToggle
@@ -22,10 +23,13 @@ class MainTeleOp : OpMode() {
 
         telemetry.addData("ff", "fff")
         robot.start()
+        robot.drive.stowBlockRedTele()
     }
 
     override fun start() {
         robot.drive.resetEncoders()
+        robot.drive.setMode(MecanumDrive.LocalizerMode.NONE)
+
     }
 
     override fun loop() {
@@ -37,10 +41,11 @@ class MainTeleOp : OpMode() {
         } else if (gamepad1.left_trigger > 0) {
             scalar = 0.5
         }
-        var g1Lx = gamepad1.left_stick_x.toDouble() * scalar * 0.65
-        var g1Ly = gamepad1.left_stick_y.toDouble() * scalar * 0.65
-        var g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.35
+        var g1Lx = gamepad1.left_stick_x.toDouble() * scalar * 0.75
+        var g1Ly = gamepad1.left_stick_y.toDouble() * scalar * 0.75
+        var g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.75
 
+//        telemetry.addData("PID", robot.drive.pid)
         when {
             gamepad1.dpad_up -> {
                 g1Lx = 0.0
@@ -82,10 +87,10 @@ class MainTeleOp : OpMode() {
 
         var status = slowToggle.status(gamepad2.y)
         if (status == UtilToggle.Status.IN_PROGRESS) {
-            println("statut1: got in here1")
+//            println("statut1: got in here1")
             robot.lift.open()
         } else if (status == UtilToggle.Status.COMPLETE) {
-            println("statut1: got in here")
+//            println("statut1: got in here")
             robot.lift.setLinkagePos(0.36)
         }
 
@@ -101,8 +106,8 @@ class MainTeleOp : OpMode() {
         robot.lift.lift(gamepad2.left_stick_y.toDouble())
 
 
-        telemetry.addData("touch sensor", robot.lift.touchSensorState)
-        telemetry.addData("lift encoder", robot.lift.encoderValue)
+//        telemetry.addData("touch sensor", robot.lift.touchSensorState)
+//        telemetry.addData("lift encoder", robot.lift.encoderValue)
 
         //===================================
 
@@ -115,31 +120,37 @@ class MainTeleOp : OpMode() {
         if (gamepad1.a) {
             robot.drive.grabFoundationTele()
         } else {
-            robot.drive.openFoundationGrabber()
+            robot.drive.openFoundationGrabberTele()
         }
 
-        var statusUp = dpadTogggleUp.status(gamepad2.dpad_up)
-        var statusDown = dpadTogggleUp.status(gamepad2.dpad_down)
 
-        //robot.lift.setJoyStickPos(gamepad2.left_stick_y.toDouble())
+//        robot.lift.setJoyStickPos(gamepad2.left_stick_y.toDouble())
         //if (gamepad2.left_stick_y == 0.0f) {
 
         //}
-
-//        if (statusDown == UtilToggle.Status.COMPLETE) {
-//            liftPos += 80
-//        } else if (statusUp == UtilToggle.Status.COMPLETE) {
+//        var statusUp = dpadTogggleUp.status(gamepad2.dpad_up)
+//        var statusDown = dpadTogggleUp.status(gamepad2.dpad_down)
+//
+////        if (abs(gamepad2.left_stick_y) > 0) {
+//            liftPos += (sign(gamepad2.left_stick_y) * 1).toInt()
+//        } else if (statusDown == UtilToggle.Status.IN_PROGRESS) {
+//
+//        } else if (statusDown == UtilToggle.Status.COMPLETE) {
+//            liftPos -= 80
+//        }
+//
+//        if (statusUp == UtilToggle.Status.COMPLETE) {
 //            liftPos = 0
 //        }
 //        robot.lift.setLiftPos(liftPos)
 
-        telemetry.addData("asd", robot.lift.pid)
+//        telemetry.addData("goalPos", liftPos)
 
 
-        if (gamepad1.b) {
-            robot.drive.setTapeCapPower(1.0)
-        } else {
-            robot.drive.setTapeCapPower(0.0)
+        when {
+            gamepad1.b -> robot.drive.setTapeCapPower(1.0)
+            gamepad1.y -> robot.drive.setTapeCapPower(-1.0)
+            else -> robot.drive.setTapeCapPower(0.0)
         }
 
 

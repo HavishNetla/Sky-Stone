@@ -78,8 +78,9 @@ class ServoTest : OpMode() {
 
         //robot.drive.readyBlock()
         //robot.drive.grabBlockRed()
+        robot.drive.grabBlock()
         robot.drive.grabBlockRed()
-        robot.drive.stowBlockRed()
-        robot.drive.releaseBlockRed()
+//        robot.drive.stowBlockRed()
+//        robot.drive.releaseBlockRed()
     }
 }

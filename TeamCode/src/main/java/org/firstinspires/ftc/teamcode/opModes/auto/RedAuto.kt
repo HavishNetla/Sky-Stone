@@ -76,6 +76,7 @@ class RedAuto : AutoOpMode(Pose2d(-20.32, 81.7, Math.PI / 2)) {
             BlockPos.TWO_FIVE -> 5
             else -> 5
         }
+
         robot.drive.readyBlockRed()
 
         // Robot moves towards the first skystone
@@ -96,12 +97,17 @@ class RedAuto : AutoOpMode(Pose2d(-20.32, 81.7, Math.PI / 2)) {
         // Robot releases the block and stows the arm
         robot.drive.releaseBlockRed()
         robot.drive.stowBlockRed()
+
         //==========================================================================================
         // SECOND BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
         robot.drive.goToPoint(Vector2d(-70.0, 110.08), 0.0, 0.5, 0.5)
         robot.drive.setLocalizerConfig(false)
+        robot.drive.waitForPathFollower()
+
+        robot.drive.turn(Math.toRadians(40.0))
+        robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
         robot.drive.readyBlockRed()
@@ -116,8 +122,12 @@ class RedAuto : AutoOpMode(Pose2d(-20.32, 81.7, Math.PI / 2)) {
         robot.drive.grabBlockRed()
         robot.drive.stowBlockRed()
 
+        robot.drive.goToPoint(Vector2d(-90.14, 125.265), 0.0, 0.5, 0.5)
+        robot.drive.setLocalizerConfig(false)
+        robot.drive.waitForPathFollower()
+
         // Move to the bulding foundation
-        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position))
+        robot.drive.followPath(paths.moveTowardsPlatfrom2(robot.drive.position))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
@@ -136,7 +146,7 @@ class RedAuto : AutoOpMode(Pose2d(-20.32, 81.7, Math.PI / 2)) {
         robot.drive.waitForPathFollower()
 
         // Slam against the foundation to prep the grab
-        robot.drive.goToPoint(Vector2d(-110.0, 300.72), Math.PI, 0.3, 0.0)
+        robot.drive.goToPoint(Vector2d(-116.0, 300.72), Math.PI, 0.3, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
@@ -157,7 +167,7 @@ class RedAuto : AutoOpMode(Pose2d(-20.32, 81.7, Math.PI / 2)) {
         robot.drive.openFoundationGrabber()
 
         // Move underneath the bridge
-        robot.drive.goToPoint(Vector2d(-30.48 * 3.5, 6 * 30.48), 0.0, 0.3, 0.0)
+        robot.drive.goToPoint(Vector2d(-30.48 * 3.5, 6 * 30.48), 0.0, 0.5, 0.0)
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
     }

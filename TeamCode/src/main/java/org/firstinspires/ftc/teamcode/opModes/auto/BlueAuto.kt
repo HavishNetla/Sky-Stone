@@ -104,9 +104,9 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
-        robot.drive.goToPoint(Vector2d(85.14, 130.265), 0.0, 0.3, 0.3)
-        robot.drive.setLocalizerConfig(false)
-        robot.drive.waitForPathFollower()
+//        robot.drive.goToPoint(Vector2d(85.14, 130.265), 0.0, 0.3, 0.3)
+//        robot.drive.setLocalizerConfig(false)
+//        robot.drive.waitForPathFollower()
 
         robot.drive.readyBlock()
 
@@ -140,12 +140,12 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.waitForPathFollower()
 
         // Turn to grab the foundation
-        robot.drive.turn(Math.toRadians(240.0))
+        robot.drive.turn(Math.toRadians(250.0))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
         // Slam against the foundation to prep the grab
-        robot.drive.goToPoint(Vector2d(110.0, 300.72), Math.PI, 0.3, 0.0)
+        robot.drive.goToPoint(Vector2d(115.0, 300.72), Math.PI, 0.3, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 

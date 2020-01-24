@@ -7,12 +7,12 @@ import org.firstinspires.ftc.teamcode.util.Vector2d
 data class PathPoint(val point: Vector2d, val followAngle: Double, val speed: Double, val turnSpeed: Double, val label: String)
 
 var blockPositions: List<PathPoint> = listOf(
-        PathPoint(Vector2d(103.14, 23.668), Math.toRadians(60.0), 0.3, 0.3, "first block"),
-        PathPoint(Vector2d(103.14, 43.985), Math.toRadians(66.25), 0.3, 0.3, "second block"),
-        PathPoint(Vector2d(103.14, 64.305), Math.toRadians(77.5), 0.3, 0.3, "third block"),
-        PathPoint(Vector2d(103.14, 84.625), Math.toRadians(83.75), 0.3, 0.3, "fourth block"),
-        PathPoint(Vector2d(103.14, 104.945), Math.toRadians(102.0), 0.3, 0.3, "fifth block"),
-        PathPoint(Vector2d(103.14, 130.265), Math.toRadians(116.25), 0.3, 0.3, "sixth block")
+        PathPoint(Vector2d(102.14, 23.668), Math.toRadians(60.0), 0.3, 0.3, "first block"),
+        PathPoint(Vector2d(102.14, 43.985), Math.toRadians(66.25), 0.3, 0.3, "second block"),
+        PathPoint(Vector2d(102.14, 64.305), Math.toRadians(77.5), 0.3, 0.3, "third block"),
+        PathPoint(Vector2d(108.14, 87.625), Math.toRadians(83.75), 0.3, 0.3, "fourth block"),
+        PathPoint(Vector2d(102.14, 104.945), Math.toRadians(102.0), 0.3, 0.3, "fifth block"),
+        PathPoint(Vector2d(106.14, 130.265), Math.toRadians(116.25), 0.3, 0.3, "sixth block")
 )
 
 class Paths {
