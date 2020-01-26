@@ -17,6 +17,7 @@ abstract class AutoOpMode(ogPose: Pose2d) : LinearOpMode() {
     override fun runOpMode() {
         robot = Robot(ogPose, this, this.telemetry)
         robot.start()
+        robot.drive.velocityControlls()
 
         setup()
 

@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -25,6 +24,8 @@ public class Lift extends Subsystem {
   private double liftPower = 0.0;
   private double capStonePos = 0.0;
   private int liftPos = 0;
+
+  private LIFT_STATUS liftStatus;
 
   private PIDController pidController = new PIDController(0.01, 0.002, 0.002);
   private double joyStickPower = 0.0;
@@ -47,13 +48,12 @@ public class Lift extends Subsystem {
     open();
     stowCap();
 
-    //    PIDFCoefficients newPIDF = new PIDFCoefficients(5.0, 3.0, 0.0, 0.0);
-    //    liftMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_TO_POSITION, newPIDF);
-    //
-    //    liftMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-    //    liftMotor.setTargetPosition(-800);
     liftMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-    liftMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+    // liftMotor.setTargetPosition(-240 * 3 * 2);
+    // liftMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+
+    setLiftStatus(LIFT_STATUS.RESETING);
   }
 
   public void stowCap() {
@@ -62,6 +62,10 @@ public class Lift extends Subsystem {
 
   public void openCap() {
     setCapstonePosition(0.35);
+  }
+
+  public double getLinkagePos() {
+    return linkagePos;
   }
 
   public void setLinkagePos(double pos) {
@@ -102,44 +106,36 @@ public class Lift extends Subsystem {
     }
   }
 
-  public double liftToPos(double pos) {
-    PIDController pidController = new PIDController(0.1, 0, 0);
-
-    return pidController.getError(pos, -liftMotor.getCurrentPosition());
-  }
-
   public boolean getTouchSensorState() {
     return touchSensor.getState();
-  }
-
-  public double getEncoderValue() {
-    return liftMotor.getCurrentPosition();
   }
 
   public void setCapstonePosition(double pos) {
     this.capStonePos = pos;
   }
 
-  public String getPID() {
-    PIDFCoefficients pidOrig = liftMotor.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION);
-
-    return ("P,I,D (orig): "
-        + " "
-        + pidOrig.p
-        + ", "
-        + pidOrig.i
-        + ", "
-        + pidOrig.d
-        + ", "
-        + pidOrig.f);
+  public void setLiftPower(double power) {
+    this.liftPower = power;
   }
 
-  public void setLiftPos(int pos) {
-    this.liftPos = pos;
+  public void setTargetPosition(int position) {
+    this.liftPos = position;
   }
 
-  public void setJoyStickPos(double power) {
-    this.joyStickPower = power;
+  public LIFT_STATUS getLiftStatus() {
+    return liftStatus;
+  }
+
+  public void setLiftStatus(LIFT_STATUS status) {
+    this.liftStatus = status;
+  }
+
+  public int getCurrentPosition() {
+    return liftMotor.getCurrentPosition();
+  }
+
+  public double getLiftEncoderPos() {
+    return liftMotor.getCurrentPosition();
   }
 
   @Override
@@ -149,7 +145,30 @@ public class Lift extends Subsystem {
     grabber.setPosition(grabberPos);
     capStone.setPosition(capStonePos);
 
-    liftMotor.setPower(liftPower);
+    switch (liftStatus) {
+      case RESETING:
+        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        if (!getTouchSensorState()) {
+          liftMotor.setPower(1.0);
+        }
+        setLiftStatus(LIFT_STATUS.NOTHING);
+        break;
+      case MANUAL:
+        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        liftMotor.setPower(liftPower);
+        break;
+      case RUN_TO_POSITION:
+        liftMotor.setTargetPosition(liftPos);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setPower(1.0);
+
+        telemetry.addData("GOT IN HERE BRO", "asd");
+        break;
+      case NOTHING:
+        break;
+    }
     //    liftMotor.setPower(pidController.getError(liftPos, liftMotor.getCurrentPosition()));
   }
 
@@ -163,5 +182,12 @@ public class Lift extends Subsystem {
     LOADING,
     LEFT,
     RIGHT
+  }
+
+  public enum LIFT_STATUS {
+    RESETING,
+    MANUAL,
+    RUN_TO_POSITION,
+    NOTHING
   }
 }

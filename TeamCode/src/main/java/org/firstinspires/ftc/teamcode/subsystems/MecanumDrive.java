@@ -81,6 +81,9 @@ public class MecanumDrive extends Subsystem {
 
   private double tapeCapPower;
 
+  private int loopCount = 0;
+  private boolean forwardDirection = false;
+
   public MecanumDrive(Pose2d ogPos, HardwareMap map, Telemetry telemetry) {
     frontLeft = map.get(DcMotorEx.class, "FL");
     frontRight = map.get(DcMotorEx.class, "FR");
@@ -123,16 +126,30 @@ public class MecanumDrive extends Subsystem {
 
     this.telemetry = telemetry;
 
-    frontLeft.setVelocityPIDFCoefficients(10.0, 3.0, 0.0, 0.0);
-    frontRight.setVelocityPIDFCoefficients(10.0, 3.0, 0.0, 0.0);
-    backLeft.setVelocityPIDFCoefficients(10.0, 3.0, 0.0, 0.0);
-    backRight.setVelocityPIDFCoefficients(10.0, 3.0, 0.0, 0.0);
+    frontLeft.setVelocityPIDFCoefficients(10.0, 3.0, 1.0, 2.0);
+    frontRight.setVelocityPIDFCoefficients(10.0, 3.0, 1.0, 2.0);
+    backLeft.setVelocityPIDFCoefficients(10.0, 3.0, 1.0, 2.0);
+    backRight.setVelocityPIDFCoefficients(10.0, 3.0, 1.0, 2.0);
 
     resetEncoders();
 
     stowBlock();
     stowBlockRed();
     openFoundationGrabber();
+
+    // frontLeft.get
+  }
+
+  public void velocityControlls() {
+    frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+    frontLeft.setVelocityPIDFCoefficients(10.0, 3.0, 0.0, 0.0);
+    frontRight.setVelocityPIDFCoefficients(10.0, 3.0, 0.0, 0.0);
+    backLeft.setVelocityPIDFCoefficients(10.0, 3.0, 0.0, 0.0);
+    backRight.setVelocityPIDFCoefficients(10.0, 3.0, 0.0, 0.0);
   }
 
   public String getPID() {
@@ -238,7 +255,7 @@ public class MecanumDrive extends Subsystem {
     return mode;
   }
 
-  private void setMode(Mode mode) {
+  public void setMode(Mode mode) {
     this.mode = mode;
   }
 
@@ -375,13 +392,17 @@ public class MecanumDrive extends Subsystem {
     ElapsedTime eTime = new ElapsedTime();
 
     while (eTime.time() < s && !Thread.currentThread().isInterrupted()) {
-      telemetry.addData("delaying", Math.random());
+      // telemetry.addData("delaying", Math.random());
     }
   }
 
   public void setSpecialAngle(boolean option) {
     this.specialAngle = option;
     System.out.println("statut2: uh");
+  }
+
+  public int getLoopCount() {
+    return loopCount;
   }
 
   @Override
@@ -397,6 +418,7 @@ public class MecanumDrive extends Subsystem {
 
     switch (mode) {
       case OPEN_LOOP:
+        loopCount = 0;
         break;
       case FOLLOW_PATH:
         pathPowers = pathfollower.update(position);
@@ -436,6 +458,17 @@ public class MecanumDrive extends Subsystem {
           stop();
         }
         break;
+      case JOSTLE:
+        loopCount++;
+        if (loopCount % 25 != 0) {
+          if (forwardDirection) {
+            internalSetVelocity(new Vector2d(0.05, 0.0), 0.0);
+          } else {
+            internalSetVelocity(new Vector2d(-0.05, 0.0), 0.0);
+          }
+        } else {
+          forwardDirection = !forwardDirection;
+        }
     }
     updatePowers();
 
@@ -460,6 +493,7 @@ public class MecanumDrive extends Subsystem {
     FOLLOW_PATH,
     GO_TO_POINT,
     TURN,
+    JOSTLE
   }
 
   //  public String getStatus() {
