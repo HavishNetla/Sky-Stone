@@ -162,7 +162,7 @@ public class Lift extends Subsystem {
       case RUN_TO_POSITION:
         liftMotor.setTargetPosition(liftPos);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(1.0);
+        liftMotor.setPower(-1.0);
 
         telemetry.addData("GOT IN HERE BRO", "asd");
         break;
