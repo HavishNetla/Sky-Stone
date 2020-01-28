@@ -334,21 +334,37 @@ public class MecanumDrive extends Subsystem {
   public void readyBlock() {
     setRotaterPos(0.82);
     setGrabberPos(0.0);
-    delay((long) 1.0);
+    //delay((long) 0.5);
   }
 
   public void grabBlock() {
     setRotaterPos(1.0);
-    setGrabberPos(0.0);
-    delay((long) 1.0);
     setGrabberPos(0.8);
+    //while (grabber.getPosition()<0.5){
+      //delay((long)0.000001);
+      //telemetry.addData("rotater:", grabber.getPosition());
+      //telemetry.update();
+    //}
     delay((long) 1.0);
   }
 
   public void stowBlock() {
     setRotaterPos(0.3);
     setGrabberPos(0.8);
+    //while (rotater.getPosition()>0.4){
+      //delay((long)0.000001);
+      //telemetry.addData("rotater:", rotater.getPosition());
+      //telemetry.update();
+    //}
     delay((long) 1.0);
+  }
+  public void stowBlockNoDelay() {
+    setRotaterPos(0.3);
+    setGrabberPos(0.8);
+  }
+  public void halfPlaceBlock(){
+    //Place -Added my Matthew
+    setRotaterPos(0.8);
   }
 
   public void releaseBlock() {
