@@ -356,7 +356,7 @@ public class MecanumDrive extends Subsystem {
       //telemetry.addData("rotater:", rotater.getPosition());
       //telemetry.update();
     //}
-    delay((long) 1.0);
+    //delay((long) 1.0);
   }
   public void stowBlockNoDelay() {
     setRotaterPos(0.3);
@@ -368,7 +368,7 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void releaseBlock() {
-    setRotaterPos(0.5);
+    setRotaterPos(0.6);
     setGrabberPos(0.0);
     delay((long) 1.0);
   }

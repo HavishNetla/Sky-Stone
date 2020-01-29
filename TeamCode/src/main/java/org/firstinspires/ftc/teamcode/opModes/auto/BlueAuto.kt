@@ -88,17 +88,17 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.stowBlock()
 
         //move out a little bit - Matthew
-        //robot.drive.goToPoint(Vector2d(70.0, 30.0), 0.0, 0.5, 0.0)
-        //robot.drive.setLocalizerConfig(true)
-        //robot.drive.waitForPathFollower()
+        robot.drive.goToPoint(Vector2d(70.0, 30.0), 0.0, 0.5, 0.0)
+        robot.drive.setLocalizerConfig(false)
+        robot.drive.waitForPathFollower()
 
         // Robot drives to the foundation
-        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position))
+        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position,1))
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
         // Robot releases the block and stows the arm
-        robot.drive.halfPlaceBlock()
+        //robot.drive.halfPlaceBlock()
         robot.drive.releaseBlock()
         robot.drive.stowBlockNoDelay()
 
@@ -132,17 +132,64 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.grabBlock()
         robot.drive.stowBlock()
 
-        //move out a little bit - Matthew
-        //robot.drive.goToPoint(Vector2d(80.0, 127.265), 0.0, 0.5, 0.0)
+        //move out a little bit. Only works for Zero_Three - Matthew
+        robot.drive.goToPoint(Vector2d(90.0, 108.14), 0.0, 0.5, 0.0)
+        robot.drive.setLocalizerConfig(false)
+        robot.drive.waitForPathFollower()
 
         // Move to the bulding foundation
-        robot.drive.followPath(paths.moveTowardsPlatfrom2(robot.drive.position))
+        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position,2))
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
         // Release the block and stow the arm
         robot.drive.releaseBlock()
         robot.drive.stowBlockNoDelay()
+
+        //==========================================================================================
+        // THIRD BLOCK ============================================================================
+        //==========================================================================================
+        // Move underneath the bridge
+        robot.drive.goToPoint(Vector2d(80.0, 132.08), 0.0, 0.5, 0.5)
+        robot.drive.stowBlockNoDelay()
+        robot.drive.setLocalizerConfig(true)
+        robot.drive.waitForPathFollower()
+
+        robot.drive.readyBlock()
+
+        if (blockLoc2 == 5) {
+            robot.drive.goToPoint(Vector2d(130.0, 100.0), 0.0, 0.3, 0.3)
+            robot.drive.setLocalizerConfig(false)
+            robot.drive.waitForPathFollower()
+        } else if(blockLoc2 == 4){
+            robot.drive.goToPoint(Vector2d(130.0, 90.0), 0.0, 0.3, 0.3)
+            robot.drive.setLocalizerConfig(false)
+            robot.drive.waitForPathFollower()
+        }else {
+            robot.drive.goToPoint(Vector2d(130.0, 100.0), 0.0, 0.3, 0.3)
+            robot.drive.setLocalizerConfig(false)
+            robot.drive.waitForPathFollower()
+        }
+
+        // Grab and stow the block
+        robot.drive.grabBlock()
+        robot.drive.stowBlock()
+
+        //move out a little bit. Works only for Zero_three - Matthew
+        robot.drive.goToPoint(Vector2d(90.0, 90.0), 0.0, 0.5, 0.0)
+        robot.drive.setLocalizerConfig(false)
+        robot.drive.waitForPathFollower()
+
+        // Move to the bulding foundation
+        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position,3))
+        robot.drive.setLocalizerConfig(false)
+        robot.drive.waitForPathFollower()
+
+        // Release the block and stow the arm
+        robot.drive.releaseBlock()
+        robot.drive.stowBlockNoDelay()
+
+        //Foundation Code Below
 
         // Move out a little from the foundation
         robot.drive.goToPoint(Vector2d(90.0, 300.72), 0.0, 0.3, 0.0)

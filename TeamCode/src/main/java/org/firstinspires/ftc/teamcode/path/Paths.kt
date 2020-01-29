@@ -68,16 +68,20 @@ class Paths {
      * @param pose the position of the robot
      * @return the path to the foundation
      */
-    fun moveTowardsPlatfrom(pose: Pose2d): PathFollower {
+    fun moveTowardsPlatfrom(pose: Pose2d, loc: Int): PathFollower {
         var t = PathBuilder(pose)
-        var path: ArrayList<PathSegment> = t
-                .addPoint(Vector2d(70.0, 120.08), -Math.PI, 0.4, 0.25, "moving forward1")
+                t.addPoint(Vector2d(70.0, 120.08), -Math.PI, 0.4, 0.25, "moving forward1")
                 .addPoint(Vector2d(78.0, 132.08), -Math.PI, 0.4, 0.25, "moving forward1")
                 .addPoint(Vector2d(78.0, 220.98), -Math.PI, 0.4, 0.25, "moving forward2")
-                .addPoint(Vector2d(105.0, 320.72), -Math.PI, 0.25, 0.25, "moving forward3")
-                .create()
+                if(loc == 1){
+                    t.addPoint(Vector2d(105.0, 330.72), -Math.PI, 0.25, 0.25, "moving forward3")
+                }else if(loc == 2){
+                    t.addPoint(Vector2d(105.0, 320.72), -Math.PI, 0.25, 0.25, "moving forward3")
+                }else {
+                    t.addPoint(Vector2d(105.0, 310.72), -Math.PI, 0.25, 0.25, "moving forward3")
+                }
 
-        return PathFollower(path, 55.0, "FIrst1")
+        return PathFollower(t.create(), 55.0, "FIrst1")
     }
 
     /**
