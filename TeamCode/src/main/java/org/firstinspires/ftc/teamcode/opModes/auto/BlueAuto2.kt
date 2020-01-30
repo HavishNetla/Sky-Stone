@@ -147,7 +147,7 @@ class BlueAuto2 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.stowBlockNoDelay()
 
         //==========================================================================================
-        // THIRD BLOCK ============================================================================
+        // THIRD BLOCK INTAKE============================================================================
         //==========================================================================================
         // Move underneath the bridge
         robot.drive.goToPoint(Vector2d(80.0, 132.08), 0.0, 0.5, 0.5)
@@ -157,32 +157,51 @@ class BlueAuto2 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
 
         robot.drive.readyBlock()
 
+        //Get into position for auto intake
         if (blockLoc2 == 5) {
-            robot.drive.goToPoint(Vector2d(130.0, 100.0), 0.0, 0.3, 0.3)
+            robot.drive.goToPoint(Vector2d(152.86, 100.0), 0.0, 0.3, 0.3)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
         } else if(blockLoc2 == 4){
-            robot.drive.goToPoint(Vector2d(130.0, 90.0), 0.0, 0.3, 0.3)
+            robot.drive.goToPoint(Vector2d(152.86, 90.0), 0.0, 0.3, 0.3)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
         }else {
-            robot.drive.goToPoint(Vector2d(130.0, 100.0), 0.0, 0.3, 0.3)
+            robot.drive.goToPoint(Vector2d(152.86, 100.0), 0.0, 0.3, 0.3)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
         }
 
-        // Grab and stow the block
-        robot.drive.grabBlock()
-        robot.drive.stowBlock()
+        //Insert code for intake running
 
+        //move in while intake runs
+        if (blockLoc2 == 5) {
+            robot.drive.goToPoint(Vector2d(152.86, 69.52), 0.0, 0.3, 0.3)
+            robot.drive.setLocalizerConfig(false)
+            robot.drive.waitForPathFollower()
+        } else if(blockLoc2 == 4){
+            robot.drive.goToPoint(Vector2d(152.86, 69.52), 0.0, 0.3, 0.3)
+            robot.drive.setLocalizerConfig(false)
+            robot.drive.waitForPathFollower()
+        }else {
+            robot.drive.goToPoint(Vector2d(152.86, 69.52), 0.0, 0.3, 0.3)
+            robot.drive.setLocalizerConfig(false)
+            robot.drive.waitForPathFollower()
+        }
+
+        //insert code for deposit grabber
+        //insert if statment for sensor that detects if stone is in or not
+        //if(sensor detects stone){
+            robot.lift.setGrabberPos(0.8)
+        //}
         //move out a little bit. Works only for Zero_three - Matthew
-        robot.drive.goToPoint(Vector2d(90.0, 90.0), 0.0, 0.5, 0.0)
+        robot.drive.goToPoint(Vector2d(90.0, 100.0), 0.0, 0.5, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
         // Move to the bulding foundation
         robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position,3))
-        robot.drive.setLocalizerConfig(false)
+        robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
         // Release the block and stow the arm
@@ -192,22 +211,30 @@ class BlueAuto2 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         //Foundation Code Below
 
         // Move out a little from the foundation
-        robot.drive.goToPoint(Vector2d(90.0, 300.72), 0.0, 0.3, 0.0)
+/*        robot.drive.goToPoint(Vector2d(90.0, 300.72), 0.0, 0.3, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
         // Turn to grab the foundation
         robot.drive.turn(Math.toRadians(230.0))
         robot.drive.setLocalizerConfig(true)
-        robot.drive.waitForPathFollower()
+       robot.drive.waitForPathFollower()
+*/
+        //Enter deposit code
 
         // Slam against the foundation to prep the grab
         robot.drive.goToPoint(Vector2d(115.0, 300.72), Math.PI, 0.3, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
+        //Release stone
+        robot.lift.setGrabberPos(0.0)
+
         // Grab the foundation
         robot.drive.grabFoundation()
+
+        //Deposit retracted
+        robot.lift.linkagePos = 0.36
 
         // Move the foundation forward
         robot.drive.followPath(paths.moveFoundation(robot.drive.position))

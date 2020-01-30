@@ -176,7 +176,7 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.stowBlock()
 
         //move out a little bit. Works only for Zero_three - Matthew
-        robot.drive.goToPoint(Vector2d(90.0, 90.0), 0.0, 0.5, 0.0)
+        robot.drive.goToPoint(Vector2d(90.0, 100.0), 0.0, 0.5, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
@@ -197,7 +197,7 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.waitForPathFollower()
 
         // Turn to grab the foundation
-        robot.drive.turn(Math.toRadians(230.0))
+        robot.drive.turn(Math.toRadians(235.0))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
