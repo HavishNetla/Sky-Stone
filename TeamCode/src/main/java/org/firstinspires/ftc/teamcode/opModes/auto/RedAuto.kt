@@ -77,7 +77,7 @@ class RedAuto : AutoOpMode(Pose2d(-20.32, 81.7, Math.PI / 2)) {
             else -> 5
         }
 
-        robot.drive.readyBlockRed()
+        robot.drive.readyBlockRedNoDelay()
 
         // Robot moves towards the first skystone
         var pp = blockPositionsRed[blockLoc1]
@@ -170,5 +170,7 @@ class RedAuto : AutoOpMode(Pose2d(-20.32, 81.7, Math.PI / 2)) {
         robot.drive.goToPoint(Vector2d(-30.48 * 3.5, 6 * 30.48), 0.0, 0.5, 0.0)
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
+
+        robot.drive.stowBlockRedTele()
     }
 }

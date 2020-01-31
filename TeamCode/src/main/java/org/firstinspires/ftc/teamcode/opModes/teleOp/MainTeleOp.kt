@@ -27,13 +27,12 @@ class MainTeleOp : OpMode() {
 
         telemetry.addData("ff", "fff")
         robot.start()
-        robot.drive.stowBlockRedTele()
     }
 
     override fun start() {
         robot.drive.resetEncoders()
         robot.drive.setMode(MecanumDrive.LocalizerMode.NONE)
-
+        robot.drive.stowBlockRedTele()
     }
 
     override fun loop() {
@@ -152,7 +151,7 @@ class MainTeleOp : OpMode() {
 
         if (abs(gamepad2.left_stick_y) > 0.05f) {
             robot.lift.liftStatus = Lift.LIFT_STATUS.MANUAL
-            robot.lift.setLiftPower(gamepad2.left_stick_y.toDouble())
+            robot.lift.setLiftPower(gamepad2.left_stick_y.toDouble() * 0.5)
         } else {
             robot.lift.setLiftPower(0.0)
 

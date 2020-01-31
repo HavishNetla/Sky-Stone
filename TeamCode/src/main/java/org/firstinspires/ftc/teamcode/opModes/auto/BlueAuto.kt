@@ -76,7 +76,7 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
             else -> 5
         }
 
-        robot.drive.readyBlock()
+        robot.drive.readyBlockNoDelay()
 
         // Robot moves towards the first skystone
         robot.drive.followPath(paths.getPathToBlock(blockLoc1))
@@ -271,5 +271,7 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.goToPoint(Vector2d(30.48 * 3.5, 6 * 30.48), 0.0, 0.3, 0.0)
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
+
+        robot.drive.stowBlockRedTele()
     }
 }

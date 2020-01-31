@@ -337,6 +337,11 @@ public class MecanumDrive extends Subsystem {
     //delay((long) 0.5);
   }
 
+  public void readyBlockNoDelay() {
+    setRotaterPos(0.82);
+    setGrabberPos(0.0);
+  }
+
   public void grabBlock() {
     setRotaterPos(1.0);
     setGrabberPos(0.8);
@@ -377,6 +382,11 @@ public class MecanumDrive extends Subsystem {
     setRotaterRedPos(0.93);
     setGrabberRedPos(0.0);
     delay((long) 1.0);
+  }
+
+  public void  readyBlockRedNoDelay() {
+    setRotaterRedPos(0.93);
+    setGrabberRedPos(0.0);
   }
 
   public void grabBlockRed() {
