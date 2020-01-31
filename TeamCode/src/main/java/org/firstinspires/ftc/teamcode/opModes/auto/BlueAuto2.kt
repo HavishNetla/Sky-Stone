@@ -87,10 +87,24 @@ class BlueAuto2 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.grabBlock()
         robot.drive.stowBlock()
 
-        //move out a little bit - Matthew
-        robot.drive.goToPoint(Vector2d(70.0, 30.0), 0.0, 0.5, 0.0)
-        robot.drive.setLocalizerConfig(false)
-        robot.drive.waitForPathFollower()
+        //move out a little bit. Only works Zero_Three - Matthew
+        when (blockLoc2) {
+            3 -> {
+                robot.drive.goToPoint(Vector2d(70.0, 30.0), 0.0, 0.5, 0.0)
+                robot.drive.setLocalizerConfig(false)
+                robot.drive.waitForPathFollower()
+            }
+            4 -> {
+                robot.drive.goToPoint(Vector2d(70.0, 30.0), 0.0, 0.5, 0.0)
+                robot.drive.setLocalizerConfig(false)
+                robot.drive.waitForPathFollower()
+            }
+            else -> {
+                robot.drive.goToPoint(Vector2d(70.0, 30.0), 0.0, 0.5, 0.0)
+                robot.drive.setLocalizerConfig(false)
+                robot.drive.waitForPathFollower()
+            }
+        }
 
         // Robot drives to the foundation
         robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position,1))
@@ -133,9 +147,23 @@ class BlueAuto2 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.stowBlock()
 
         //move out a little bit. Only works for Zero_Three - Matthew
-        robot.drive.goToPoint(Vector2d(90.0, 108.14), 0.0, 0.5, 0.0)
-        robot.drive.setLocalizerConfig(false)
-        robot.drive.waitForPathFollower()
+        when (blockLoc2) {
+            3 -> {
+                robot.drive.goToPoint(Vector2d(90.0, 108.14), 0.0, 0.5, 0.0)
+                robot.drive.setLocalizerConfig(false)
+                robot.drive.waitForPathFollower()
+            }
+            4 -> {
+                robot.drive.goToPoint(Vector2d(90.0, 108.14), 0.0, 0.5, 0.0)
+                robot.drive.setLocalizerConfig(false)
+                robot.drive.waitForPathFollower()
+            }
+            else -> {
+                robot.drive.goToPoint(Vector2d(90.0, 108.14), 0.0, 0.5, 0.0)
+                robot.drive.setLocalizerConfig(false)
+                robot.drive.waitForPathFollower()
+            }
+        }
 
         // Move to the bulding foundation
         robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position,2))
@@ -158,35 +186,43 @@ class BlueAuto2 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.readyBlock()
 
         //Get into position for auto intake
-        if (blockLoc2 == 5) {
-            robot.drive.goToPoint(Vector2d(152.86, 100.0), 0.0, 0.3, 0.3)
-            robot.drive.setLocalizerConfig(false)
-            robot.drive.waitForPathFollower()
-        } else if(blockLoc2 == 4){
-            robot.drive.goToPoint(Vector2d(152.86, 90.0), 0.0, 0.3, 0.3)
-            robot.drive.setLocalizerConfig(false)
-            robot.drive.waitForPathFollower()
-        }else {
-            robot.drive.goToPoint(Vector2d(152.86, 100.0), 0.0, 0.3, 0.3)
-            robot.drive.setLocalizerConfig(false)
-            robot.drive.waitForPathFollower()
+        when (blockLoc2) {
+            5 -> {
+                robot.drive.goToPoint(Vector2d(152.86, 100.0), 0.0, 0.3, 0.3)
+                robot.drive.setLocalizerConfig(false)
+                robot.drive.waitForPathFollower()
+            }
+            4 -> {
+                robot.drive.goToPoint(Vector2d(152.86, 90.0), 0.0, 0.3, 0.3)
+                robot.drive.setLocalizerConfig(false)
+                robot.drive.waitForPathFollower()
+            }
+            else -> {
+                robot.drive.goToPoint(Vector2d(152.86, 100.0), 0.0, 0.3, 0.3)
+                robot.drive.setLocalizerConfig(false)
+                robot.drive.waitForPathFollower()
+            }
         }
 
         //Insert code for intake running
 
         //move in while intake runs
-        if (blockLoc2 == 5) {
-            robot.drive.goToPoint(Vector2d(152.86, 69.52), 0.0, 0.3, 0.3)
-            robot.drive.setLocalizerConfig(false)
-            robot.drive.waitForPathFollower()
-        } else if(blockLoc2 == 4){
-            robot.drive.goToPoint(Vector2d(152.86, 69.52), 0.0, 0.3, 0.3)
-            robot.drive.setLocalizerConfig(false)
-            robot.drive.waitForPathFollower()
-        }else {
-            robot.drive.goToPoint(Vector2d(152.86, 69.52), 0.0, 0.3, 0.3)
-            robot.drive.setLocalizerConfig(false)
-            robot.drive.waitForPathFollower()
+        when (blockLoc2) {
+            5 -> {
+                robot.drive.goToPoint(Vector2d(152.86, 69.52), 0.0, 0.3, 0.3)
+                robot.drive.setLocalizerConfig(false)
+                robot.drive.waitForPathFollower()
+            }
+            4 -> {
+                robot.drive.goToPoint(Vector2d(152.86, 69.52), 0.0, 0.3, 0.3)
+                robot.drive.setLocalizerConfig(false)
+                robot.drive.waitForPathFollower()
+            }
+            else -> {
+                robot.drive.goToPoint(Vector2d(152.86, 69.52), 0.0, 0.3, 0.3)
+                robot.drive.setLocalizerConfig(false)
+                robot.drive.waitForPathFollower()
+            }
         }
 
         //insert code for deposit grabber
