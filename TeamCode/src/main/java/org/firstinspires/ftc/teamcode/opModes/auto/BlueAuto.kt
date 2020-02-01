@@ -88,19 +88,19 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.stowBlock()
 
         //move out a little bit. Only works Zero_Three - Matthew
-        when (blockLoc2) {
-            3 -> {
-                robot.drive.goToPoint(Vector2d(70.0, 30.0), 0.0, 0.5, 0.0)
+        when (blockLoc1) {
+            0 -> {
+                robot.drive.goToPoint(Vector2d(70.0, 30.0), 0.0, 0.3, 0.0)
                 robot.drive.setLocalizerConfig(false)
                 robot.drive.waitForPathFollower()
             }
-            4 -> {
-                robot.drive.goToPoint(Vector2d(70.0, 30.0), 0.0, 0.5, 0.0)
+            1 -> {
+                robot.drive.goToPoint(Vector2d(70.0, 50.32), 0.0, 0.3, 0.0)
                 robot.drive.setLocalizerConfig(false)
                 robot.drive.waitForPathFollower()
             }
             else -> {
-                robot.drive.goToPoint(Vector2d(70.0, 30.0), 0.0, 0.5, 0.0)
+                robot.drive.goToPoint(Vector2d(70.0, 70.64), 0.0, 0.3, 0.0)
                 robot.drive.setLocalizerConfig(false)
                 robot.drive.waitForPathFollower()
             }
@@ -131,7 +131,7 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.readyBlock()
 
         if (blockLoc2 == 5) {
-            robot.drive.goToPoint(Vector2d(103.14, 127.265), 0.0, 0.3, 0.3)
+            robot.drive.goToPoint(Vector2d(103.14, 127.265), 0.0, 0.5, 0.3)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
         } else {
@@ -147,18 +147,18 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
 
         //move out a little bit. Only works for Zero_Three - Matthew
         when (blockLoc2) {
-            3 -> {
-                robot.drive.goToPoint(Vector2d(90.0, 108.14), 0.0, 0.5, 0.0)
+            3 -> {//y orginaly 70.0
+                robot.drive.goToPoint(Vector2d(90.0, 90.0), 0.0, 0.5, 0.0)
                 robot.drive.setLocalizerConfig(false)
                 robot.drive.waitForPathFollower()
             }
             4 -> {
-                robot.drive.goToPoint(Vector2d(90.0, 108.14), 0.0, 0.5, 0.0)
+                robot.drive.goToPoint(Vector2d(90.0, 90.0), 0.0, 0.5, 0.0)
                 robot.drive.setLocalizerConfig(false)
                 robot.drive.waitForPathFollower()
             }
             else -> {
-                robot.drive.goToPoint(Vector2d(90.0, 108.14), 0.0, 0.5, 0.0)
+                robot.drive.goToPoint(Vector2d(90.0, 110.0), 0.0, 0.5, 0.0)
                 robot.drive.setLocalizerConfig(false)
                 robot.drive.waitForPathFollower()
             }
@@ -185,18 +185,13 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.readyBlock()
 
         when (blockLoc2) {
-            5 -> {
-                robot.drive.goToPoint(Vector2d(130.0, 100.0), 0.0, 0.3, 0.3)
-                robot.drive.setLocalizerConfig(false)
-                robot.drive.waitForPathFollower()
-            }
             4 -> {
-                robot.drive.goToPoint(Vector2d(130.0, 90.0), 0.0, 0.3, 0.3)
+                robot.drive.goToPoint(Vector2d(130.0, 90.0), 0.0, 0.5, 0.3)
                 robot.drive.setLocalizerConfig(false)
                 robot.drive.waitForPathFollower()
             }
             else -> {
-                robot.drive.goToPoint(Vector2d(130.0, 100.0), 0.0, 0.3, 0.3)
+                robot.drive.goToPoint(Vector2d(130.0, 60.0), 0.0, 0.5, 0.3)
                 robot.drive.setLocalizerConfig(false)
                 robot.drive.waitForPathFollower()
             }
@@ -208,18 +203,13 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
 
         //move out a little bit. Works only for Zero_three - Matthew
         when (blockLoc2) {
-            3 -> {
-                robot.drive.goToPoint(Vector2d(90.0, 100.0), 0.0, 0.5, 0.0)
-                robot.drive.setLocalizerConfig(false)
-                robot.drive.waitForPathFollower()
-            }
             4 -> {
-                robot.drive.goToPoint(Vector2d(90.0, 100.0), 0.0, 0.5, 0.0)
+                robot.drive.goToPoint(Vector2d(90.0, 90.0), 0.0, 0.5, 0.0)
                 robot.drive.setLocalizerConfig(false)
                 robot.drive.waitForPathFollower()
             }
             else -> {
-                robot.drive.goToPoint(Vector2d(90.0, 100.0), 0.0, 0.5, 0.0)
+                robot.drive.goToPoint(Vector2d(90.0, 70.0), 0.0, 0.5, 0.0)
                 robot.drive.setLocalizerConfig(false)
                 robot.drive.waitForPathFollower()
             }
@@ -237,12 +227,13 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         //Foundation Code Below
 
         // Move out a little from the foundation
-        robot.drive.goToPoint(Vector2d(90.0, 300.72), 0.0, 0.3, 0.0)
+        robot.drive.goToPoint(Vector2d(90.0, 300.72), 0.0, 0.5, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
         // Turn to grab the foundation
         robot.drive.turn(Math.toRadians(235.0))
+        //robot.drive.goToPoint(Vector2d(105.0, 300.72), 0.0, 0.5, 0.0)
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
@@ -261,6 +252,7 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
 
         // Spin move the foundation into the zone
         robot.drive.turn(Math.toRadians(240.0 + 90.0))
+        //robot.drive.goto
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
@@ -268,7 +260,7 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.openFoundationGrabber()
 
         // Move underneath the bridge
-        robot.drive.goToPoint(Vector2d(30.48 * 3.5, 6 * 30.48), 0.0, 0.3, 0.0)
+        robot.drive.goToPoint(Vector2d(30.48 * 3.5, 6 * 30.48), 0.0, 0.5, 0.0)
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
     }
