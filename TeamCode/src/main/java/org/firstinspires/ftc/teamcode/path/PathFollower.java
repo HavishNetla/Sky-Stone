@@ -56,14 +56,14 @@ public class PathFollower {
     double dist = Math.hypot(goal.getX() - pose.getX(), goal.getY() - pose.getY()) / ogDist;
 
     double absoluteAngleToTarget = Math.atan2(goal.getY() - pose.getY(), goal.getX() - pose.getX());
-    double relativeAngleToPoint = AngleWrap(pose.getHeading() - absoluteAngleToTarget);
+    double relativeAngleToPoint = pose.getHeading() - absoluteAngleToTarget;
     relTurnAngle = relativeAngleToPoint;
 
     double relativeYToPoint;
     double relativeXToPoint;
 
-    relativeYToPoint = Math.sin(relativeAngleToPoint) * dist;
-    relativeXToPoint = Math.cos(relativeAngleToPoint) * dist;
+    relativeYToPoint = Math.sin(AngleWrap(relativeAngleToPoint)) * dist;
+    relativeXToPoint = Math.cos(AngleWrap(relativeAngleToPoint)) * dist;
     powers = new Vector2d(relativeXToPoint, relativeYToPoint);
 
     //    double movementXPower =
@@ -74,7 +74,7 @@ public class PathFollower {
     movement_x = relativeXToPoint;
     movement_y = relativeYToPoint;
 
-    double relativeTurnAngle = relativeAngleToPoint + preferredAngle;
+    double relativeTurnAngle = AngleWrap(relativeAngleToPoint + preferredAngle);
     relTurnAngle = relativeTurnAngle;
 
     if (ended == false) {
@@ -82,7 +82,7 @@ public class PathFollower {
         ended = true;
         movement_turn = 0;
       } else {
-        movement_turn = Range.clip((relativeTurnAngle / Math.toRadians(30)), -1, 1) /* turnSpeed*/;
+        movement_turn = Range.clip((relativeTurnAngle / Math.toRadians(90)), -1, 1) /* turnSpeed*/;
       }
     }
 
@@ -143,6 +143,8 @@ public class PathFollower {
     Vector2d point = path.get(0).start;
     lookAheadPoint = point;
 
+    double fixAngle = pose.getHeading() + followAngle;
+
     // Loop through the path and find all intersections
     for (int i = 0; i < path.size(); i++) {
       ArrayList<Vector2d> intersectionsinPath =
@@ -155,7 +157,7 @@ public class PathFollower {
             Math.toDegrees(
                 Math.atan2(intersection.getY() - pose.getY(), intersection.getX() - pose.getX()));
 
-        double angleFix = Math.toDegrees(pose.getHeading()) + 90;
+        double angleFix = Math.toDegrees(fixAngle) + 90;
         double newAngle = angleFix < 0 ? 360 + angleFix : angleFix;
         double deltaAngle = Math.abs(angle - newAngle);
 
@@ -171,13 +173,13 @@ public class PathFollower {
 
   public double[] turn(Pose2d pose, double angle) {
     double error = angle - pose.getHeading();
-//    System.out.println(
-//        "status1: "
-//            + Math.toDegrees(error)
-//            + " goal: "
-//            + Math.toDegrees(angle)
-//            + " current: "
-//            + Math.toDegrees(pose.getHeading()));
+    //    System.out.println(
+    //        "status1: "
+    //            + Math.toDegrees(error)
+    //            + " goal: "
+    //            + Math.toDegrees(angle)
+    //            + " current: "
+    //            + Math.toDegrees(pose.getHeading()));
     if (Math.abs(error) < 1) {
       isDone = true;
       return new double[] {0, 0, 0};

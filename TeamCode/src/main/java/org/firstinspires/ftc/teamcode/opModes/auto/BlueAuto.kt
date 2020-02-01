@@ -76,7 +76,7 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
             else -> 5
         }
 
-        robot.drive.readyBlock()
+        robot.drive.readyBlockNoDelay()
 
         // Robot moves towards the first skystone
         robot.drive.followPath(paths.getPathToBlock(blockLoc1))
@@ -106,8 +106,8 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
             }
         }
         // Robot drives to the foundation
-        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position,1))
-        robot.drive.setLocalizerConfig(false)
+        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position, 1))
+        robot.drive.setLocalizerConfig(true) // false before
         robot.drive.waitForPathFollower()
 
         // Robot releases the block and stows the arm
@@ -164,9 +164,9 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
             }
         }
 
-                // Move to the bulding foundation
-        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position,2))
-        robot.drive.setLocalizerConfig(false)
+        // Move to the bulding foundation
+        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position, 2))
+        robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
         // Release the block and stow the arm
@@ -216,8 +216,8 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         }
 
         // Move to the bulding foundation
-        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position,3))
-        robot.drive.setLocalizerConfig(false)
+        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position, 3))
+        robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
         // Release the block and stow the arm
@@ -263,5 +263,7 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.goToPoint(Vector2d(30.48 * 3.5, 6 * 30.48), 0.0, 0.5, 0.0)
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
+
+        robot.drive.stowBlockRedTele()
     }
 }
