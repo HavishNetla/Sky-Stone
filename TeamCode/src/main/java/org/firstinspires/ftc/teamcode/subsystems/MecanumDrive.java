@@ -334,7 +334,7 @@ public class MecanumDrive extends Subsystem {
   public void readyBlock() {
     setRotaterPos(0.82);
     setGrabberPos(0.0);
-    //delay((long) 0.5);
+    // delay((long) 0.5);
   }
 
   public void readyBlockNoDelay() {
@@ -345,30 +345,32 @@ public class MecanumDrive extends Subsystem {
   public void grabBlock() {
     setRotaterPos(1.0);
     setGrabberPos(0.8);
-    //while (grabber.getPosition()<0.5){
-      //delay((long)0.000001);
-      //telemetry.addData("rotater:", grabber.getPosition());
-      //telemetry.update();
-    //}
+    // while (grabber.getPosition()<0.5){
+    // delay((long)0.000001);
+    // telemetry.addData("rotater:", grabber.getPosition());
+    // telemetry.update();
+    // }
     delay((long) 1.0);
   }
 
   public void stowBlock() {
     setRotaterPos(0.3);
     setGrabberPos(0.8);
-    //while (rotater.getPosition()>0.4){
-      //delay((long)0.000001);
-      //telemetry.addData("rotater:", rotater.getPosition());
-      //telemetry.update();
-    //}
-    //delay((long) 1.0);
+    // while (rotater.getPosition()>0.4){
+    // delay((long)0.000001);
+    // telemetry.addData("rotater:", rotater.getPosition());
+    // telemetry.update();
+    // }
+    // delay((long) 1.0);
   }
+
   public void stowBlockNoDelay() {
     setRotaterPos(0.3);
     setGrabberPos(0.8);
   }
-  public void halfPlaceBlock(){
-    //Place -Added my Matthew
+
+  public void halfPlaceBlock() {
+    // Place -Added my Matthew
     setRotaterPos(0.8);
   }
 
@@ -384,7 +386,7 @@ public class MecanumDrive extends Subsystem {
     delay((long) 1.0);
   }
 
-  public void  readyBlockRedNoDelay() {
+  public void readyBlockRedNoDelay() {
     setRotaterRedPos(0.93);
     setGrabberRedPos(0.0);
   }
@@ -470,6 +472,8 @@ public class MecanumDrive extends Subsystem {
         if (!isPathFollowingDone) {
           internalSetVelocity(
               new Vector2d(pathPowers[1], -pathPowers[0]), turn ? pathPowers[2] : 0.0);
+          telemetry.addData("rel angles", pathfollower.getRelativeAngleToPoint());
+          telemetry.update();
         } else {
           stop();
         }
