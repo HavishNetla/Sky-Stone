@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.opModes.auto
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.teamcode.path.Paths
 import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
 import org.firstinspires.ftc.teamcode.vision.FrameGrabber
-
+@Disabled
 @Autonomous(name = "Blue Auto", group = "A")
 class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
 
@@ -90,24 +91,28 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         //move out a little bit. Only works Zero_Three - Matthew
         when (blockLoc1) {
             0 -> {
-                robot.drive.goToPoint(Vector2d(70.0, 30.0), 0.0, 0.3, 0.0)
+                robot.drive.goToPoint(Vector2d(80.0, 30.0), 0.0, 0.3, 0.0)
                 robot.drive.setLocalizerConfig(false)
                 robot.drive.waitForPathFollower()
             }
             1 -> {
-                robot.drive.goToPoint(Vector2d(70.0, 50.32), 0.0, 0.3, 0.0)
+                robot.drive.goToPoint(Vector2d(80.0, 50.32), 0.0, 0.3, 0.0)
                 robot.drive.setLocalizerConfig(false)
                 robot.drive.waitForPathFollower()
             }
             else -> {
-                robot.drive.goToPoint(Vector2d(70.0, 70.64), 0.0, 0.3, 0.0)
+                robot.drive.goToPoint(Vector2d(80.0, 70.64), 0.0, 0.3, 0.0)
                 robot.drive.setLocalizerConfig(false)
                 robot.drive.waitForPathFollower()
             }
         }
         // Robot drives to the foundation
-        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position, 1))
+        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position, 1, robot))
         robot.drive.setLocalizerConfig(true) // false before
+        robot.drive.waitForPathFollower()
+
+        robot.drive.followPath(paths.moveInToFoundation(robot.drive.position, 1))
+        robot.drive.setLocalizerConfig(false) // false before
         robot.drive.waitForPathFollower()
 
         // Robot releases the block and stows the arm
@@ -165,7 +170,7 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         }
 
         // Move to the bulding foundation
-        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position, 2))
+        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position, 2, robot))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
@@ -205,18 +210,16 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         when (blockLoc2) {
             4 -> {
                 robot.drive.goToPoint(Vector2d(90.0, 90.0), 0.0, 0.5, 0.0)
-                robot.drive.setLocalizerConfig(false)
-                robot.drive.waitForPathFollower()
             }
             else -> {
                 robot.drive.goToPoint(Vector2d(90.0, 70.0), 0.0, 0.5, 0.0)
-                robot.drive.setLocalizerConfig(false)
-                robot.drive.waitForPathFollower()
             }
         }
+        robot.drive.setLocalizerConfig(false)
+        robot.drive.waitForPathFollower()
 
         // Move to the bulding foundation
-        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position, 3))
+        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position, 3, robot))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
@@ -265,5 +268,6 @@ class BlueAuto : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.waitForPathFollower()
 
         robot.drive.stowBlockRedTele()
+
     }
 }

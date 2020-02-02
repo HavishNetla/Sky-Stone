@@ -109,7 +109,6 @@ class MainTeleOp : OpMode() {
 
             if (robot.lift.linkagePos != 0.36) {
                 robot.lift.liftStatus = Lift.LIFT_STATUS.RUN_TO_POSITION
-
                 robot.lift.setTargetPosition(robot.lift.currentPosition - 100)
             }
 
