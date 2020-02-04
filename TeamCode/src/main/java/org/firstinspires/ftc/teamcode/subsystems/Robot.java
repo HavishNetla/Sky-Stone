@@ -34,13 +34,18 @@ public class Robot implements OpModeManagerNotifier.Notifications {
         @Override
         public void run() {
           while (!Thread.currentThread().isInterrupted()) {
+            long startTime = System.currentTimeMillis();
+
             for (LynxModule module : allHubs) {
               module.clearBulkCache();
             }
-            
+
             for (Subsystem subsystem : subsystems) {
               subsystem.update();
             }
+            
+            long endTime = System.currentTimeMillis();
+            System.out.println("time taken in nano seconds" + (endTime-startTime));
           }
         }
       };
