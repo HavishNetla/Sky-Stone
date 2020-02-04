@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import android.app.Activity;
 
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManagerNotifier;
 import com.qualcomm.robotcore.util.ThreadPool;
@@ -25,12 +26,18 @@ public class Robot implements OpModeManagerNotifier.Notifications {
   private OpModeManagerImpl opModeManager;
   private ExecutorService subsystemUpdateExecutor;
   private boolean started;
+  List<LynxModule> allHubs;
+
   // Run the "update" function for every subsytem
   private Runnable subsystemUpdateRunnable =
       new Runnable() {
         @Override
         public void run() {
           while (!Thread.currentThread().isInterrupted()) {
+            for (LynxModule module : allHubs) {
+              module.clearBulkCache();
+            }
+            
             for (Subsystem subsystem : subsystems) {
               subsystem.update();
             }
@@ -40,6 +47,7 @@ public class Robot implements OpModeManagerNotifier.Notifications {
 
   public Robot(Pose2d ogPos, OpMode opMode, Telemetry telemetry) {
     subsystems = new ArrayList<>();
+    this.allHubs = opMode.hardwareMap.getAll(LynxModule.class);
 
     // Init subsystems
     drive = new MecanumDrive(ogPos, opMode.hardwareMap, telemetry);
@@ -55,6 +63,10 @@ public class Robot implements OpModeManagerNotifier.Notifications {
     opModeManager = OpModeManagerImpl.getOpModeManagerOfActivity(activity);
     if (opModeManager != null) {
       opModeManager.registerListener(this);
+    }
+
+    for (LynxModule module : allHubs) {
+      module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
     }
 
     subsystemUpdateExecutor = ThreadPool.newSingleThreadExecutor("subsystem update");
