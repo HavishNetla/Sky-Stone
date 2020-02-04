@@ -24,6 +24,7 @@ public class Lift extends Subsystem {
   private double liftPower = 0.0;
   private double capStonePos = 0.0;
   private int liftPos = 0;
+  private double currentPosition;
 
   private LIFT_STATUS liftStatus;
 
@@ -147,28 +148,53 @@ public class Lift extends Subsystem {
 
     switch (liftStatus) {
       case RESETING:
-        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        if (liftMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER) {
+          liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+          telemetry.addData("reseting", "settong mode");
+        }
 
         if (!getTouchSensorState()) {
           liftMotor.setPower(1.0);
+        } else {
+          setLiftStatus(LIFT_STATUS.NOTHING);
         }
-        setLiftStatus(LIFT_STATUS.NOTHING);
+
         break;
       case MANUAL:
-        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        if (liftMotor.getMode() != DcMotor.RunMode.RUN_USING_ENCODER) {
+          liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+          telemetry.addData("manual", "settong mode");
+        }
 
-        liftMotor.setPower(liftPower);
+        if (getTouchSensorState()) {
+          if (liftPower >= 0) {
+            liftMotor.setPower(0);
+          } else {
+            liftMotor.setPower(liftPower);
+          }
+        } else {
+          liftMotor.setPower(liftPower);
+        }
+        telemetry.addData("MANUAL", liftMotor.getPower());
+
         break;
       case RUN_TO_POSITION:
         liftMotor.setTargetPosition(liftPos);
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        if (liftMotor.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+          liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+          telemetry.addData("run2pos", "settong mode");
+        }
         liftMotor.setPower(-1.0);
 
-        telemetry.addData("GOT IN HERE BRO", "asd");
+        telemetry.addData("RUN TO POSITION", liftMotor.getPower());
         break;
       case NOTHING:
+        liftMotor.setPower(0);
         break;
     }
+    System.out.println("touch sensor: " + getTouchSensorState());
+
     //    liftMotor.setPower(pidController.getError(liftPos, liftMotor.getCurrentPosition()));
   }
 

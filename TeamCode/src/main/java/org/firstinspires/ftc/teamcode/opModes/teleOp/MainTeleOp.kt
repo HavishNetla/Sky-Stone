@@ -21,18 +21,18 @@ class MainTeleOp : OpMode() {
     private var liftPos: Int = 0
     private lateinit var statusUp: UtilToggle.Status
     private lateinit var statusDown: UtilToggle.Status
-
+    private var lastPressed = ""
     override fun init() {
         robot = Robot(Pose2d(20.32, 81.7, -Math.PI / 2), this, this.telemetry)
 
         telemetry.addData("ff", "fff")
         robot.start()
+        robot.drive.stowBlockRedTele()
     }
 
     override fun start() {
         robot.drive.resetEncoders()
-        robot.drive.setMode(MecanumDrive.LocalizerMode.NONE)
-        robot.drive.stowBlockRedTele()
+        //robot.drive.setMode(MecanumDrive.LocalizerMode.THREE_WHEEL_LOCALIZER)
     }
 
     override fun loop() {
@@ -69,6 +69,7 @@ class MainTeleOp : OpMode() {
                 g1Rx = 0.0
             }
         }
+
 
         var dpadStatus = gamepad1.dpad_up || gamepad1.dpad_down || gamepad1.dpad_left || gamepad1.dpad_right
 
@@ -118,6 +119,7 @@ class MainTeleOp : OpMode() {
         //===============================
         if (robot.lift.touchSensorState || gamepad2.back) {
             when {
+                gamepad2.back -> robot.intake.openIntakeBois()
                 gamepad2.right_trigger > 0.0 -> robot.intake.power = gamepad2.right_trigger.toDouble() * 0.8
                 gamepad2.left_trigger > 0.0 -> robot.intake.power = -0.8
                 else -> robot.intake.power = 0.0
@@ -152,6 +154,7 @@ class MainTeleOp : OpMode() {
             robot.lift.liftStatus = Lift.LIFT_STATUS.MANUAL
             robot.lift.setLiftPower(gamepad2.left_stick_y.toDouble() * 0.5)
         } else {
+            // Manual is never left and 0.0 is set.
             robot.lift.setLiftPower(0.0)
 
             if (statusDown == UtilToggle.Status.COMPLETE && gamepad2.b) {
@@ -169,6 +172,8 @@ class MainTeleOp : OpMode() {
             }
         }
 
+        println("CURRENT POSITION: " + robot.lift.currentPosition)
+
 //        telemetry.addData("LIFT STATUS", robot.lift.liftStatus)
 //        telemetry.addData("LIFT POS", liftPos)
 //        telemetry.addData("LIFT ENCODER POS", robot.lift.liftEncoderPos)
@@ -178,11 +183,28 @@ class MainTeleOp : OpMode() {
 //
 
         when {
-            gamepad1.b -> robot.drive.setTapeCapPower(1.0)
-            gamepad1.y -> robot.drive.setTapeCapPower(-1.0)
+            gamepad1.x -> {
+                lastPressed = "x"
+                robot.drive.setTapeCapPower(1.0)
+            }
+            gamepad1.b -> {
+                lastPressed = "a"
+                robot.drive.setTapeCapPower1(1.0)
+            }
+            gamepad1.y -> {
+                if (lastPressed == "a") {
+                    robot.drive.setTapeCapPower1(-1.0)
+                } else if (lastPressed == "x") {
+                    robot.drive.setTapeCapPower(-1.0)
+                }
+            }
             else -> robot.drive.setTapeCapPower(0.0)
         }
 
+        telemetry.addData("POSITION", robot.drive.position)
+        telemetry.addData("WHEEL POSITION", robot.drive.trackingWheelPositions)
+        telemetry.update()
+        println("POSITION: " + robot.drive.position)
     }
 
     override fun stop() {

@@ -49,7 +49,7 @@ public class ThreeWheelLocalizer {
   public Pose2d update() {
     List<Double> wheelPositions = drive.getTrackingWheelPositions();
     if (!lastWheelPositions.isEmpty()) {
-      double c = 17 * 2 * Math.PI;
+      double c = 23.1 * 2 * Math.PI;
       double dL = wheelPositions.get(0) - lastWheelPositions.get(0);
       double dR = wheelPositions.get(1) - lastWheelPositions.get(1);
 

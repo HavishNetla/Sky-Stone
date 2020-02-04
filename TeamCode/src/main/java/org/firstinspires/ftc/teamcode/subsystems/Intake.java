@@ -10,7 +10,8 @@ public class Intake extends Subsystem {
   private DcMotor left;
   private DcMotor right;
 
-  private double power = 0;
+  private double powerLeft = 0;
+  private double powerRight = 0;
   private boolean hasBlock = false;
 
   public Intake(HardwareMap map) {
@@ -20,26 +21,32 @@ public class Intake extends Subsystem {
     right.setDirection(DcMotorSimple.Direction.REVERSE);
   }
 
-  public void setPower(double power) {
-    this.power = power;
+  public double getPower() {
+    return powerLeft;
   }
 
-  public double getPower() {
-      return power;
+  public void setPower(double power) {
+    this.powerLeft = power;
+    this.powerRight = power;
   }
 
   public boolean hasBlock() {
-      return hasBlock;
+    return hasBlock;
   }
 
   public String getStatus() {
-      return StringUtils.caption("Power", power) + StringUtils.caption("Has Block", hasBlock);
+    return StringUtils.caption("Power", powerLeft) + StringUtils.caption("Has Block", hasBlock);
   }
+
+  public void openIntakeBois() {
+    this.powerLeft = 1.0;
+  }
+
   @Override
   public void update() {
-      left.setPower(power);
-      right.setPower(power);
+    left.setPower(powerLeft);
+    right.setPower(powerRight);
 
-      hasBlock = true /*TODO: implement condition*/ ? false : true;
+    hasBlock = true /*TODO: implement condition*/ ? false : true;
   }
 }

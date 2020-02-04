@@ -20,13 +20,11 @@ public class Robot implements OpModeManagerNotifier.Notifications {
   public EncoderTest encoderTest;
   public Lift lift;
   public Intake intake;
-
+  long start;
   private List<Subsystem> subsystems;
   private OpModeManagerImpl opModeManager;
   private ExecutorService subsystemUpdateExecutor;
-
   private boolean started;
-
   // Run the "update" function for every subsytem
   private Runnable subsystemUpdateRunnable =
       new Runnable() {
@@ -66,6 +64,7 @@ public class Robot implements OpModeManagerNotifier.Notifications {
 
   // Starts subsystem executor
   public void start() {
+
     if (!started) {
       subsystemUpdateExecutor.execute(subsystemUpdateRunnable);
 

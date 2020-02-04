@@ -24,6 +24,8 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         val frameGrabber = FrameGrabber()
         frameGrabber.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
         frameGrabber.enable()
+        robot.drive.stowBlockRedTele()
+
         while (!isStarted) {
             when {
                 gamepad1.dpad_up -> frameGrabber.offset.y -= 0.002
@@ -97,6 +99,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.followPath(paths.getPathToBlock(blockLoc1))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
+        println("POSITION1" + robot.drive.position)
 
         // Grabs and stows the first skystone
         robot.drive.grabBlock()
@@ -114,6 +117,8 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.followPath(paths.moveInToFoundation(robot.drive.position, 1))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
+        println("FoundPOSITION1" + robot.drive.position)
+
 
         // Robot releases the block and stows the arm
         //robot.drive.halfPlaceBlock()
@@ -124,7 +129,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         // SECOND BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
-        robot.drive.goToPoint(Vector2d(93.0, 120.08), 0.0, 0.5, 0.5)
+        robot.drive.goToPoint(Vector2d(85.0, 90.08), 0.0, 0.5, 0.5)
         robot.drive.stowBlockNoDelay()
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
@@ -141,10 +146,13 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
             robot.drive.waitForPathFollower()
         } else {
             // Pick up the next skystone
-            robot.drive.followPath(paths.secondBlock(robot.drive.position, blockLoc2))
+            var p = paths.blockPositions[blockLoc2]
+            robot.drive.goToPoint(Vector2d(p.point.x + 5, p.point.y), 0.0, p.speed, p.turnSpeed)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
         }
+        println("POSITION2" + robot.drive.position)
+
 
         // Grab and stow the block
         robot.drive.grabBlock()
@@ -164,35 +172,39 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.followPath(paths.moveInToFoundation(robot.drive.position, 1))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
+        println("FoundPOSITION2" + robot.drive.position)
+
 
         // Robot releases the block and stows the arm
         //robot.drive.halfPlaceBlock()
         robot.drive.throwBlock()
         robot.drive.stowBlockNoDelay()
 
-
         //==========================================================================================
         // THIRD BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
-        robot.drive.goToPoint(Vector2d(93.0, 130.08), 0.0, 0.5, 0.5)
+        robot.drive.goToPoint(Vector2d(89.0, 100.08), 0.0, 0.5, 0.5)
         robot.drive.stowBlockNoDelay()
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
         robot.drive.readyBlock()
 
-        if (blockLoc2 == 5) {
+        if (blockLoc3 == 5) {
             robot.drive.goToPoint(Vector2d(103.14, 127.265), 0.0, 0.3, 0.3)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
         } else {
             // Pick up the next skystone
-            robot.drive.followPath(paths.thirdBlock(robot.drive.position, blockLoc3))
+            var p = paths.blockPositions[blockLoc3]
+            robot.drive.goToPoint(Vector2d(p.point.x + 14, p.point.y), 0.0, p.speed, p.turnSpeed)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
             println("statut2: got in here")
         }
+        println("POSITION3" + robot.drive.position)
+
 
         // Grab and stow the block
         robot.drive.grabBlock()
@@ -212,6 +224,8 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.followPath(paths.moveInToFoundation(robot.drive.position, 3))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
+        println("FoundPOSITION3" + robot.drive.position)
+
 
         // Robot releases the block and stows the arm
         //robot.drive.halfPlaceBlock()
@@ -222,7 +236,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         // FOURTH BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
-        robot.drive.goToPoint(Vector2d(93.0, 130.08), 0.0, 0.5, 0.5)
+        robot.drive.goToPoint(Vector2d(89.0, 90.08), 0.0, 0.5, 0.5)
         robot.drive.stowBlockNoDelay()
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
@@ -240,6 +254,8 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
             robot.drive.waitForPathFollower()
             println("statut2: got in here")
         }
+        println("POSITION4" + robot.drive.position)
+
 
         // Grab and stow the block
         robot.drive.grabBlock()
@@ -259,6 +275,8 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.followPath(paths.moveInToFoundation(robot.drive.position, 3))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
+        println("FoundPOSITION4" + robot.drive.position)
+
 
         // Robot releases the block and stows the arm
         //robot.drive.halfPlaceBlock()

@@ -22,22 +22,22 @@ class PathsRed {
      * @param index the location of the block
      * @return the path to the block
      */
-    fun getPathToBlock(index: Int): PathFollower {
-        userInput = index
-
-        var t = PathBuilder(Pose2d(18.32, 81.7, 0.0))
-        var path: ArrayList<PathSegment> = t
-                .addPoint(blockPositions[index].point,
-                        blockPositions[index].followAngle,
-                        blockPositions[index].speed,
-                        0.75
-                        ,
-                        "13312"
-                )
-                .create()
-
-        return PathFollower(path, 55.0, "FIrst")
-    }
+//    fun getPathToBlock(index: Int): PathFollower {
+//        userInput = index
+//
+//        var t = PathBuilder(Pose2d(18.32, 81.7, 0.0))
+//        var path: ArrayList<PathSegment> = t
+//                .addPoint(blockPositions[index].point,
+//                        blockPositions[index].followAngle,
+//                        blockPositions[index].speed,
+//                        0.75
+//                        ,
+//                        "13312"
+//                )
+//                .create()
+//
+//        return PathFollower(path, 55.0, "FIrst")
+//    }
 
     /**
      * Returns the path to get to a given block the SECOND time
