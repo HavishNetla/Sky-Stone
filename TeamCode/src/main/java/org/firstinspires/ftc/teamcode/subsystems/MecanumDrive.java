@@ -188,6 +188,12 @@ public class MecanumDrive extends Subsystem {
     setMode(Mode.FOLLOW_PATH);
   }
 
+  public void followPathGlobal(PathFollower pf) {
+    isPathFollowingDone = false;
+    this.pathfollower = pf;
+    setMode(Mode.FOLLOW_PATH_GLOBAL);
+  }
+
   public void goToPoint(Vector2d goal, double preferredAngle, double speed, double turnSpeed) {
     PathBuilder t = new PathBuilder(position);
     ArrayList<PathSegment> path =
@@ -203,6 +209,24 @@ public class MecanumDrive extends Subsystem {
     this.goToSpeed = speed;
     this.goToTurnSpeed = turnSpeed;
     setMode(Mode.GO_TO_POINT);
+  }
+
+  public void goToPointGlobal(
+      Vector2d goal, double preferredAngle, double speed, double turnSpeed) {
+    PathBuilder t = new PathBuilder(position);
+    ArrayList<PathSegment> path =
+        t.addPoint(new Vector2d(0.0, 0.0), 0.0, 0.0, 0.0, "THIS IS NOT BIENG USED").create();
+
+    PathFollower pf = new PathFollower(path, 55, "NOT BIENG USED");
+
+    this.isPathFollowingDone = false;
+    this.pathfollower = pf;
+
+    this.pointToGoTo = goal;
+    this.goToPreferredAngle = preferredAngle;
+    this.goToSpeed = speed;
+    this.goToTurnSpeed = turnSpeed;
+    setMode(Mode.GO_TO_POINT_GLOBAL);
   }
 
   public void turn(double angle) {
@@ -285,6 +309,8 @@ public class MecanumDrive extends Subsystem {
   public void waitForPathFollower() {
     while (!Thread.currentThread().isInterrupted()
         && (getMode() == Mode.FOLLOW_PATH
+            || getMode() == Mode.FOLLOW_PATH_GLOBAL
+            || getMode() == Mode.GO_TO_POINT_GLOBAL
             || getMode() == Mode.GO_TO_POINT
             || getMode() == Mode.TURN)) {
       delay((long) 0.005);
@@ -498,6 +524,17 @@ public class MecanumDrive extends Subsystem {
           stop();
         }
         break;
+
+      case FOLLOW_PATH_GLOBAL:
+        pathPowers = pathfollower.updateGlobal(position);
+        isPathFollowingDone = pathfollower.getStatus();
+        System.out.println("C power: " + pathPowers[2]);
+        if (!isPathFollowingDone) {
+          internalSetVelocity(new Vector2d(pathPowers[1], -pathPowers[0]), pathPowers[2]);
+        } else {
+          stop();
+        }
+        break;
       case GO_TO_POINT:
         pathPowers =
             pathfollower.goToPoint(
@@ -511,6 +548,22 @@ public class MecanumDrive extends Subsystem {
         if (!isPathFollowingDone) {
           internalSetVelocity(
               new Vector2d(pathPowers[1], -pathPowers[0]), turn ? pathPowers[2] : 0.0);
+        } else {
+          stop();
+        }
+        break;
+      case GO_TO_POINT_GLOBAL:
+        pathPowers =
+            pathfollower.goToPointGlobal(
+                this.pointToGoTo,
+                position,
+                this.goToPreferredAngle,
+                this.goToSpeed,
+                this.goToTurnSpeed);
+        isPathFollowingDone = pathfollower.getStatus();
+
+        if (!isPathFollowingDone) {
+          internalSetVelocity(new Vector2d(pathPowers[1], -pathPowers[0]), pathPowers[2]);
         } else {
           stop();
         }
@@ -559,7 +612,9 @@ public class MecanumDrive extends Subsystem {
   public enum Mode {
     OPEN_LOOP,
     FOLLOW_PATH,
+    FOLLOW_PATH_GLOBAL,
     GO_TO_POINT,
+    GO_TO_POINT_GLOBAL,
     TURN,
     JOSTLE
   }

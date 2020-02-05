@@ -14,7 +14,7 @@ class Paths {
             PathPoint(Vector2d(102.14, 43.985), Math.toRadians(66.25), 0.3, 0.3, "second block"),
             PathPoint(Vector2d(102.14, 64.305), Math.toRadians(77.5), 0.3, 0.3, "third block"),
             PathPoint(Vector2d(107.14, 87.625), Math.toRadians(83.75), 0.3, 0.3, "fourth block"),
-            PathPoint(Vector2d(106.14, 104.945), Math.toRadians(102.0), 0.3, 0.3, "fifth block"),
+            PathPoint(Vector2d(102.14, 104.945), Math.toRadians(102.0), 0.3, 0.3, "fifth block"),
             PathPoint(Vector2d(106.14, 130.265), Math.toRadians(116.25), 0.3, 0.3, "sixth block")
     )
     var userInput = 0
@@ -113,13 +113,13 @@ class Paths {
      */
     fun moveTowardsPlatfrom(pose: Pose2d, loc: Int, robot: Robot): PathFollower {
         var t = PathBuilder(pose)
-        t.addPoint(Vector2d(85.0, 150.08), Math.PI, 0.40, 0.25, "moving forward1")
-                .addPoint(Vector2d(90.0, 260.08), Math.PI, 0.10, 0.25, "moving forward1")
+        t.addPoint(Vector2d(80.0, 150.08), -Math.PI / 2, 0.40, 0.5, "moving aforward1")
+                .addPoint(Vector2d(80.0, 250.08), -Math.PI / 2, 0.40, 0.5, "moving forward1")
 //                .addPoint(Vector2d(85.0, 170.0), Math.PI, 0.5, 0.25, "moving forward1")
 //                .addPoint(Vector2d(85.0, 200.08), Math.PI, 0.25, 0.25, "moving forward1")
 //                .addPoint(Vector2d(85.0, 250.0), Math.PI, 0.20, 0.0, "moving forward1")
 
-        return PathFollower(t.create(), 35.0, "FIrst1")
+        return PathFollower(t.create(), 55.0, "FIrst1")
     }
 
     /**
@@ -143,20 +143,20 @@ class Paths {
         var t = PathBuilder(pose)
         when (loc) {
             1 -> {
-                t.addPoint(Vector2d(90.0, 325.0), -0.099 + Math.PI, 0.4, 0.25, "ENTERS THE PATH")
+                t.addPoint(Vector2d(88.0, 315.0), -Math.PI / 2, 0.4, 0.25, "ENTERS THE PATH")
             }
             2 -> {
-                t.addPoint(Vector2d(130.0, 295.72), -0.28 + Math.PI, 0.4, 0.25, "moving forward3")
+                t.addPoint(Vector2d(88.0, 280.72), -Math.PI / 2, 0.4, 0.25, "moving forward3")
             }
             3 -> {
-                t.addPoint(Vector2d(95.0, 297.0), Math.PI, 0.4, 0.25, "moving forward3")
+                t.addPoint(Vector2d(88.0, 270.0), -Math.PI / 2, 0.4, 0.25, "moving forward3")
             }
             else -> {
-                t.addPoint(Vector2d(130.0, 297.0), Math.PI, 0.4, 0.25, "moving forward3")
+                t.addPoint(Vector2d(88.0, 270.0), -Math.PI / 2, 0.4, 0.25, "moving forward3")
             }
         }
 
-        return PathFollower(t.create(), 25.0, "FIrst1")
+        return PathFollower(t.create(), 40.0, "FIrst1")
     }
 
     /**

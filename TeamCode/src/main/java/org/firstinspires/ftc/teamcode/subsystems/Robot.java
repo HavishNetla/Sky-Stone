@@ -22,19 +22,18 @@ public class Robot implements OpModeManagerNotifier.Notifications {
   public Lift lift;
   public Intake intake;
   long start;
+  List<LynxModule> allHubs;
   private List<Subsystem> subsystems;
   private OpModeManagerImpl opModeManager;
   private ExecutorService subsystemUpdateExecutor;
   private boolean started;
-  List<LynxModule> allHubs;
-
   // Run the "update" function for every subsytem
   private Runnable subsystemUpdateRunnable =
       new Runnable() {
         @Override
         public void run() {
           while (!Thread.currentThread().isInterrupted()) {
-            long startTime = System.currentTimeMillis();
+            //  long startTime = System.currentTimeMillis();
 
             for (LynxModule module : allHubs) {
               module.clearBulkCache();
@@ -43,9 +42,9 @@ public class Robot implements OpModeManagerNotifier.Notifications {
             for (Subsystem subsystem : subsystems) {
               subsystem.update();
             }
-            
-            long endTime = System.currentTimeMillis();
-            System.out.println("time taken in nano seconds" + (endTime-startTime));
+
+            // long endTime = System.currentTimeMillis();
+            // System.out.println("time taken in nano seconds" + (endTime-startTime));
           }
         }
       };

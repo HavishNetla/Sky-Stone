@@ -110,11 +110,11 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.waitForPathFollower()
 
         // robot drives to the foundation
-        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position, 1, robot))
+        robot.drive.followPathGlobal(paths.moveTowardsPlatfrom(robot.drive.position, 1, robot))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
-        robot.drive.followPath(paths.moveInToFoundation(robot.drive.position, 1))
+        robot.drive.followPathGlobal(paths.moveInToFoundation(robot.drive.position, 1))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
         println("FoundPOSITION1" + robot.drive.position)
@@ -125,11 +125,12 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.throwBlock()
         robot.drive.stowBlockNoDelay()
 
+
         //==========================================================================================
         // SECOND BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
-        robot.drive.goToPoint(Vector2d(85.0, 90.08), 0.0, 0.5, 0.5)
+        robot.drive.goToPointGlobal(Vector2d(70.0, 85.08), -Math.PI / 2, 0.5, 0.5)
         robot.drive.stowBlockNoDelay()
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
@@ -147,7 +148,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         } else {
             // Pick up the next skystone
             var p = paths.blockPositions[blockLoc2]
-            robot.drive.goToPoint(Vector2d(p.point.x + 5, p.point.y), 0.0, p.speed, p.turnSpeed)
+            robot.drive.goToPoint(Vector2d(p.point.x, p.point.y), 0.0, p.speed, p.turnSpeed)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
         }
@@ -163,47 +164,50 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.waitForPathFollower()
 
         // robot drives to the foundation
-        robot.drive.followPath(paths.moveTowardsPlatfrom(robot.drive.position, 2, robot))
+        robot.drive.followPathGlobal(paths.moveTowardsPlatfrom(robot.drive.position, 2, robot))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
         //robot.drive.preRelease()
 
-        robot.drive.followPath(paths.moveInToFoundation(robot.drive.position, 1))
+        robot.drive.followPathGlobal(paths.moveInToFoundation(robot.drive.position, 2))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
         println("FoundPOSITION2" + robot.drive.position)
-
 
         // Robot releases the block and stows the arm
         //robot.drive.halfPlaceBlock()
         robot.drive.throwBlock()
         robot.drive.stowBlockNoDelay()
 
+
         //==========================================================================================
         // THIRD BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
-        robot.drive.goToPoint(Vector2d(89.0, 100.08), 0.0, 0.5, 0.5)
+        robot.drive.goToPointGlobal(Vector2d(70.0, 85.08), -Math.PI / 2, 0.5, 0.5)
         robot.drive.stowBlockNoDelay()
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
+//        robot.drive.goToPoint(Vector2d(85.14, 130.265), 0.0, 0.3, 0.3)
+//        robot.drive.setLocalizerConfig(false)
+//        robot.drive.waitForPathFollower()
+
         robot.drive.readyBlock()
 
-        if (blockLoc3 == 5) {
+        if (blockLoc2 == 5) {
             robot.drive.goToPoint(Vector2d(103.14, 127.265), 0.0, 0.3, 0.3)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
         } else {
             // Pick up the next skystone
             var p = paths.blockPositions[blockLoc3]
-            robot.drive.goToPoint(Vector2d(p.point.x + 14, p.point.y), 0.0, p.speed, p.turnSpeed)
+            robot.drive.goToPoint(Vector2d(p.point.x, p.point.y), 0.0, p.speed, p.turnSpeed)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
-            println("statut2: got in here")
         }
-        println("POSITION3" + robot.drive.position)
+        println("POSITION2" + robot.drive.position)
 
 
         // Grab and stow the block
@@ -215,23 +219,23 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.waitForPathFollower()
 
         // robot drives to the foundation
-        robot.drive.followPath(paths.moveTowardsPlatfrom3(robot.drive.position, 2, robot))
+        robot.drive.followPathGlobal(paths.moveTowardsPlatfrom(robot.drive.position, 3, robot))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
         //robot.drive.preRelease()
 
-        robot.drive.followPath(paths.moveInToFoundation(robot.drive.position, 3))
+        robot.drive.followPathGlobal(paths.moveInToFoundation(robot.drive.position, 3))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
-        println("FoundPOSITION3" + robot.drive.position)
-
+        println("FoundPOSITION2" + robot.drive.position)
 
         // Robot releases the block and stows the arm
         //robot.drive.halfPlaceBlock()
         robot.drive.throwBlock()
         robot.drive.stowBlockNoDelay()
 
+        /*
         //==========================================================================================
         // FOURTH BLOCK ============================================================================
         //==========================================================================================
@@ -281,6 +285,6 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         // Robot releases the block and stows the arm
         //robot.drive.halfPlaceBlock()
         robot.drive.throwBlock()
-        robot.drive.stowBlockNoDelay()
+        robot.drive.stowBlockNoDelay()*/
     }
 }
