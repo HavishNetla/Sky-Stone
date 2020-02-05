@@ -148,7 +148,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         } else {
             // Pick up the next skystone
             var p = paths.blockPositions[blockLoc2]
-            robot.drive.goToPoint(Vector2d(p.point.x, p.point.y), 0.0, p.speed, p.turnSpeed)
+            robot.drive.goToPoint(Vector2d(p.point.x + 6, p.point.y), 0.0, p.speed, p.turnSpeed)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
         }
@@ -203,7 +203,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         } else {
             // Pick up the next skystone
             var p = paths.blockPositions[blockLoc3]
-            robot.drive.goToPoint(Vector2d(p.point.x, p.point.y), 0.0, p.speed, p.turnSpeed)
+            robot.drive.goToPoint(Vector2d(p.point.x + 12, p.point.y), 0.0, p.speed, p.turnSpeed)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
         }
@@ -235,15 +235,20 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.throwBlock()
         robot.drive.stowBlockNoDelay()
 
-        /*
+
         //==========================================================================================
         // FOURTH BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
-        robot.drive.goToPoint(Vector2d(89.0, 90.08), 0.0, 0.5, 0.5)
+        // Move underneath the bridge
+        robot.drive.goToPointGlobal(Vector2d(70.0, 85.08), -Math.PI / 2, 0.5, 0.5)
         robot.drive.stowBlockNoDelay()
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
+
+//        robot.drive.goToPoint(Vector2d(85.14, 130.265), 0.0, 0.3, 0.3)
+//        robot.drive.setLocalizerConfig(false)
+//        robot.drive.waitForPathFollower()
 
         robot.drive.readyBlock()
 
@@ -253,38 +258,37 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
             robot.drive.waitForPathFollower()
         } else {
             // Pick up the next skystone
-            robot.drive.followPath(paths.fourthBlock(robot.drive.position, blockLoc4))
+            var p = paths.blockPositions[blockLoc4]
+            robot.drive.goToPoint(Vector2d(p.point.x + 18, p.point.y), 0.0, p.speed, p.turnSpeed)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
-            println("statut2: got in here")
         }
-        println("POSITION4" + robot.drive.position)
+        println("POSITION2" + robot.drive.position)
 
 
         // Grab and stow the block
         robot.drive.grabBlock()
         robot.drive.stowBlock()
 
-        robot.drive.goToPoint(Vector2d(robot.drive.position.x - 6, robot.drive.position.y), 0.0, 0.25, 0.0)
+        robot.drive.goToPoint(Vector2d(robot.drive.position.x - 6, robot.drive.position.y - 3), 0.0, 0.25, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
         // robot drives to the foundation
-        robot.drive.followPath(paths.moveTowardsPlatfrom3(robot.drive.position, 3, robot))
+        robot.drive.followPathGlobal(paths.moveTowardsPlatfrom(robot.drive.position, 4, robot))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
         //robot.drive.preRelease()
 
-        robot.drive.followPath(paths.moveInToFoundation(robot.drive.position, 3))
+        robot.drive.followPathGlobal(paths.moveInToFoundation(robot.drive.position, 4))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
-        println("FoundPOSITION4" + robot.drive.position)
-
+        println("FoundPOSITION2" + robot.drive.position)
 
         // Robot releases the block and stows the arm
         //robot.drive.halfPlaceBlock()
         robot.drive.throwBlock()
-        robot.drive.stowBlockNoDelay()*/
+        robot.drive.stowBlockNoDelay()
     }
 }

@@ -528,7 +528,8 @@ public class MecanumDrive extends Subsystem {
       case FOLLOW_PATH_GLOBAL:
         pathPowers = pathfollower.updateGlobal(position);
         isPathFollowingDone = pathfollower.getStatus();
-        System.out.println("C power: " + pathPowers[2]);
+        System.out.println(
+            "path Powers: " + pathPowers[0] + ", " + pathPowers[1] + ", " + pathPowers[2]);
         if (!isPathFollowingDone) {
           internalSetVelocity(new Vector2d(pathPowers[1], -pathPowers[0]), pathPowers[2]);
         } else {
