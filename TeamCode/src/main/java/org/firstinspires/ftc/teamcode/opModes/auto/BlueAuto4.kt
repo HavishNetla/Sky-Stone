@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.util.Vector2d
 import org.firstinspires.ftc.teamcode.vision.FrameGrabber
 
 @Autonomous(name = "Blue Auto 4", group = "A")
-class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
+class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
 
     enum class BlockPos {
         ZERO_THREE,
@@ -96,10 +96,9 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.readyBlock()
 
         // Robot moves towards the first skystone
-        robot.drive.followPath(paths.getPathToBlock(blockLoc1))
+        robot.drive.followPathGlobal(paths.getPathToBlock(blockLoc1))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
-        println("POSITION1" + robot.drive.position)
 
         // Grabs and stows the first skystone
         robot.drive.grabBlock()
@@ -117,8 +116,6 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.followPathGlobal(paths.moveInToFoundation(robot.drive.position, 1))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
-        println("FoundPOSITION1" + robot.drive.position)
-
 
         // Robot releases the block and stows the arm
         //robot.drive.halfPlaceBlock()
@@ -130,7 +127,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         // SECOND BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
-        robot.drive.goToPointGlobal(Vector2d(70.0, 85.08), -Math.PI / 2, 0.5, 0.5)
+        robot.drive.goToPointGlobal(Vector2d(70.0, 85.08), -Math.PI / 2, 0.65, 0.5)
         robot.drive.stowBlockNoDelay()
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
@@ -148,7 +145,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         } else {
             // Pick up the next skystone
             var p = paths.blockPositions[blockLoc2]
-            robot.drive.goToPoint(Vector2d(p.point.x + 6, p.point.y), 0.0, p.speed, p.turnSpeed)
+            robot.drive.goToPoint(Vector2d(p.point.x, p.point.y), 0.0, p.speed, p.turnSpeed)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
         }
@@ -159,7 +156,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         robot.drive.grabBlock()
         robot.drive.stowBlock()
 
-        robot.drive.goToPoint(Vector2d(robot.drive.position.x - 6, robot.drive.position.y), 0.0, 0.25, 0.0)
+        robot.drive.goToPoint(Vector2d(robot.drive.position.x - 6, robot.drive.position.y), 0.0, 0.3, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
@@ -203,7 +200,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         } else {
             // Pick up the next skystone
             var p = paths.blockPositions[blockLoc3]
-            robot.drive.goToPoint(Vector2d(p.point.x + 12, p.point.y), 0.0, p.speed, p.turnSpeed)
+            robot.drive.goToPoint(Vector2d(p.point.x, p.point.y), 0.0, p.speed, p.turnSpeed)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
         }
@@ -259,7 +256,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.32, 81.7, -Math.PI / 2)) {
         } else {
             // Pick up the next skystone
             var p = paths.blockPositions[blockLoc4]
-            robot.drive.goToPoint(Vector2d(p.point.x + 18, p.point.y), 0.0, p.speed, p.turnSpeed)
+            robot.drive.goToPoint(Vector2d(p.point.x, p.point.y), 0.0, p.speed, p.turnSpeed)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
         }
