@@ -421,11 +421,11 @@ public class MecanumDrive extends Subsystem {
 
   public void throwBlock() {
     specialDelay(0.2);
+    setRotaterPos(0.5);
+
+    specialDelay(0.1);
     setGrabberPos(0.0);
 
-    specialDelay(0.05);
-
-    setRotaterPos(0.5);
     specialDelay(0.4);
   }
 

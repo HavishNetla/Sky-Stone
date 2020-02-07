@@ -121,8 +121,9 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         //robot.drive.halfPlaceBlock()
         robot.drive.throwBlock()
         robot.drive.stowBlockNoDelay()
+        System.out.println("position123: " + robot.drive.position)
 
-
+        /*
         //==========================================================================================
         // SECOND BLOCK ============================================================================
         //==========================================================================================
@@ -256,7 +257,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         } else {
             // Pick up the next skystone
             var p = paths.blockPositions[blockLoc4]
-            robot.drive.goToPoint(Vector2d(p.point.x, p.point.y), 0.0, p.speed, p.turnSpeed)
+            robot.drive.goToPoint(Vector2d(p.point.x + 5, p.point.y), 0.0, p.speed, p.turnSpeed)
             robot.drive.setLocalizerConfig(false)
             robot.drive.waitForPathFollower()
         }
@@ -287,5 +288,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         //robot.drive.halfPlaceBlock()
         robot.drive.throwBlock()
         robot.drive.stowBlockNoDelay()
+
+        println("LAST POSITION: " + robot.drive.trackingWheelPositions)*/
     }
 }

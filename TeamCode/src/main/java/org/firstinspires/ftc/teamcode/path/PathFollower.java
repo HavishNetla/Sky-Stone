@@ -124,16 +124,9 @@ public class PathFollower {
     movement_x = relativeXToPoint;
     movement_y = relativeYToPoint;
 
-    if (ended == false) {
-      if (Math.abs(Math.hypot(goal.getX() - pose.getX(), goal.getY() - pose.getY())) < 10) {
-        ended = true;
-        movement_turn = 0;
-      } else {
-        movement_turn = Range.clip((-relTurnAngle / Math.toRadians(25)), -1, 1) /* turnSpeed*/;
-      }
-    }
+    movement_turn = Range.clip((-relTurnAngle / Math.toRadians(25)), -1, 1) /* turnSpeed*/;
 
-    if (Math.abs(movement_x) < 0.2 && Math.abs(movement_y) < 0.2) {
+    if (Math.abs(movement_x) < 0.1 && Math.abs(movement_y) < 0.1) {
       isDone = true;
     }
 

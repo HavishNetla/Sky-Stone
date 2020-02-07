@@ -143,16 +143,16 @@ class Paths {
         var t = PathBuilder(pose)
         when (loc) {
             1 -> {
-                t.addPoint(Vector2d(88.0, 320.0), -Math.PI / 2, 0.4, 0.25, "ENTERS THE PATH")
+                t.addPoint(Vector2d(92.0, 320.0), -Math.PI / 2, 0.4, 0.25, "ENTERS THE PATH")
             }
             2 -> {
-                t.addPoint(Vector2d(88.0, 320.0), -Math.PI / 2, 0.4, 0.25, "moving forward3")
+                t.addPoint(Vector2d(92.0, 315.0), -Math.PI / 2, 0.4, 0.25, "moving forward3")
             }
             3 -> {
-                t.addPoint(Vector2d(88.0, 300.0), -Math.PI / 2, 0.4, 0.25, "moving forward3")
+                t.addPoint(Vector2d(92.0, 310.0), -Math.PI / 2, 0.4, 0.25, "moving forward3")
             }
             else -> {
-                t.addPoint(Vector2d(88.0, 300.0), -Math.PI / 2, 0.4, 0.25, "moving forward3")
+                t.addPoint(Vector2d(92.0, 305.0), -Math.PI / 2, 0.4, 0.25, "moving forward3")
             }
         }
 

@@ -59,15 +59,21 @@ public class ThreeWheelLocalizer {
 
       double dS = (dR + dL) / 2.0;
 
-      double avgTheta = theta + dTheta / 2.0;
+      // double avgTheta = theta + dTheta / 2.0;
 
-      double dY = dS * Math.sin(avgTheta) - dM * Math.cos(avgTheta);
-      double dX = dS * Math.cos(avgTheta) + dM * Math.sin(avgTheta);
+      double dX = dM, dY = dS;
+      if (Math.abs(dTheta) > 0) {
+        double movmentRadius = (dR + dL) / (2 * dTheta);
+        double strafeRadius = dM / dTheta;
+
+        dY = (movmentRadius * Math.sin(dTheta)) - (strafeRadius * (1 - Math.cos(dTheta)));
+        dX = (movmentRadius * (1 - Math.cos(dTheta))) + (strafeRadius * Math.sin(dTheta));
+      }
 
       // Update current robot position.
-      x += dX;
-      y += dY;
       theta += dTheta;
+      x += (Math.cos(theta) * dY) + (Math.sin(theta) * dX);
+      y += (Math.sin(theta) * dY) - (Math.cos(theta) * dX);
 
       poseEstimate = new Pose2d(x, y, theta);
       lastWheelPositions = wheelPositions;
