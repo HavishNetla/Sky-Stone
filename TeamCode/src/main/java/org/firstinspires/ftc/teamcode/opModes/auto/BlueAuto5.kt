@@ -2,13 +2,14 @@ package org.firstinspires.ftc.teamcode.opModes.auto
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
+import org.firstinspires.ftc.teamcode.path.PathBuilder
 import org.firstinspires.ftc.teamcode.path.Paths
 import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
 import org.firstinspires.ftc.teamcode.vision.FrameGrabber
 
-@Autonomous(name = "Blue Auto 4", group = "A")
-class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
+@Autonomous(name = "Blue Auto 5", group = "A")
+class BlueAuto5 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
 
     enum class BlockPos {
         ZERO_THREE,
@@ -109,9 +110,16 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         robot.drive.waitForPathFollower()
 
         // robot drives to the foundation
-//        robot.drive.followPathGlobal(paths.moveTowardsPlatfrom(robot.drive.position, 1, robot))
-//        robot.drive.setLocalizerConfig(true)
-//        robot.drive.waitForPathFollower()
+        var t = PathBuilder(robot.drive.position)
+        t.addPoint(Vector2d(robot.drive.position.x, 246.0), 0.0, 0.4, 0.3, "asdasd")
+                .addPoint(Vector2d(robot.drive.position.x, 291.0), 0.0, 0.4, 0.3, "asdasda")
+                .addPoint(Vector2d(75.0, 291.0), 0.0, 0.4, 0.3, "asdasdasdasd")
+                .create()
+
+        //robot.drive.followPath(t)
+        robot.drive.followPathGlobal(paths.moveTowardsPlatfrom(robot.drive.position, 1, robot))
+        robot.drive.setLocalizerConfig(true)
+        robot.drive.waitForPathFollower()
 
         robot.drive.followPathGlobal(paths.moveInToFoundation(robot.drive.position, 1))
         robot.drive.setLocalizerConfig(true)
@@ -122,13 +130,15 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         //robot.drive.halfPlaceBlock()
         robot.drive.throwBlock()
         robot.drive.stowBlockNoDelay()
-        println("POSITION234: " + robot.drive.position)
+        println("POSITION2: " + robot.drive.position)
+        println("POSITION2" + robot.drive.trackingWheelPositions[2])
+
 
         //==========================================================================================
         // SECOND BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
-        robot.drive.goToPointGlobal(Vector2d(80.0, 85.08), -Math.PI / 2, 0.65, 0.5, true)
+        robot.drive.goToPointGlobal(Vector2d(70.0, 85.08), -Math.PI / 2, 0.65, 0.5, true)
         robot.drive.stowBlockNoDelay()
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
@@ -159,17 +169,18 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
-//        // robot drives to the foundation
-//        robot.drive.followPathGlobal(paths.moveTowardsPlatfrom(robot.drive.position, 2, robot))
-//        robot.drive.setLocalizerConfig(true)
-//        robot.drive.waitForPathFollower()
+        // robot drives to the foundation
+        robot.drive.followPathGlobal(paths.moveTowardsPlatfrom(robot.drive.position, 2, robot))
+        robot.drive.setLocalizerConfig(true)
+        robot.drive.waitForPathFollower()
 
         //robot.drive.preRelease()
 
         robot.drive.followPathGlobal(paths.moveInToFoundation(robot.drive.position, 2))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
-        println("POSITION234" + robot.drive.position)
+        println("POSITION2" + robot.drive.position)
+        println("POSITION2" + robot.drive.trackingWheelPositions[2])
 
         // Robot releases the block and stows the arm
         //robot.drive.halfPlaceBlock()
@@ -181,7 +192,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         // THIRD BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
-        robot.drive.goToPointGlobal(Vector2d(80.0, 85.08), -Math.PI / 2, 0.5, 0.5, true)
+        robot.drive.goToPointGlobal(Vector2d(70.0, 85.08), -Math.PI / 2, 0.5, 0.5, true)
         robot.drive.stowBlockNoDelay()
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
@@ -212,10 +223,10 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
-//        // robot drives to the foundation
-//        robot.drive.followPathGlobal(paths.moveTowardsPlatfrom(robot.drive.position, 3, robot))
-//        robot.drive.setLocalizerConfig(true)
-//        robot.drive.waitForPathFollower()
+        // robot drives to the foundation
+        robot.drive.followPathGlobal(paths.moveTowardsPlatfrom(robot.drive.position, 3, robot))
+        robot.drive.setLocalizerConfig(true)
+        robot.drive.waitForPathFollower()
 
         //robot.drive.preRelease()
 
@@ -227,14 +238,15 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         //robot.drive.halfPlaceBlock()
         robot.drive.throwBlock()
         robot.drive.stowBlockNoDelay()
-        println("POSITION234" + robot.drive.position)
+        println("POSITION2" + robot.drive.position)
+        println("POSITION2" + robot.drive.trackingWheelPositions[2])
 
         //==========================================================================================
         // FOURTH BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
         // Move underneath the bridge
-        robot.drive.goToPointGlobal(Vector2d(80.0, 85.08), -Math.PI / 2, 0.5, 0.5, true)
+        robot.drive.goToPointGlobal(Vector2d(70.0, 85.08), -Math.PI / 2, 0.5, 0.5, true)
         robot.drive.stowBlockNoDelay()
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
@@ -281,7 +293,8 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         //robot.drive.halfPlaceBlock()
         robot.drive.throwBlock()
         robot.drive.stowBlockNoDelay()
-        println("POSITION234" + robot.drive.position)
+        println("POSITION2" + robot.drive.position)
+        println("POSITION2" + robot.drive.trackingWheelPositions[2])
 
         println("LAST POSITION: " + robot.drive.trackingWheelPositions)
     }

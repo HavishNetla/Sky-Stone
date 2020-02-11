@@ -141,6 +141,8 @@ class Paths {
 
     fun moveInToFoundation(pose: Pose2d, loc: Int): PathFollower {
         var t = PathBuilder(pose)
+        t.addPoint(Vector2d(80.0, 150.08), -Math.PI / 2, 0.5, 0.5, "moving aforwasard1")
+                .addPoint(Vector2d(80.0, 250.08), -Math.PI / 2, 0.4, 0.5, "moving forwdard1")
         when (loc) {
             1 -> {
                 t.addPoint(Vector2d(92.0, 320.0), -Math.PI / 2, 0.4, 0.25, "ENTERS THE PATH")

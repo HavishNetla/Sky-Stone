@@ -132,7 +132,14 @@ public class Lift extends Subsystem {
   }
 
   public int getCurrentPosition() {
-    return liftMotor.getCurrentPosition();
+    int pos = 0;
+    try {
+      pos = liftMotor.getCurrentPosition();
+
+    } catch (Exception e) {
+      System.out.println("ERROR1: " + e);
+    }
+    return pos;
   }
 
   public double getLiftEncoderPos() {

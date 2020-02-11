@@ -86,6 +86,7 @@ public class MecanumDrive extends Subsystem {
   private boolean forwardDirection = false;
 
   private ElapsedTime eTime = new ElapsedTime();
+  private boolean innacurate = false;
 
   public MecanumDrive(Pose2d ogPos, HardwareMap map, Telemetry telemetry) {
     frontLeft = map.get(DcMotorEx.class, "FL");
@@ -164,9 +165,9 @@ public class MecanumDrive extends Subsystem {
     double ratio = (Math.PI * 5.00) / 1440;
 
     return Arrays.asList(
-        -left.getCurrentPosition() * ratio,
-        -right.getCurrentPosition() * ratio,
-        -center.getCurrentPosition() * ratio);
+        -left.getCurrentPosition() * ratio * 1.00812, // manufacturing error
+        -right.getCurrentPosition() * ratio * 1.010242, // manufacturing error
+        -center.getCurrentPosition() * ratio * 1.006569); // manufacturing error
   }
 
   // ===============================================================================================
@@ -194,6 +195,12 @@ public class MecanumDrive extends Subsystem {
     setMode(Mode.FOLLOW_PATH_GLOBAL);
   }
 
+  public void followPathInnaccurate(PathFollower pf) {
+    isPathFollowingDone = false;
+    this.pathfollower = pf;
+    setMode(Mode.FOLLOW_PATH_GLOBAL);
+  }
+
   public void goToPoint(Vector2d goal, double preferredAngle, double speed, double turnSpeed) {
     PathBuilder t = new PathBuilder(position);
     ArrayList<PathSegment> path =
@@ -212,7 +219,7 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void goToPointGlobal(
-      Vector2d goal, double preferredAngle, double speed, double turnSpeed) {
+      Vector2d goal, double preferredAngle, double speed, double turnSpeed, boolean innacurate) {
     PathBuilder t = new PathBuilder(position);
     ArrayList<PathSegment> path =
         t.addPoint(new Vector2d(0.0, 0.0), 0.0, 0.0, 0.0, "THIS IS NOT BIENG USED").create();
@@ -226,7 +233,9 @@ public class MecanumDrive extends Subsystem {
     this.goToPreferredAngle = preferredAngle;
     this.goToSpeed = speed;
     this.goToTurnSpeed = turnSpeed;
-    setMode(Mode.GO_TO_POINT_GLOBAL);
+    this.innacurate = true;
+
+    this.setMode(Mode.GO_TO_POINT_GLOBAL);
   }
 
   public void turn(double angle) {
@@ -420,7 +429,6 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void throwBlock() {
-    specialDelay(0.2);
     setRotaterPos(0.5);
 
     specialDelay(0.1);
@@ -508,6 +516,7 @@ public class MecanumDrive extends Subsystem {
       case NONE:
         break;
     }
+    pathfollower.endDist = 2.0;
 
     switch (mode) {
       case OPEN_LOOP:
@@ -561,8 +570,24 @@ public class MecanumDrive extends Subsystem {
                 this.goToPreferredAngle,
                 this.goToSpeed,
                 this.goToTurnSpeed);
+
+        //        if (this.innacurate) {
+        //          pathfollower.endDist = 10.0;
+        //        }
         isPathFollowingDone = pathfollower.getStatus();
 
+        if (!isPathFollowingDone) {
+          internalSetVelocity(new Vector2d(pathPowers[1], -pathPowers[0]), pathPowers[2]);
+        } else {
+          stop();
+        }
+        break;
+
+      case FOLLOW_PATH_INNACURATE:
+        pathPowers = pathfollower.updateInnacurate(position);
+        isPathFollowingDone = pathfollower.getStatus();
+        System.out.println(
+            "path Powers: " + pathPowers[0] + ", " + pathPowers[1] + ", " + pathPowers[2]);
         if (!isPathFollowingDone) {
           internalSetVelocity(new Vector2d(pathPowers[1], -pathPowers[0]), pathPowers[2]);
         } else {
@@ -614,6 +639,7 @@ public class MecanumDrive extends Subsystem {
     OPEN_LOOP,
     FOLLOW_PATH,
     FOLLOW_PATH_GLOBAL,
+    FOLLOW_PATH_INNACURATE,
     GO_TO_POINT,
     GO_TO_POINT_GLOBAL,
     TURN,

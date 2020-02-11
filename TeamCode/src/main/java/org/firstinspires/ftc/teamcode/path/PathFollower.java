@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.path;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.util.MyMath;
+import org.firstinspires.ftc.teamcode.util.PIDController;
 import org.firstinspires.ftc.teamcode.util.Pose2d;
 import org.firstinspires.ftc.teamcode.util.Vector2d;
 
@@ -11,9 +12,13 @@ import java.util.ArrayList;
 import static org.firstinspires.ftc.teamcode.util.MyMath.AngleWrap;
 
 public class PathFollower {
+  public static double endDist = 2;
   double followAngle1 = 0.0;
   double speed1 = 0.0;
   double turnSpeed1 = 0.0;
+  PIDController pidControllerX = new PIDController(0.25, 0.0, 0.06);
+  PIDController pidControllerY = new PIDController(0.25, 0.0, 0.06);
+  PIDController pidControllerC = new PIDController(0.25, 0.0, 0.06);
   private double movement_x, movement_y, movement_turn;
   private Vector2d lookAheadPoint;
   private boolean first = true;
@@ -104,6 +109,7 @@ public class PathFollower {
     }
 
     double dist = Math.hypot(goal.getX() - pose.getX(), goal.getY() - pose.getY()) / ogDist;
+    double distNonScaled = Math.hypot(goal.getX() - pose.getX(), goal.getY() - pose.getY());
 
     double absoluteAngleToTarget = Math.atan2(goal.getY() - pose.getY(), goal.getX() - pose.getX());
     double relativeAngleToPoint = pose.getHeading() - absoluteAngleToTarget;
@@ -123,14 +129,28 @@ public class PathFollower {
 
     movement_x = relativeXToPoint;
     movement_y = relativeYToPoint;
+    movement_turn = Range.clip(-relTurnAngle, -1, 1) /* turnSpeed*/;
 
-    movement_turn = Range.clip((-relTurnAngle / Math.toRadians(25)), -1, 1) /* turnSpeed*/;
+    //    movement_x = pidControllerX.getError(0, -relativeXToPoint);
+    //    movement_y = pidControllerY.getError(0, -relativeYToPoint);
+    //    movement_turn = pidControllerC.getError(0, relTurnAngle);
 
-    if (Math.abs(movement_x) < 0.1 && Math.abs(movement_y) < 0.1) {
+    if (distNonScaled < endDist) {
       isDone = true;
+      return new double[] {0, 0, 0};
     }
 
-    return new double[] {movement_x * speed, movement_y * speed, movement_turn * speed};
+    System.out.println(
+        "relMov x:"
+            + movement_x * speed
+            + "y: "
+            + movement_y * speed
+            + "turn: "
+            + movement_turn * speed);
+
+    return new double[] {
+      movement_x * speed, movement_y * speed, movement_turn * speed,
+    };
   }
 
   public boolean getStatus() {
@@ -277,10 +297,17 @@ public class PathFollower {
    * @return the left and right powers
    */
   public double[] update(Pose2d pose) {
+    endDist = 2.0;
     return followCurve(pose);
   }
 
   public double[] updateGlobal(Pose2d pose) {
+    endDist = 2.0;
+    return followCurveGlobal(pose);
+  }
+
+  public double[] updateInnacurate(Pose2d pose) {
+    endDist = 10.0;
     return followCurveGlobal(pose);
   }
 

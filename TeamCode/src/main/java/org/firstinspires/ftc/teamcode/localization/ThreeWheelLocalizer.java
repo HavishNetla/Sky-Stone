@@ -71,9 +71,9 @@ public class ThreeWheelLocalizer {
       }
 
       // Update current robot position.
-      theta += dTheta;
       x += (Math.cos(theta) * dY) + (Math.sin(theta) * dX);
       y += (Math.sin(theta) * dY) - (Math.cos(theta) * dX);
+      theta += dTheta;
 
       poseEstimate = new Pose2d(x, y, theta);
       lastWheelPositions = wheelPositions;

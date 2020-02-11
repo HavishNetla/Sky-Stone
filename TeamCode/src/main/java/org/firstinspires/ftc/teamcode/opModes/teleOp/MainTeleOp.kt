@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opModes.teleOp
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.subsystems.Lift
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDrive
 import org.firstinspires.ftc.teamcode.subsystems.Robot
@@ -22,16 +23,20 @@ class MainTeleOp : OpMode() {
     private lateinit var statusUp: UtilToggle.Status
     private lateinit var statusDown: UtilToggle.Status
     private var lastPressed = ""
+    private lateinit var eTime: ElapsedTime
+
     override fun init() {
         robot = Robot(Pose2d(20.32, 81.7, -Math.PI / 2), this, this.telemetry)
 
         telemetry.addData("ff", "fff")
         robot.start()
         robot.drive.stowBlockRedTele()
+        eTime = ElapsedTime()
     }
 
     override fun start() {
         robot.drive.resetEncoders()
+
         //robot.drive.setMode(MecanumDrive.LocalizerMode.THREE_WHEEL_LOCALIZER)
     }
 
@@ -198,13 +203,22 @@ class MainTeleOp : OpMode() {
                     robot.drive.setTapeCapPower(-1.0)
                 }
             }
-            else -> robot.drive.setTapeCapPower(0.0)
+            else -> {
+                robot.drive.setTapeCapPower(0.0)
+                robot.drive.setTapeCapPower1(0.0)
+            }
         }
 
         telemetry.addData("POSITION", robot.drive.position)
         telemetry.addData("WHEEL POSITION", robot.drive.trackingWheelPositions)
         telemetry.update()
         println("POSITION: " + robot.drive.position)
+
+        if (eTime.time() == 31.0) {
+            telemetry.speak("FOUNDATION FIRST")
+        } else if (eTime.time() == 10.0) {
+            telemetry.speak("TAPE MEASURE")
+        }
     }
 
     override fun stop() {

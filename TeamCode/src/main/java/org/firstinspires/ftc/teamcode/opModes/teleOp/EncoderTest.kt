@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.computerDebuging.ComputerDebugging
 import org.firstinspires.ftc.teamcode.subsystems.Robot
 import org.firstinspires.ftc.teamcode.util.Pose2d
-import org.firstinspires.ftc.teamcode.util.Vector2d
 import java.text.DecimalFormat
 
 @TeleOp(name = "Encoder Test", group = "T")
@@ -36,7 +35,7 @@ class EncoderTest : OpMode() {
 
     override fun loop() {
         //robot.update()
-        robot.drive.setVelocity(Vector2d(gamepad1.left_stick_x.toDouble(), gamepad1.left_stick_y.toDouble()), gamepad1.right_stick_x.toDouble())
+        //robot.drive.setVelocity(Vector2d(gamepad1.left_stick_x.toDouble(), gamepad1.left_stick_y.toDouble()), gamepad1.right_stick_x.toDouble())
 
 
         var fixPos = Pose2d(robot.drive.position.x, robot.drive.position.y, robot.drive.position.heading * (180 / Math.PI))
@@ -47,11 +46,11 @@ class EncoderTest : OpMode() {
         telemetry.addData("pos", robot.drive.position)
 
 
-        ComputerDebugging.sendRobotLocation(fixPos)
-        ComputerDebugging.sendLog("\nPosition - " + robot.drive.position.toString() +
-                "\nPowersg - " + df.format(gamepad1.left_stick_x) + ", " + df.format(gamepad1.left_stick_y) + ", " + df.format(gamepad1.right_stick_x)
-        )
-        ComputerDebugging.sendPacket()
+//        ComputerDebugging.sendRobotLocation(fixPos)
+//        ComputerDebugging.sendLog("\nPosition - " + robot.drive.position.toString() +
+//                "\nPowersg - " + df.format(gamepad1.left_stick_x) + ", " + df.format(gamepad1.left_stick_y) + ", " + df.format(gamepad1.right_stick_x)
+//        )
+//        ComputerDebugging.sendPacket()
     }
 
     override fun stop() {
