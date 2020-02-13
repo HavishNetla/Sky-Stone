@@ -620,8 +620,8 @@ public class MecanumDrive extends Subsystem {
 
     frontLeft.setPower(powers[0]);
     frontRight.setPower(powers[1]);
-    backLeft.setPower(powers[2]);
     backRight.setPower(powers[3]);
+    backLeft.setPower(powers[2]);
 
     foundationGrabber.setPosition(foundationGrabberPosition);
     rotater.setPosition(rotaterPos);

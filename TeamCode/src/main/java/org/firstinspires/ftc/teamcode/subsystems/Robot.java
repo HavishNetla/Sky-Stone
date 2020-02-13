@@ -9,8 +9,10 @@ import com.qualcomm.robotcore.util.ThreadPool;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.opmode.OpModeManagerImpl;
+import org.firstinspires.ftc.teamcode.util.Logger;
 import org.firstinspires.ftc.teamcode.util.Pose2d;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -23,15 +25,22 @@ public class Robot implements OpModeManagerNotifier.Notifications {
   public Intake intake;
   long start;
   List<LynxModule> allHubs;
+  // Run the "update" function for every subsytem
+  Logger logger;
   private List<Subsystem> subsystems;
   private OpModeManagerImpl opModeManager;
   private ExecutorService subsystemUpdateExecutor;
   private boolean started;
-  // Run the "update" function for every subsytem
   private Runnable subsystemUpdateRunnable =
       new Runnable() {
         @Override
         public void run() {
+          try {
+            Logger logger = new Logger("robotPositions");
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+
           while (!Thread.currentThread().isInterrupted()) {
             //  long startTime = System.currentTimeMillis();
 
@@ -42,6 +51,11 @@ public class Robot implements OpModeManagerNotifier.Notifications {
             for (Subsystem subsystem : subsystems) {
               subsystem.update();
             }
+            try {
+              logger.writePose(drive.getPosition());
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
 
             // long endTime = System.currentTimeMillis();
             // System.out.println("time taken in nano seconds" + (endTime-startTime));
@@ -49,7 +63,7 @@ public class Robot implements OpModeManagerNotifier.Notifications {
         }
       };
 
-  public Robot(Pose2d ogPos, OpMode opMode, Telemetry telemetry) {
+  public Robot(Pose2d ogPos, OpMode opMode, Telemetry telemetry) throws IOException {
     subsystems = new ArrayList<>();
     this.allHubs = opMode.hardwareMap.getAll(LynxModule.class);
 
@@ -76,6 +90,8 @@ public class Robot implements OpModeManagerNotifier.Notifications {
     subsystemUpdateExecutor = ThreadPool.newSingleThreadExecutor("subsystem update");
 
     this.started = false;
+
+    logger = new Logger("RobotPositions");
   }
 
   // Starts subsystem executor

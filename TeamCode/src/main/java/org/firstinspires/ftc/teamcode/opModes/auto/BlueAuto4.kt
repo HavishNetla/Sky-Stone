@@ -283,6 +283,6 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         robot.drive.stowBlockNoDelay()
         println("POSITION234" + robot.drive.position)
 
-        println("LAST POSITION: " + robot.drive.trackingWheelPositions)
+        println("LAST POSITION123: " + robot.drive.trackingWheelPositions)
     }
 }
