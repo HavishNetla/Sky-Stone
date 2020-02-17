@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opModes.teleOp
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.util.ElapsedTime
+import org.firstinspires.ftc.teamcode.localization.ThreeWheelLocalizer
 import org.firstinspires.ftc.teamcode.subsystems.Lift
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDrive
 import org.firstinspires.ftc.teamcode.subsystems.Robot
@@ -49,7 +50,7 @@ class MainTeleOp : OpMode() {
         }
         var g1Lx = gamepad1.left_stick_x.toDouble() * scalar * 1.0
         var g1Ly = gamepad1.left_stick_y.toDouble() * scalar * 1.0
-        var g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.85
+        var g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.82
 
 //        telemetry.addData("PID", robot.drive.pid)
         when {
@@ -184,6 +185,15 @@ class MainTeleOp : OpMode() {
 //        telemetry.addData("LIFT ENCODER POS", robot.lift.liftEncoderPos)
 //        telemetry.addData("VAL", robot.lift.currentPosition)
 //        telemetry.addData("TOUCH SENSOR", robot.lift.touchSensorState)
+
+//        telemetry.addData("dX", ThreeWheelLocalizer.dX)
+//        telemetry.addData("dY", ThreeWheelLocalizer.dY)
+//        telemetry.addData("dL",ThreeWheelLocalizer.dL)
+//        telemetry.addData("dR", ThreeWheelLocalizer.dR)
+        telemetry.addData("X",ThreeWheelLocalizer.x)
+        telemetry.addData("Y",ThreeWheelLocalizer.y)
+        telemetry.addData("Theta", ThreeWheelLocalizer.theta)
+        telemetry.update()
 //
 //
 
@@ -209,10 +219,10 @@ class MainTeleOp : OpMode() {
             }
         }
 
-        telemetry.addData("POSITION", robot.drive.position)
-        telemetry.addData("WHEEL POSITION", robot.drive.trackingWheelPositions)
-        telemetry.update()
-        println("POSITION: " + robot.drive.position)
+        //telemetry.addData("POSITION", robot.drive.position)
+        //telemetry.addData("WHEEL POSITION", robot.drive.trackingWheelPositions)
+        //telemetry.update()
+        //println("POSITION: " + robot.drive.position)
 
         if (eTime.time() == 31.0) {
             telemetry.speak("FOUNDATION FIRST")

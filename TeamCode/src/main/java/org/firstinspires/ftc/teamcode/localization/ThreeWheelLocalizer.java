@@ -25,7 +25,14 @@ import java.util.List;
  */
 public class ThreeWheelLocalizer {
   public static double dTheta = 0;
-  double x = 20.32, y = 81.7, theta = -Math.PI / 2;
+
+  //added for telementry
+  public static double dY;
+  public static double dX;
+  public static double dL;
+  public static double dR;
+
+  public static double x = 20.32, y = 81.7, theta = -Math.PI / 2;
   Telemetry telemetry;
   private double chassisWidth = 34.235; // cm
   private Pose2d poseEstimate;
@@ -49,20 +56,34 @@ public class ThreeWheelLocalizer {
   public Pose2d update() {
     List<Double> wheelPositions = drive.getTrackingWheelPositions();
     if (!lastWheelPositions.isEmpty()) {
-      double c = 23.1 * 2 * Math.PI;
-      double dL = wheelPositions.get(0) - lastWheelPositions.get(0);
-      double dR = wheelPositions.get(1) - lastWheelPositions.get(1);
+      //original -FAIL
+      //double c = 23.1;
+      //new -WORKS BRUH HAVISH!!!!!!!!!!
+      double c= 19.05;
+
+      dL = wheelPositions.get(0) - lastWheelPositions.get(0);
+      dR = wheelPositions.get(1) - lastWheelPositions.get(1);
 
       dTheta = ((dR - dL) / chassisWidth);
 
-      double dM = wheelPositions.get(2) - lastWheelPositions.get(2) - (c / (2 * Math.PI) * dTheta);
+      double dM = wheelPositions.get(2) - lastWheelPositions.get(2) - (c * dTheta);
 
       double dS = (dR + dL) / 2.0;
 
-      double avgTheta = theta + dTheta / 2.0;
+      double avgTheta = theta + dTheta/ 2.0;
 
-      double dY = dS * Math.sin(avgTheta) - dM * Math.cos(avgTheta);
-      double dX = dS * Math.cos(avgTheta) + dM * Math.sin(avgTheta);
+      //Original
+       dY = dS * Math.sin(avgTheta) - dM * Math.cos(avgTheta);
+       dX = dS * Math.cos(avgTheta) + dM * Math.sin(avgTheta);
+
+      //dY=dS * Math.cos(theta) + Math.tan(dTheta) * Math.sin(theta) * dS - dM * Math.cos(avgTheta);
+
+//      dY = dS * Math.sin(dTheta) + dM * Math.cos(dTheta); //changed from - to + :Matt
+//      dX = dS * Math.cos(dTheta) + dM * Math.sin(dTheta);
+
+      //reverse of above :Matthew
+//      dY = -1*(dS * Math.cos(dTheta) + dM * Math.sin(dTheta)); //changed from - to + :Matt
+//      dX = -1*(dS * Math.sin(dTheta) + dM * Math.cos(dTheta));
 
       // Update current robot position.
       x += dX;
@@ -71,8 +92,12 @@ public class ThreeWheelLocalizer {
 
       poseEstimate = new Pose2d(x, y, theta);
       lastWheelPositions = wheelPositions;
+
+
+
     }
     lastWheelPositions = wheelPositions;
+
 
     return poseEstimate;
   }

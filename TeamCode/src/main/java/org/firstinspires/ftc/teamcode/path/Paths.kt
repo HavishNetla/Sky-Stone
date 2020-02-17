@@ -140,21 +140,33 @@ class Paths {
     }
 
     fun moveInToFoundation(pose: Pose2d, loc: Int): PathFollower {
+        var angle = -Math.PI/2
         var t = PathBuilder(pose)
-        t.addPoint(Vector2d(80.0, 150.08), -Math.PI / 2, 0.5, 0.5, "moving aforwasard1")
-                .addPoint(Vector2d(80.0, 250.08), -Math.PI / 2, 0.4, 0.5, "moving forwdard1")
+        //t.addPoint(Vector2d(80.0, 150.08), -angle, 0.5, 0.5, "moving aforwasard1")
+                //.addPoint(Vector2d(80.0, 250.08), -angle, 0.4, 0.5, "moving forwdard1")
+//                .addPoint(Vector2d(82.0, 215.08), -angle, 0.4, 0.2, "moving forwdard1")
+//                .addPoint(Vector2d(85.0, 230.08), -angle, 0.4, 0.2, "moving forwdard1")
+//                .addPoint(Vector2d(92.0, 260.08), -angle, 0.4, 0.2, "moving forwdard1")
+                //.addPoint(Vector2d(92.0, 280.08), -angle, 0.4, 0.2, "moving forwdard1")
+                //.addPoint(Vector2d(92.0, 300.08), -angle, 0.4, 0.2, "moving forwdard1")
+
+        //new points
+        t.addPoint(Vector2d(75.32, 200.0), angle, 0.4, 0.4, "moving forward1")
+                .addPoint(Vector2d(90.0, 240.0), angle, 0.4, 0.4, "moving forward1")
+                //.addPoint(Vector2d(90.0, 320.0), angle, 0.2, 0.4, "moving forward2")
+
         when (loc) {
             1 -> {
-                t.addPoint(Vector2d(92.0, 320.0), -Math.PI / 2, 0.4, 0.25, "ENTERS THE PATH")
+                t.addPoint(Vector2d(90.0, 320.0), angle, 0.3, 0.4, "ENTERS THE PATH")
             }
             2 -> {
-                t.addPoint(Vector2d(92.0, 315.0), -Math.PI / 2, 0.4, 0.25, "moving forward3")
+                t.addPoint(Vector2d(90.0, 315.0), angle, 0.3, 0.4, "moving forward3")
             }
             3 -> {
-                t.addPoint(Vector2d(92.0, 310.0), -Math.PI / 2, 0.4, 0.25, "moving forward3")
+                t.addPoint(Vector2d(90.0, 310.0), angle, 0.3, 0.4, "moving forward3")
             }
             else -> {
-                t.addPoint(Vector2d(92.0, 305.0), -Math.PI / 2, 0.4, 0.25, "moving forward3")
+                t.addPoint(Vector2d(90.0, 305.0), -angle, 0.3, 0.4, "moving forward3")
             }
         }
 
@@ -167,16 +179,16 @@ class Paths {
      * @param pose the position of the robot
      * @return the path to the foundation
      */
-    fun moveTowardsPlatfrom2(pose: Pose2d): PathFollower {
+    fun pathTest(pose: Pose2d): PathFollower {
+        var angle = -Math.PI/2
         var t = PathBuilder(pose)
-        var path: ArrayList<PathSegment> = t
-                .addPoint(Vector2d(70.0, 120.08), -Math.PI, 0.4, 0.25, "moving forward1")
-                .addPoint(Vector2d(78.0, 132.08), -Math.PI, 0.4, 0.25, "moving forward1")
-                .addPoint(Vector2d(78.0, 220.98), -Math.PI, 0.4, 0.25, "moving forward2")
-                .addPoint(Vector2d(105.0, 320.72), -Math.PI, 0.25, 0.25, "moving forward3")
-                .create()
+        t.addPoint(Vector2d(20.32, 255.0), angle, 0.4, 0.4, "moving forward1")
+                .addPoint(Vector2d(50.0, 270.0), angle, 0.4, 0.4, "moving forward1")
+                .addPoint(Vector2d(50.0, 320.0), angle, 0.2, 0.4, "moving forward2")
+                //.addPoint(Vector2d(105.0, 320.72), -Math.PI/2, 0.25, 0.25, "moving forward3")
 
-        return PathFollower(path, 55.0, "FIrst1")
+
+        return PathFollower(t.create(), 20.0, "FIrst1")
     }
 
 

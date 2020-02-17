@@ -21,6 +21,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.openftc.revextensions2.ExpansionHubEx;
+import org.openftc.revextensions2.ExpansionHubMotor;
+import org.openftc.revextensions2.RevBulkData;
+
 public class MecanumDrive extends Subsystem {
   public static double[] pathPowers = new double[] {0, 0, 0};
   public static boolean moveToFoundation = false;
@@ -88,7 +92,17 @@ public class MecanumDrive extends Subsystem {
   private ElapsedTime eTime = new ElapsedTime();
   private boolean innacurate = false;
 
+  RevBulkData bulkData;
+  ExpansionHubMotor R, L, C;
+  ExpansionHubEx expansionHub;
+
   public MecanumDrive(Pose2d ogPos, HardwareMap map, Telemetry telemetry) {
+
+    expansionHub = map.get(ExpansionHubEx.class, "Expansion Hub 2");
+    R = (ExpansionHubMotor) map.dcMotor.get("R");
+    L = (ExpansionHubMotor) map.dcMotor.get("L");
+    C = (ExpansionHubMotor) map.dcMotor.get("C");
+
     frontLeft = map.get(DcMotorEx.class, "FL");
     frontRight = map.get(DcMotorEx.class, "FR");
     backLeft = map.get(DcMotorEx.class, "BL");
@@ -316,6 +330,7 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void waitForPathFollower() {
+    bulkData = expansionHub.getBulkInputData();
     while (!Thread.currentThread().isInterrupted()
         && (getMode() == Mode.FOLLOW_PATH
             || getMode() == Mode.FOLLOW_PATH_GLOBAL
@@ -324,7 +339,14 @@ public class MecanumDrive extends Subsystem {
             || getMode() == Mode.TURN)) {
       delay((long) 0.005);
       telemetry.addData("pos", position);
-      telemetry.update();
+
+
+
+//      telemetry.addData("R enocder", bulkData.getMotorCurrentPosition(R));
+//      telemetry.addData("L encoder", bulkData.getMotorCurrentPosition(L));
+//      telemetry.addData("C encoder", bulkData.getMotorCurrentPosition(C));
+//
+//      telemetry.update();
     }
     return;
   }

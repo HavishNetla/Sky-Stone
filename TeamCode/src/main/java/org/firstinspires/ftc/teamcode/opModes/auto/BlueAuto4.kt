@@ -6,6 +6,10 @@ import org.firstinspires.ftc.teamcode.path.Paths
 import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
 import org.firstinspires.ftc.teamcode.vision.FrameGrabber
+import org.openftc.revextensions2.ExpansionHubEx
+import org.openftc.revextensions2.ExpansionHubMotor
+import org.openftc.revextensions2.RevBulkData
+
 
 @Autonomous(name = "Blue Auto 4", group = "A")
 class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
@@ -19,8 +23,20 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
 
     private var blockPos: BlockPos = BlockPos.NONE
     private var paths: Paths = Paths()
+//
+//    var bulkData: RevBulkData? = null
+//    var R: ExpansionHubMotor? = null
+//    var L:ExpansionHubMotor? = null
+//    var C:ExpansionHubMotor? = null
+//    var expansionHub: ExpansionHubEx? = null
 
     override fun setup() {
+//        expansionHub = hardwareMap.get(ExpansionHubEx::class.java, "Expansion Hub 2")
+//        R = hardwareMap.dcMotor["R"] as ExpansionHubMotor
+//        L = hardwareMap.dcMotor["L"] as ExpansionHubMotor
+//        C = hardwareMap.dcMotor["C"] as ExpansionHubMotor
+
+
         val frameGrabber = FrameGrabber()
         frameGrabber.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
         frameGrabber.enable()
@@ -65,6 +81,9 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
     }
 
     override fun run() {
+
+//        bulkData = expansionHub!!.bulkInputData
+
         val blockLoc1 = when (blockPos) {
             BlockPos.ZERO_THREE -> 0
             BlockPos.ONE_FOUR -> 1
@@ -104,6 +123,8 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         robot.drive.grabBlock()
         robot.drive.stowBlock()
 
+
+
         robot.drive.goToPoint(Vector2d(robot.drive.position.x - 6, robot.drive.position.y), 0.0, 0.25, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
@@ -122,13 +143,15 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         //robot.drive.halfPlaceBlock()
         robot.drive.throwBlock()
         robot.drive.stowBlockNoDelay()
-        println("POSITION234: " + robot.drive.position)
+        //println("POSITION234: " + robot.drive.position)
+
 
         //==========================================================================================
         // SECOND BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
-        robot.drive.goToPointGlobal(Vector2d(80.0, 85.08), -Math.PI / 2, 0.65, 0.5, true)
+        robot.drive.goToPointGlobal(Vector2d(80.0, 160.08), -Math.PI / 2, 0.65, 0.5, true)
+        //robot.drive.goToPoint(Vector2d(80.14, 160.265), 0.0, 0.3, 0.3)
         robot.drive.stowBlockNoDelay()
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
@@ -169,7 +192,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         robot.drive.followPathGlobal(paths.moveInToFoundation(robot.drive.position, 2))
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
-        println("POSITION234" + robot.drive.position)
+        //println("POSITION234" + robot.drive.position)
 
         // Robot releases the block and stows the arm
         //robot.drive.halfPlaceBlock()
@@ -227,7 +250,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         //robot.drive.halfPlaceBlock()
         robot.drive.throwBlock()
         robot.drive.stowBlockNoDelay()
-        println("POSITION234" + robot.drive.position)
+        //println("POSITION234" + robot.drive.position)
 
         //==========================================================================================
         // FOURTH BLOCK ============================================================================
@@ -281,7 +304,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         //robot.drive.halfPlaceBlock()
         robot.drive.throwBlock()
         robot.drive.stowBlockNoDelay()
-        println("POSITION234" + robot.drive.position)
+        //println("POSITION234" + robot.drive.position)
 
         println("LAST POSITION123: " + robot.drive.trackingWheelPositions)
     }
