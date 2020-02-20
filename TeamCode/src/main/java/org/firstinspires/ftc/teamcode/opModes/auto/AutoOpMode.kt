@@ -22,7 +22,6 @@ abstract class AutoOpMode(ogPose: Pose2d) : LinearOpMode() {
         setup()
 
         AutoTransitioner.transitionOnStop(this, "Mecanum Drive")
-        telemetry.speak("FOUNDATION FIRST! FOUNDATION FIRST!")
 
         waitForStart()
 

@@ -50,7 +50,8 @@ class MainTeleOp : OpMode() {
         }
         var g1Lx = gamepad1.left_stick_x.toDouble() * scalar * 1.0
         var g1Ly = gamepad1.left_stick_y.toDouble() * scalar * 1.0
-        var g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.82
+        var g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.9
+
 
 //        telemetry.addData("PID", robot.drive.pid)
         when {

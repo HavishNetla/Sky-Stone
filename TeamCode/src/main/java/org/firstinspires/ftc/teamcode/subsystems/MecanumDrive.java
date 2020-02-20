@@ -21,10 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.openftc.revextensions2.ExpansionHubEx;
-import org.openftc.revextensions2.ExpansionHubMotor;
-import org.openftc.revextensions2.RevBulkData;
-
 public class MecanumDrive extends Subsystem {
   public static double[] pathPowers = new double[] {0, 0, 0};
   public static boolean moveToFoundation = false;
@@ -92,16 +88,16 @@ public class MecanumDrive extends Subsystem {
   private ElapsedTime eTime = new ElapsedTime();
   private boolean innacurate = false;
 
-  RevBulkData bulkData;
-  ExpansionHubMotor R, L, C;
-  ExpansionHubEx expansionHub;
+  //  RevBulkData bulkData;
+  //  ExpansionHubMotor R, L, C;
+  //  ExpansionHubEx expansionHub;
 
   public MecanumDrive(Pose2d ogPos, HardwareMap map, Telemetry telemetry) {
 
-    expansionHub = map.get(ExpansionHubEx.class, "Expansion Hub 2");
-    R = (ExpansionHubMotor) map.dcMotor.get("R");
-    L = (ExpansionHubMotor) map.dcMotor.get("L");
-    C = (ExpansionHubMotor) map.dcMotor.get("C");
+    //    expansionHub = map.get(ExpansionHubEx.class, "Expansion Hub 2");
+    //    R = (ExpansionHubMotor) map.dcMotor.get("R");
+    //    L = (ExpansionHubMotor) map.dcMotor.get("L");
+    //    C = (ExpansionHubMotor) map.dcMotor.get("C");
 
     frontLeft = map.get(DcMotorEx.class, "FL");
     frontRight = map.get(DcMotorEx.class, "FR");
@@ -201,18 +197,18 @@ public class MecanumDrive extends Subsystem {
     isPathFollowingDone = false;
     this.pathfollower = pf;
     setMode(Mode.FOLLOW_PATH);
+    this.innacurate = false;
   }
 
   public void followPathGlobal(PathFollower pf) {
     isPathFollowingDone = false;
     this.pathfollower = pf;
     setMode(Mode.FOLLOW_PATH_GLOBAL);
+    this.innacurate = false;
   }
 
-  public void followPathInnaccurate(PathFollower pf) {
-    isPathFollowingDone = false;
-    this.pathfollower = pf;
-    setMode(Mode.FOLLOW_PATH_GLOBAL);
+  public void setInnacurate() {
+    this.innacurate = true;
   }
 
   public void goToPoint(Vector2d goal, double preferredAngle, double speed, double turnSpeed) {
@@ -229,6 +225,7 @@ public class MecanumDrive extends Subsystem {
     this.goToPreferredAngle = preferredAngle;
     this.goToSpeed = speed;
     this.goToTurnSpeed = turnSpeed;
+    this.innacurate = false;
     setMode(Mode.GO_TO_POINT);
   }
 
@@ -247,7 +244,7 @@ public class MecanumDrive extends Subsystem {
     this.goToPreferredAngle = preferredAngle;
     this.goToSpeed = speed;
     this.goToTurnSpeed = turnSpeed;
-    this.innacurate = true;
+    this.innacurate = false;
 
     this.setMode(Mode.GO_TO_POINT_GLOBAL);
   }
@@ -330,7 +327,7 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void waitForPathFollower() {
-    bulkData = expansionHub.getBulkInputData();
+    //    bulkData = expansionHub.getBulkInputData();
     while (!Thread.currentThread().isInterrupted()
         && (getMode() == Mode.FOLLOW_PATH
             || getMode() == Mode.FOLLOW_PATH_GLOBAL
@@ -340,20 +337,18 @@ public class MecanumDrive extends Subsystem {
       delay((long) 0.005);
       telemetry.addData("pos", position);
 
-
-
-//      telemetry.addData("R enocder", bulkData.getMotorCurrentPosition(R));
-//      telemetry.addData("L encoder", bulkData.getMotorCurrentPosition(L));
-//      telemetry.addData("C encoder", bulkData.getMotorCurrentPosition(C));
-//
-//      telemetry.update();
+      //      telemetry.addData("R enocder", bulkData.getMotorCurrentPosition(R));
+      //      telemetry.addData("L encoder", bulkData.getMotorCurrentPosition(L));
+      //      telemetry.addData("C encoder", bulkData.getMotorCurrentPosition(C));
+      //
+      //      telemetry.update();
     }
     return;
   }
 
   public void grabFoundation() {
     foundationGrabberPosition = 0.9;
-    delay((long) 1.0);
+    specialDelay(0.3);
   }
 
   public void grabFoundationTele() {
@@ -362,7 +357,7 @@ public class MecanumDrive extends Subsystem {
 
   public void openFoundationGrabber() {
     foundationGrabberPosition = 0.5;
-    delay((long) 1.0);
+    specialDelay(0.1);
   }
 
   public void openFoundationGrabberTele() {
@@ -453,7 +448,7 @@ public class MecanumDrive extends Subsystem {
   public void throwBlock() {
     setRotaterPos(0.5);
 
-    specialDelay(0.1);
+    specialDelay(0.06);
     setGrabberPos(0.0);
 
     specialDelay(0.4);
@@ -538,7 +533,11 @@ public class MecanumDrive extends Subsystem {
       case NONE:
         break;
     }
-    pathfollower.endDist = 2.0;
+    if (innacurate) {
+      pathfollower.endDist = 10.0;
+    } else {
+      pathfollower.endDist = 4.0;
+    }
 
     switch (mode) {
       case OPEN_LOOP:
@@ -608,8 +607,7 @@ public class MecanumDrive extends Subsystem {
       case FOLLOW_PATH_INNACURATE:
         pathPowers = pathfollower.updateInnacurate(position);
         isPathFollowingDone = pathfollower.getStatus();
-        System.out.println(
-            "path Powers: " + pathPowers[0] + ", " + pathPowers[1] + ", " + pathPowers[2]);
+
         if (!isPathFollowingDone) {
           internalSetVelocity(new Vector2d(pathPowers[1], -pathPowers[0]), pathPowers[2]);
         } else {

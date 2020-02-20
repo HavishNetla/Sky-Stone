@@ -24,6 +24,8 @@ public class PathFollower {
   private boolean first = true;
   private Vector2d powers = new Vector2d(0, 0);
   private double ogDist;
+  private double ogX;
+  private double ogY;
   private boolean hasReachedEnd = false;
   private Vector2d followPoint = new Vector2d(0.0, 0.0);
   private double relTurnAngle = 0;
@@ -105,6 +107,8 @@ public class PathFollower {
     Vector2d pointToTurn;
     if (first) {
       ogDist = Math.hypot(goal.getX() - pose.getX(), goal.getY() - pose.getY());
+      ogX = goal.getX() - pose.getX();
+      ogY = goal.getY() - pose.getY();
       first = false;
     }
 
@@ -118,8 +122,8 @@ public class PathFollower {
     double relativeYToPoint;
     double relativeXToPoint;
 
-    relativeYToPoint = Math.sin(AngleWrap(relativeAngleToPoint)) * dist;
-    relativeXToPoint = Math.cos(AngleWrap(relativeAngleToPoint)) * dist;
+    relativeYToPoint = (Math.sin(AngleWrap(relativeAngleToPoint)) * dist);
+    relativeXToPoint = (Math.cos(AngleWrap(relativeAngleToPoint)) * dist);
     powers = new Vector2d(relativeXToPoint, relativeYToPoint);
 
     //    double movementXPower =
@@ -285,11 +289,14 @@ public class PathFollower {
     //            + Math.toDegrees(angle)
     //            + " current: "
     //            + Math.toDegrees(pose.getHeading()));
-    if (Math.abs(error) < 1) {
+
+    double power = -error / Math.toRadians(100);
+
+    if (Math.abs(error) < Math.toRadians(1) && Math.abs(power) < 0.1) {
       isDone = true;
       return new double[] {0, 0, 0};
     }
-    return new double[] {0, 0, -error / 10};
+    return new double[] {0, 0, -error / Math.toRadians(90)};
   }
 
   /**
@@ -297,17 +304,17 @@ public class PathFollower {
    * @return the left and right powers
    */
   public double[] update(Pose2d pose) {
-    endDist = 2.0;
+    // endDist = 2.0;
     return followCurve(pose);
   }
 
   public double[] updateGlobal(Pose2d pose) {
-    endDist = 2.0;
+    // endDist = 2.0;
     return followCurveGlobal(pose);
   }
 
   public double[] updateInnacurate(Pose2d pose) {
-    endDist = 10.0;
+    // endDist = 10.0;
     return followCurveGlobal(pose);
   }
 

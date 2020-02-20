@@ -31,7 +31,7 @@ public class Lift extends Subsystem {
   private PIDController pidController = new PIDController(0.01, 0.002, 0.002);
   private double joyStickPower = 0.0;
 
-  public Lift(HardwareMap map, Telemetry telemetry) {
+  public Lift(HardwareMap map, Telemetry telemetryz) {
     linkage = map.get(Servo.class, "LL");
     rotater = map.get(Servo.class, "LR");
     grabber = map.get(Servo.class, "LG");

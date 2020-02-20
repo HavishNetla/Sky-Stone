@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import android.app.Activity;
 
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.lynx.commands.core.LynxGetBulkInputDataResponse;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManagerNotifier;
 import com.qualcomm.robotcore.util.ThreadPool;
@@ -14,7 +15,9 @@ import org.firstinspires.ftc.teamcode.util.Pose2d;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 public class Robot implements OpModeManagerNotifier.Notifications {
@@ -31,6 +34,10 @@ public class Robot implements OpModeManagerNotifier.Notifications {
   private OpModeManagerImpl opModeManager;
   private ExecutorService subsystemUpdateExecutor;
   private boolean started;
+  private List<LynxModule> hubs;
+  private boolean bulkDataUpdated = false;
+  private Map<LynxModule, LynxGetBulkInputDataResponse> bulkDataResponses;
+
   private Runnable subsystemUpdateRunnable =
       new Runnable() {
         @Override
@@ -42,14 +49,35 @@ public class Robot implements OpModeManagerNotifier.Notifications {
           }
 
           while (!Thread.currentThread().isInterrupted()) {
-            //  long startTime = System.currentTimeMillis();
+            long startTime = System.currentTimeMillis();
 
             for (LynxModule module : allHubs) {
               module.clearBulkCache();
             }
 
+            //            for (LynxModule hub : hubs) {
+            //              LynxGetBulkInputDataCommand command = new
+            // LynxGetBulkInputDataCommand(hub);
+            //              try {
+            //                bulkDataResponses.put(hub, command.sendReceive());
+            //                bulkDataUpdated = true;
+            //              } catch (Exception e) {
+            //                try {
+            //                  Log.e("sadasd", "get bulk data error");
+            //                  Log.e("sadasd", e.getLocalizedMessage());
+            //                } catch (NullPointerException npe) {
+            //                  Log.e("sadasd", "error logging exception");
+            //                }
+            //                bulkDataUpdated = false;
+            //              }
+            //            }
+
             for (Subsystem subsystem : subsystems) {
-              subsystem.update();
+              try {
+                subsystem.update();
+              } catch (Exception E) {
+                System.out.println("DAMMIT ERROR GOT THROW BUT IT DIDNT CRASH WHOOPEEEE");
+              }
             }
             try {
               logger.writePose(drive.getPosition());
@@ -57,8 +85,8 @@ public class Robot implements OpModeManagerNotifier.Notifications {
               e.printStackTrace();
             }
 
-            // long endTime = System.currentTimeMillis();
-            // System.out.println("time taken in nano seconds" + (endTime-startTime));
+            long endTime = System.currentTimeMillis();
+            System.out.println("time taken in mili seconds " + (endTime - startTime));
           }
         }
       };
@@ -86,6 +114,9 @@ public class Robot implements OpModeManagerNotifier.Notifications {
     for (LynxModule module : allHubs) {
       module.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
     }
+
+    bulkDataResponses = new HashMap<>(2);
+    hubs = new ArrayList<>(2);
 
     subsystemUpdateExecutor = ThreadPool.newSingleThreadExecutor("subsystem update");
 
