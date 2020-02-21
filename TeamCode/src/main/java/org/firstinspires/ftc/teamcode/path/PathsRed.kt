@@ -4,16 +4,19 @@ import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
 
 
-var blockPositionsRed: List<PathPoint> = listOf(
-        PathPoint(Vector2d(-113.14, 10.668), Math.toRadians(116.25), 0.3, 0.3, "first block"),
-        PathPoint(Vector2d(-110.14, 40.985), Math.toRadians(99.0 + 5), 0.3, 0.3, "second block"),
-        PathPoint(Vector2d(-117.14, 64.305), Math.toRadians(83.75 + 9), 0.3, 0.3, "third block"),
-        PathPoint(Vector2d(-121.14, 69.625), Math.toRadians(77.5 + 5), 0.3, 0.3, "fourth block"),
-        PathPoint(Vector2d(-115.14, 104.945), Math.toRadians(71.25 + 5), 0.3, 0.3, "fifth block"),
-        PathPoint(Vector2d(-110.14, 132.265), Math.toRadians(65.0 + 5), 0.3, 0.3, "sixth block")
-)
 
 class PathsRed {
+    var xVal =-96.0;
+    var blockPositionsRed: List<PathPoint> = listOf(
+
+            PathPoint(Vector2d(xVal, 24.0), Math.PI / 2, 0.35, 0.3, "first block"),
+            PathPoint(Vector2d(xVal, 44.0), Math.PI / 2, 0.35, 0.3, "second block"),
+            PathPoint(Vector2d(xVal, 64.0), Math.PI / 2, 0.35, 0.3, "third block"),
+            PathPoint(Vector2d(xVal, 88.0), Math.PI / 2, 0.35, 0.3, "fourth block"),
+            PathPoint(Vector2d(xVal, 109.0), Math.PI / 2, 0.35, 0.3, "fifth block"),
+            PathPoint(Vector2d(xVal, 124.0), Math.PI / 2, 0.35, 0.3, "sixth block")
+    )
+
     var userInput = 0
 
     /**
@@ -38,7 +41,22 @@ class PathsRed {
 //
 //        return PathFollower(path, 55.0, "FIrst")
 //    }
+    fun getPathToBlock(index: Int): PathFollower {
+        userInput = index
 
+        var t = PathBuilder(Pose2d(-16.32, 81.7, 0.0))
+        var path: ArrayList<PathSegment> = t
+                .addPoint(blockPositionsRed[index].point,
+                        blockPositionsRed[index].followAngle,
+                        blockPositionsRed[index].speed,
+                        0.75
+                        ,
+                        "13312"
+                )
+                .create()
+
+        return PathFollower(path, 55.0, "FIrst")
+    }
     /**
      * Returns the path to get to a given block the SECOND time
      *
@@ -89,7 +107,82 @@ class PathsRed {
 
         return PathFollower(path, 55.0, "FIrst1")
     }
+    fun moveInToFoundation(pose: Pose2d, loc: Int): PathFollower {
+        var angle = Math.PI / 2
+        var t = PathBuilder(pose)
 
+        //new points
+        t.addPoint(Vector2d(-70.32, 140.0), angle, 0.4, 1.0, "moving forward1")
+                .addPoint(Vector2d(-75.0, 170.0), angle, 0.7, 0.8, "moving forward1")
+                .addPoint(Vector2d(-75.0, 200.0), angle, 0.7, 0.8, "moving forward1")
+                .addPoint(Vector2d(-95.0, 240.0), angle, 0.2, 0.8, "moving forward1")
+        when (loc) {
+            1 -> {
+                t.addPoint(Vector2d(-97.0, 323.0), angle, 0.28, 0.6, "ENTERS THE PATH")
+            }
+            2 -> {
+                t.addPoint(Vector2d(-97.0, 315.0), angle, 0.25, 0.6, "moving forward3")
+            }
+            3 -> {
+                t.addPoint(Vector2d(-97.0, 305.0), angle, 0.20, 0.6, "moving forward3")
+            }
+            else -> {
+                t.addPoint(Vector2d(-97.0, 295.0), angle, 0.20, 0.6, "moving forward3")
+            }
+        }
+
+        return PathFollower(t.create(), 30.0, "FIrst1")
+    }
+    fun moveInToFoundation2(pose: Pose2d, loc: Int): PathFollower {
+        var angle = Math.PI / 2
+        var t = PathBuilder(pose)
+
+        //new points
+        t.addPoint(Vector2d(-75.32, 140.0), angle, 0.6, 1.0, "moving forward1")
+                .addPoint(Vector2d(-75.0, 170.0), angle, 0.7, 0.8, "moving forward1")
+                .addPoint(Vector2d(-75.0, 200.0), angle, 0.7, 0.8, "moving forward1")
+                .addPoint(Vector2d(-95.0, 240.0), angle, 0.2, 0.8, "moving forward1")
+        when (loc) {
+            1 -> {
+                t.addPoint(Vector2d(-97.0, 323.0), angle, 0.28, 0.6, "ENTERS THE PATH")
+            }
+            2 -> {
+                t.addPoint(Vector2d(-97.0, 315.0), angle, 0.25, 0.6, "moving forward3")
+            }
+            3 -> {
+                t.addPoint(Vector2d(-80.0, 305.0), 0.0, 0.20, 0.6, "moving forward3")
+            }
+            else -> {
+                t.addPoint(Vector2d(-80.0, 295.0), 0.0, 0.20, 0.6, "moving forward3")
+            }
+        }
+
+        return PathFollower(t.create(), 30.0, "FIrst1")
+    }
+
+    fun moveOutOfFoundation(pose: Pose2d): PathFollower {
+        var angle = Math.PI / 2
+        var t = PathBuilder(pose)
+
+        t.addPoint(Vector2d(-75.0, 280.0), angle, 0.5, 0.9, "moving forward1")
+                .addPoint(Vector2d(-75.0, 200.0), angle, 0.80, 0.9, "moving forward2")
+                .addPoint(Vector2d(-75.0, 160.0), angle, 0.60, 0.9, "moving forward2")
+                .addPoint(Vector2d(-82.0, 130.0), angle, 0.4, 0.6, "moving forwarad2")
+
+        return PathFollower(t.create(), 40.0, "FIrst11")
+    }
+    fun moveOutOfFoundationSpecial(pose: Pose2d): PathFollower {
+        var angle1 = Math.PI / 2
+        var angle2 = -Math.PI/2
+        var t = PathBuilder(pose)
+
+        t.addPoint(Vector2d(-75.0, 280.0), angle2, 0.5, 0.9, "moving forward1")
+                .addPoint(Vector2d(-75.0, 200.0), angle2, 0.5, 0.9, "moving forward2")
+                .addPoint(Vector2d(-75.0, 160.0), angle2, 0.5, 0.9, "moving forward2")
+                .addPoint(Vector2d(-85.0, 130.0), angle1, 0.4, 0.8, "moving forwarad2")
+
+        return PathFollower(t.create(), 40.0, "FIrst11")
+    }
     /**
      * @deprecated
      */

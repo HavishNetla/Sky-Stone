@@ -357,7 +357,7 @@ public class MecanumDrive extends Subsystem {
 
   public void openFoundationGrabber() {
     foundationGrabberPosition = 0.5;
-    specialDelay(0.1);
+    specialDelay(0.08);
   }
 
   public void openFoundationGrabberTele() {
@@ -467,33 +467,38 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void readyBlockRedNoDelay() {
-    setRotaterRedPos(0.93);
+    setRotaterRedPos(0.91);
     setGrabberRedPos(0.0);
   }
 
   public void grabBlockRed() {
     setRotaterRedPos(0.96);
-    setGrabberRedPos(0.0);
-    delay((long) 1.0);
     setGrabberRedPos(1.0);
-    delay((long) 1.0);
-  }
+    specialDelay( 0.4);  }
 
   public void stowBlockRed() {
-    setRotaterRedPos(0.58);
+    setRotaterRedPos(0.55);
     setGrabberRedPos(1.0);
-    delay((long) 1.0);
+  }
+
+  public void throwBlockRed() {
+    setRotaterRedPos(0.73);
+
+    specialDelay(0.07);
+    setGrabberRedPos(0.0);
+
+    specialDelay(0.4);
   }
 
   public void releaseBlockRed() {
     setRotaterRedPos(0.78);
     setGrabberRedPos(0.0);
-    delay((long) 1.0);
+    specialDelay( 0.25);
   }
 
   public void stowBlockRedTele() {
     setGrabberRedPos(0.0);
-    specialDelay(0.25);
+    specialDelay(0.7);
     setRotaterRedPos(0.5);
   }
 
