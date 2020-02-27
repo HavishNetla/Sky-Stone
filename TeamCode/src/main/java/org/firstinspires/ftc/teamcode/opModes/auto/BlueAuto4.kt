@@ -227,7 +227,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         //==========================================================================================
         // FOUNDATION MOVER THING ==================================================================
         //==========================================================================================
-        robot.drive.goToPoint(Vector2d(robot.drive.position.x - 10, robot.drive.position.y), 0.0, 0.3, 0.0)
+        robot.drive.goToPoint(Vector2d(robot.drive.position.x - 5, robot.drive.position.y-10), 0.0, 0.3, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 

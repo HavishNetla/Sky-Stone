@@ -393,8 +393,9 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void readyBlock() {
-    setRotaterPos(0.82);
+    setRotaterPos(0.60);
     setGrabberPos(0.0);
+    specialDelay(0.1);
     // delay((long) 0.5);
   }
 
@@ -405,7 +406,7 @@ public class MecanumDrive extends Subsystem {
 
   public void grabBlock() {
     setRotaterPos(1.0);
-    setGrabberPos(0.8);
+    setGrabberPos(1.0);
     // while (grabber.getPosition()<0.5){
     // delay((long)0.000001);
     // telemetry.addData("rotater:", grabber.getPosition());
@@ -415,8 +416,8 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void stowBlock() {
-    setRotaterPos(0.3);
-    setGrabberPos(0.8);
+    setRotaterPos(0.0);
+    setGrabberPos(1.0);
     // while (rotater.getPosition()>0.4){
     // delay((long)0.000001);
     // telemetry.addData("rotater:", rotater.getPosition());
@@ -426,8 +427,8 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void stowBlockNoDelay() {
-    setRotaterPos(0.3);
-    setGrabberPos(0.8);
+    setRotaterPos(0.0);
+    setGrabberPos(1.0);
   }
 
   public void halfPlaceBlock() {
@@ -446,9 +447,9 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void throwBlock() {
-    setRotaterPos(0.5);
+    setRotaterPos(0.4);
 
-    specialDelay(0.06);
+    specialDelay(0.07);
     setGrabberPos(0.0);
 
     specialDelay(0.4);
@@ -472,17 +473,17 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void grabBlockRed() {
-    setRotaterRedPos(0.96);
+    setRotaterRedPos(1.0);
     setGrabberRedPos(1.0);
     specialDelay( 0.4);  }
 
   public void stowBlockRed() {
-    setRotaterRedPos(0.55);
+    setRotaterRedPos(0.05);
     setGrabberRedPos(1.0);
   }
 
   public void throwBlockRed() {
-    setRotaterRedPos(0.73);
+    setRotaterRedPos(0.4);
 
     specialDelay(0.07);
     setGrabberRedPos(0.0);
@@ -499,7 +500,7 @@ public class MecanumDrive extends Subsystem {
   public void stowBlockRedTele() {
     setGrabberRedPos(0.0);
     specialDelay(0.7);
-    setRotaterRedPos(0.5);
+    setRotaterRedPos(0.0);
   }
 
   public void delay(long s) {
