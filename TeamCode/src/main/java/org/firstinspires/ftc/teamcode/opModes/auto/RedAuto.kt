@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opModes.auto
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.util.ElapsedTime
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.teamcode.path.PathsRed
 import org.firstinspires.ftc.teamcode.util.Pose2d
@@ -19,7 +20,6 @@ class RedAuto : AutoOpMode(Pose2d(-20.7, 81.7, Math.PI / 2)) {
 
     private var blockPos: BlockPos = BlockPos.NONE
     private var paths: PathsRed = PathsRed()
-
     override fun setup() {
         val frameGrabber = FrameGrabber()
         frameGrabber.init(hardwareMap.appContext, CameraViewDisplay.getInstance())
@@ -63,6 +63,8 @@ class RedAuto : AutoOpMode(Pose2d(-20.7, 81.7, Math.PI / 2)) {
     }
 
     override fun run() {
+        var eTime = ElapsedTime()
+
         val blockLoc1 = when (blockPos) {
             BlockPos.ZERO_THREE -> 0
             BlockPos.ONE_FOUR -> 1
@@ -127,7 +129,7 @@ class RedAuto : AutoOpMode(Pose2d(-20.7, 81.7, Math.PI / 2)) {
 
         // Pick up the next skystone
         var p = paths.blockPositionsRed[blockLoc2]
-        robot.drive.goToPointGlobal(Vector2d(p.point.x - 5, p.point.y-5), Math.PI / 2, p.speed, p.turnSpeed, false)
+        robot.drive.goToPointGlobal(Vector2d(p.point.x - 5, p.point.y - 5), Math.PI / 2, p.speed, p.turnSpeed, false)
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
@@ -136,10 +138,15 @@ class RedAuto : AutoOpMode(Pose2d(-20.7, 81.7, Math.PI / 2)) {
         robot.drive.stowBlockRed()
 
         //move out
-        robot.drive.goToPoint(Vector2d(robot.drive.position.x + 6, robot.drive.position.y), 0.0, 0.3, 0.0)
-        robot.drive.setLocalizerConfig(false)
-        robot.drive.waitForPathFollower()
-
+        if (blockLoc2 == 5) {
+            robot.drive.goToPoint(Vector2d(robot.drive.position.x + 15, robot.drive.position.y), 0.0, 0.3, 0.0)
+            robot.drive.setLocalizerConfig(false)
+            robot.drive.waitForPathFollower()
+        } else {
+            robot.drive.goToPoint(Vector2d(robot.drive.position.x + 6, robot.drive.position.y), 0.0, 0.3, 0.0)
+            robot.drive.setLocalizerConfig(false)
+            robot.drive.waitForPathFollower()
+        }
         //go to foundation
         robot.drive.followPathGlobal(paths.moveInToFoundation(robot.drive.position, 2))
         robot.drive.setLocalizerConfig(true)
@@ -163,7 +170,7 @@ class RedAuto : AutoOpMode(Pose2d(-20.7, 81.7, Math.PI / 2)) {
 
         // Pick up the next skystone
         var p1 = paths.blockPositionsRed[blockLoc3]
-        robot.drive.goToPointGlobal(Vector2d(p1.point.x - 2, p1.point.y-5), Math.PI / 2, p1.speed, p1.turnSpeed, false)
+        robot.drive.goToPointGlobal(Vector2d(p1.point.x - 2, p1.point.y - 5), Math.PI / 2, p1.speed, p1.turnSpeed, false)
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
@@ -182,43 +189,55 @@ class RedAuto : AutoOpMode(Pose2d(-20.7, 81.7, Math.PI / 2)) {
         robot.drive.throwBlockRed()
         robot.drive.stowBlockRed()
 
-        //==========================================================================================
-        // FOURTH BLOCK ============================================================================
-        //==========================================================================================
+        // Machine Learning to check if we should do the fourth block
+        if (/*eTime.time() > 22*/ false) {
+            // big rip
+            foundationProcedure()
+        } else {
+            // you know what time it is baby, its FOURTH BLOCK TIME YEEHAWW
 
-        // Move underneath the bridge
-        robot.drive.followPathGlobal(paths.moveOutOfFoundation(robot.drive.position))
-        robot.drive.setInnacurate()
-        robot.drive.setLocalizerConfig(true)
-        robot.drive.waitForPathFollower()
+            //==========================================================================================
+            // FOURTH BLOCK ============================================================================
+            //==========================================================================================
 
-        robot.drive.readyBlockRedNoDelay()
+            // Move underneath the bridge
+            robot.drive.followPathGlobal(paths.moveOutOfFoundation(robot.drive.position))
+            robot.drive.setInnacurate()
+            robot.drive.setLocalizerConfig(true)
+            robot.drive.waitForPathFollower()
 
-        // Pick up the next skystone
-        var p2 = paths.blockPositionsRed[blockLoc4]
-        robot.drive.goToPointGlobal(Vector2d(p2.point.x - 2, p2.point.y), Math.PI / 2, p2.speed, p2.turnSpeed, false)
-        robot.drive.setLocalizerConfig(true)
-        robot.drive.waitForPathFollower()
+            robot.drive.readyBlockRedNoDelay()
 
-        // Grab and stow the block
-        robot.drive.grabBlockRed()
-        robot.drive.stowBlockRed()
+            // Pick up the next skystone
+            var p2 = paths.blockPositionsRed[blockLoc4]
+            robot.drive.goToPointGlobal(Vector2d(p2.point.x - 2, p2.point.y), Math.PI / 2, p2.speed, p2.turnSpeed, false)
+            robot.drive.setLocalizerConfig(true)
+            robot.drive.waitForPathFollower()
 
-        robot.drive.goToPoint(Vector2d(robot.drive.position.x + 6, robot.drive.position.y), 0.0, 0.3, 0.0)
-        robot.drive.setLocalizerConfig(false)
-        robot.drive.waitForPathFollower()
+            // Grab and stow the block
+            robot.drive.grabBlockRed()
+            robot.drive.stowBlockRed()
 
-        robot.drive.followPathGlobal(paths.moveInToFoundation(robot.drive.position, 4))
-        robot.drive.setLocalizerConfig(true)
-        robot.drive.waitForPathFollower()
+            robot.drive.goToPoint(Vector2d(robot.drive.position.x + 6, robot.drive.position.y), 0.0, 0.3, 0.0)
+            robot.drive.setLocalizerConfig(false)
+            robot.drive.waitForPathFollower()
 
-        robot.drive.throwBlockRed()
-        robot.drive.stowBlockRed()
+            robot.drive.followPathGlobal(paths.moveInToFoundation(robot.drive.position, 4))
+            robot.drive.setLocalizerConfig(true)
+            robot.drive.waitForPathFollower()
 
-        //==========================================================================================
-        // FOUNDATION MOVER THING ==================================================================
-        //==========================================================================================
-        robot.drive.goToPoint(Vector2d(robot.drive.position.x + 10, robot.drive.position.y+5), 0.0, 0.3, 0.0)
+            robot.drive.throwBlockRed()
+            robot.drive.stowBlockRed()
+
+            //==========================================================================================
+            // FOUNDATION MOVER THING ==================================================================
+            //==========================================================================================
+            foundationProcedure()
+        }
+    }
+
+    private fun foundationProcedure() {
+        robot.drive.goToPoint(Vector2d(robot.drive.position.x + 10, robot.drive.position.y + 5), 0.0, 0.3, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
@@ -252,10 +271,9 @@ class RedAuto : AutoOpMode(Pose2d(-20.7, 81.7, Math.PI / 2)) {
 
         robot.drive.openFoundationGrabber()
 
+        robot.intake.openIntakeBois()
 
-        //robot.intake.openIntakeBois()
-
-        robot.drive.goToPoint(Vector2d(robot.drive.position.x, robot.drive.position.y - 40), 0.0, 0.5, 0.0)
+        robot.drive.goToPoint(Vector2d(-80.0, 220.0), 0.0, 0.5, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 

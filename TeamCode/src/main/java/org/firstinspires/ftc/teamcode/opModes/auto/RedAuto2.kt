@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.opModes.auto
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.corningrobotics.enderbots.endercv.CameraViewDisplay
 import org.firstinspires.ftc.teamcode.path.PathsRed
 import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
 import org.firstinspires.ftc.teamcode.vision.FrameGrabber
 
+@Disabled
 @Autonomous(name = "Red Auto FOUNDATION FIRST", group = "A")
 class RedAuto2 : AutoOpMode(Pose2d(-20.7, 81.7, Math.PI / 2)) {
 

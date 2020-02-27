@@ -54,24 +54,6 @@ public class Robot implements OpModeManagerNotifier.Notifications {
             for (LynxModule module : allHubs) {
               module.clearBulkCache();
             }
-
-            //            for (LynxModule hub : hubs) {
-            //              LynxGetBulkInputDataCommand command = new
-            // LynxGetBulkInputDataCommand(hub);
-            //              try {
-            //                bulkDataResponses.put(hub, command.sendReceive());
-            //                bulkDataUpdated = true;
-            //              } catch (Exception e) {
-            //                try {
-            //                  Log.e("sadasd", "get bulk data error");
-            //                  Log.e("sadasd", e.getLocalizedMessage());
-            //                } catch (NullPointerException npe) {
-            //                  Log.e("sadasd", "error logging exception");
-            //                }
-            //                bulkDataUpdated = false;
-            //              }
-            //            }
-
             for (Subsystem subsystem : subsystems) {
               try {
                 subsystem.update();

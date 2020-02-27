@@ -122,23 +122,6 @@ class Paths {
         return PathFollower(t.create(), 55.0, "FIrst1")
     }
 
-    /**
-     * Returns the path to get to the building foundation
-     *
-     * @param pose the position of the robot
-     * @return the path to the foundation
-     */
-    fun moveTowardsPlatfrom3(pose: Pose2d, loc: Int, robot: Robot): PathFollower {
-        var t = PathBuilder(pose)
-        t.addPoint(Vector2d(95.0, 150.08), Math.PI, 0.75, 0.25, "moving forward1")
-                .addPoint(Vector2d(100.0, 260.08), Math.PI, 0.10, 0.25, "moving forward1")
-//                .addPoint(Vector2d(85.0, 170.0), Math.PI, 0.5, 0.25, "moving forward1")
-//                .addPoint(Vector2d(85.0, 200.08), Math.PI, 0.25, 0.25, "moving forward1")
-//                .addPoint(Vector2d(85.0, 250.0), Math.PI, 0.20, 0.0, "moving forward1")
-
-        return PathFollower(t.create(), 35.0, "FIrst1")
-    }
-
     fun moveInToFoundation(pose: Pose2d, loc: Int): PathFollower {
         var angle = -Math.PI / 2
         var t = PathBuilder(pose)
@@ -148,16 +131,16 @@ class Paths {
                 .addPoint(Vector2d(90.0, 240.0), angle, 0.2, 0.8, "moving forward1")
         when (loc) {
             1 -> {
-                t.addPoint(Vector2d(90.0, 333.0), angle, 0.30, 0.6, "ENTERS THE PATH")
+                t.addPoint(Vector2d(96.0, 333.0), angle, 0.30, 0.6, "ENTERS THE PATH")
             }
             2 -> {
-                t.addPoint(Vector2d(90.0, 333.0), angle, 0.30, 0.6, "moving forward3")
+                t.addPoint(Vector2d(96.0, 333.0), angle, 0.30, 0.6, "moving forward3")
             }
             3 -> {
-                t.addPoint(Vector2d(90.0, 305.0), angle, 0.30, 0.6, "moving forward3")
+                t.addPoint(Vector2d(96.0, 305.0), angle, 0.30, 0.6, "moving forward3")
             }
             else -> {
-                t.addPoint(Vector2d(90.0, 305.0), angle, 0.30, 0.6, "moving forward3")
+                t.addPoint(Vector2d(96.0, 305.0), angle, 0.30, 0.6, "moving forward3")
             }
         }
 
@@ -175,25 +158,6 @@ class Paths {
 
         return PathFollower(t.create(), 30.0, "FIrst11")
     }
-
-    /**
-     * Returns the path to get to the building foundation
-     *
-     * @param pose the position of the robot
-     * @return the path to the foundation
-     */
-    fun pathTest(pose: Pose2d): PathFollower {
-        var angle = -Math.PI / 2
-        var t = PathBuilder(pose)
-        t.addPoint(Vector2d(20.32, 255.0), angle, 0.4, 0.4, "moving forward1")
-                .addPoint(Vector2d(50.0, 270.0), angle, 0.4, 0.4, "moving forward1")
-                .addPoint(Vector2d(50.0, 320.0), angle, 0.2, 0.4, "moving forward2")
-        //.addPoint(Vector2d(105.0, 320.72), -Math.PI/2, 0.25, 0.25, "moving forward3")
-
-
-        return PathFollower(t.create(), 20.0, "FIrst1")
-    }
-
 
     /**
      * @deprecated

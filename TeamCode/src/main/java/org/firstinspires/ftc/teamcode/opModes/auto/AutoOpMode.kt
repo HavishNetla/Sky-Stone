@@ -19,8 +19,8 @@ abstract class AutoOpMode(ogPose: Pose2d) : LinearOpMode() {
         robot.start()
         robot.drive.velocityControlls()
 
+        robot.drive.stowBlockRedTele()
         setup()
-
         AutoTransitioner.transitionOnStop(this, "Mecanum Drive")
 
         waitForStart()
