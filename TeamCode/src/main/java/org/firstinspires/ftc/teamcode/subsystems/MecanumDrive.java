@@ -345,9 +345,11 @@ public class MecanumDrive extends Subsystem {
     }
     return;
   }
-
+  public void foundationPrep(){
+      foundationGrabberPosition = 0.7;
+  }
   public void grabFoundation() {
-    foundationGrabberPosition = 0.9;
+    foundationGrabberPosition = 0.83;
     specialDelay(0.3);
   }
 
@@ -393,7 +395,7 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void readyBlock() {
-    setRotaterPos(0.60);
+    setRotaterPos(0.6);
     setGrabberPos(0.0);
     specialDelay(0.1);
     // delay((long) 0.5);
@@ -412,7 +414,7 @@ public class MecanumDrive extends Subsystem {
     // telemetry.addData("rotater:", grabber.getPosition());
     // telemetry.update();
     // }
-    specialDelay(0.4);
+    specialDelay(0.18);
   }
 
   public void stowBlock() {
@@ -429,6 +431,10 @@ public class MecanumDrive extends Subsystem {
   public void stowBlockNoDelay() {
     setRotaterPos(0.0);
     setGrabberPos(1.0);
+  }
+  public void stowBlockTest(){
+      setRotaterPos(0.0);
+      setGrabberPos(0.0);
   }
 
   public void halfPlaceBlock() {
@@ -447,14 +453,32 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void throwBlock() {
-    setRotaterPos(0.4);
+    setRotaterPos(0.3);
 
     specialDelay(0.07);
     setGrabberPos(0.0);
 
+    specialDelay(0.18);
+  }
+  public void placeBlock(){
+    setRotaterPos(0.52);
+
+    specialDelay(0.3);
+    setGrabberPos(0.0);
+
     specialDelay(0.4);
   }
+  public void placeHoldBlock(){
+      setRotaterPos(0.5);
 
+      specialDelay(0.3);
+      setGrabberPos(0.65);
+
+      specialDelay(0.4);
+//      setRotaterPos(0.5);
+//      setGrabberPos(1.0);
+//      specialDelay(0.3);
+  }
   public void preRelease() {
     setRotaterPos(0.7);
     // setGrabberPos(0.0);

@@ -68,6 +68,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
 
     override fun run() {
         var eTime = ElapsedTime()
+        var pickStoneOffset = 0.5
 
         val blockLoc1 = when (blockPos) {
             BlockPos.ZERO_THREE -> 0
@@ -125,7 +126,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         // SECOND BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
-        robot.drive.followPathGlobal(paths.moveOutOfFoundation(robot.drive.position))
+        robot.drive.followPathGlobal(paths.moveOutOfFoundation(robot.drive.position,blockLoc2))
         robot.drive.setInnacurate()
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
@@ -134,7 +135,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
 
         // Pick up the next skystone
         var p = paths.blockPositions[blockLoc2]
-        robot.drive.goToPointGlobal(Vector2d(p.point.x + 2, p.point.y), -Math.PI / 2, p.speed, p.turnSpeed, false)
+        robot.drive.goToPointGlobal(Vector2d(p.point.x + pickStoneOffset, p.point.y), -Math.PI / 2, p.speed, p.turnSpeed, false)
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
@@ -158,7 +159,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         // THIRD BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
-        robot.drive.followPathGlobal(paths.moveOutOfFoundation(robot.drive.position))
+        robot.drive.followPathGlobal(paths.moveOutOfFoundation(robot.drive.position,blockLoc3))
         robot.drive.setInnacurate()
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
@@ -167,7 +168,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
 
         // Pick up the next skystone
         var p1 = paths.blockPositions[blockLoc3]
-        robot.drive.goToPointGlobal(Vector2d(p1.point.x + 2, p1.point.y), -Math.PI / 2, p1.speed, p1.turnSpeed, false)
+        robot.drive.goToPointGlobal(Vector2d(p1.point.x + pickStoneOffset, p1.point.y), -Math.PI / 2, p1.speed, p1.turnSpeed, false)
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
@@ -175,7 +176,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         robot.drive.grabBlock()
         robot.drive.stowBlock()
 
-        robot.drive.goToPoint(Vector2d(robot.drive.position.x - 6, robot.drive.position.y), 0.0, 0.3, 0.0)
+        robot.drive.goToPoint(Vector2d(robot.drive.position.x - 7, robot.drive.position.y), 0.0, 0.3, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
@@ -196,7 +197,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         //==========================================================================================
 
         // Move underneath the bridge
-        robot.drive.followPathGlobal(paths.moveOutOfFoundation(robot.drive.position))
+        robot.drive.followPathGlobal(paths.moveOutOfFoundation(robot.drive.position,blockLoc4))
         robot.drive.setInnacurate()
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
@@ -205,7 +206,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
 
         // Pick up the next skystone
         var p2 = paths.blockPositions[blockLoc4]
-        robot.drive.goToPointGlobal(Vector2d(p2.point.x + 2, p2.point.y), -Math.PI / 2, p2.speed, p2.turnSpeed, false)
+        robot.drive.goToPointGlobal(Vector2d(p2.point.x + pickStoneOffset, p2.point.y), -Math.PI / 2, p2.speed, p2.turnSpeed, false)
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
@@ -227,7 +228,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         //==========================================================================================
         // FOUNDATION MOVER THING ==================================================================
         //==========================================================================================
-        robot.drive.goToPoint(Vector2d(robot.drive.position.x - 5, robot.drive.position.y-10), 0.0, 0.3, 0.0)
+        robot.drive.goToPoint(Vector2d(robot.drive.position.x - 5, robot.drive.position.y-5), 0.0, 0.3, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
@@ -240,18 +241,19 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
+        robot.drive.foundationPrep()
 
-        robot.drive.goToPoint(Vector2d(robot.drive.position.x + 12, robot.drive.position.y), 0.0, 0.4, 0.0)
+        robot.drive.goToPoint(Vector2d(robot.drive.position.x + 12.5, robot.drive.position.y), 0.0, 0.15, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
-        robot.drive.goToPoint(Vector2d(robot.drive.position.x + 12, robot.drive.position.y), 0.0, 0.2, 0.0)
+        robot.drive.goToPoint(Vector2d(robot.drive.position.x + 12, robot.drive.position.y), 0.0, 0.1, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 
         robot.drive.grabFoundation()
 
-        robot.drive.goToPoint(Vector2d(robot.drive.position.x - 25, robot.drive.position.y - 15), 0.0, 0.7, 0.0)
+        robot.drive.goToPoint(Vector2d(robot.drive.position.x - 35, robot.drive.position.y - 15), 0.0, 0.7, 0.0)
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()
 
@@ -264,7 +266,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
 
         robot.intake.openIntakeBois()
 
-        robot.drive.goToPoint(Vector2d(robot.drive.position.x, robot.drive.position.y - 40), 0.0, 0.5, 0.0)
+        robot.drive.goToPoint(Vector2d(robot.drive.position.x, robot.drive.position.y - 50), 0.0, 0.5, 0.0)
         robot.drive.setLocalizerConfig(false)
         robot.drive.waitForPathFollower()
 

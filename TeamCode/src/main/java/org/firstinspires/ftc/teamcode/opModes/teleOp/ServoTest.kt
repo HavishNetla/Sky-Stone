@@ -1,24 +1,19 @@
-package org.firstinspires.ftc.teamcode.opModes.teleOp
+package org.firstinspires.ftc.teamcode.opModes.auto
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.Gamepad
 import org.firstinspires.ftc.teamcode.subsystems.Robot
 import org.firstinspires.ftc.teamcode.util.Pose2d
 
-@TeleOp(name = "Servo Test", group = "T")
-class ServoTest : OpMode() {
-    private lateinit var robot: Robot
-    private var pos = 0.5
-    private var b = true
-    private var lastGamePad: Gamepad = Gamepad()
+@Autonomous(name = "Servo Test", group = "T")
+class ServoTest : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
+    override fun setup() {
 
-    override fun init() {
-        robot = Robot(Pose2d(20.32, 81.7, -Math.PI / 2), this, this.telemetry)
-        robot.start()
     }
-
-    override fun loop() {
+    override fun run() {
 //        if (gamepad1.a) {
 //            robot.drive.grabFoundation()
 //        } else {
@@ -77,14 +72,24 @@ class ServoTest : OpMode() {
 //        robot.drive.releaseBlock()
 //
 
-            robot.drive.readyBlock()
-            robot.drive.specialDelay(1.0)
-            robot.drive.grabBlock()
-            robot.drive.specialDelay(1.0)
-            robot.drive.stowBlockNoDelay()
-            robot.drive.specialDelay(1.0)
-            robot.drive.throwBlock()
-            robot.drive.specialDelay(1.0)
+            var time=2.0
+        while(opModeIsActive()) {
+//            robot.drive.readyBlock()
+//            robot.drive.specialDelay(time)
+//            robot.drive.grabBlock()
+//            robot.drive.specialDelay(time)
+//            robot.drive.stowBlockNoDelay()
+//            robot.drive.specialDelay(time)
+////            robot.drive.placeHoldBlock()
+////            robot.drive.specialDelay(time)
+////            robot.drive.placeBlock()
+//            robot.drive.throwBlock()
+////            robot.drive.specialDelay(time)
+//            robot.drive.stowBlockNoDelay()
+//            robot.drive.specialDelay(time)
+            robot.drive.foundationPrep()
+        }
+
 
 //            robot.drive.readyBlockRedNoDelay()
 //            robot.drive.specialDelay(1.0)
