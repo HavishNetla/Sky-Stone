@@ -354,7 +354,7 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void grabFoundationTele() {
-    foundationGrabberPosition = 0.9;
+    foundationGrabberPosition = 0.88;
   }
 
   public void openFoundationGrabber() {
@@ -414,7 +414,7 @@ public class MecanumDrive extends Subsystem {
     // telemetry.addData("rotater:", grabber.getPosition());
     // telemetry.update();
     // }
-    specialDelay(0.18);
+    specialDelay(0.2);
   }
 
   public void stowBlock() {
@@ -458,7 +458,7 @@ public class MecanumDrive extends Subsystem {
     specialDelay(0.07);
     setGrabberPos(0.0);
 
-    specialDelay(0.18);
+    specialDelay(0.2);
   }
   public void placeBlock(){
     setRotaterPos(0.52);
@@ -492,17 +492,17 @@ public class MecanumDrive extends Subsystem {
   }
 
   public void readyBlockRedNoDelay() {
-    setRotaterRedPos(0.91);
+    setRotaterRedPos(0.62);
     setGrabberRedPos(0.0);
   }
 
   public void grabBlockRed() {
     setRotaterRedPos(1.0);
     setGrabberRedPos(1.0);
-    specialDelay( 0.4);  }
+    specialDelay( 0.2);  }
 
   public void stowBlockRed() {
-    setRotaterRedPos(0.05);
+    setRotaterRedPos(0.25);
     setGrabberRedPos(1.0);
   }
 
@@ -512,7 +512,7 @@ public class MecanumDrive extends Subsystem {
     specialDelay(0.07);
     setGrabberRedPos(0.0);
 
-    specialDelay(0.4);
+    specialDelay(0.2);
   }
 
   public void releaseBlockRed() {

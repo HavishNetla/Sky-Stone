@@ -68,7 +68,7 @@ class BlueAuto4 : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
 
     override fun run() {
         var eTime = ElapsedTime()
-        var pickStoneOffset = 0.5
+        var pickStoneOffset = 0.0
 
         val blockLoc1 = when (blockPos) {
             BlockPos.ZERO_THREE -> 0

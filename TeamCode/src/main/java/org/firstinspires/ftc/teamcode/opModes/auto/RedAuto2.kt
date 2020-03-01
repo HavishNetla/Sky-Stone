@@ -120,7 +120,7 @@ class RedAuto2 : AutoOpMode(Pose2d(-20.7, 81.7, Math.PI / 2)) {
         // SECOND BLOCK ============================================================================
         //==========================================================================================
         // Move underneath the bridge
-        robot.drive.followPathGlobal(paths.moveOutOfFoundation(robot.drive.position))
+        robot.drive.followPathGlobal(paths.moveOutOfFoundation(robot.drive.position,blockLoc2))
         robot.drive.setInnacurate()
         robot.drive.setLocalizerConfig(true)
         robot.drive.waitForPathFollower()

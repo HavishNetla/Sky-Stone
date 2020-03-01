@@ -124,7 +124,7 @@ class Paths {
 
     fun moveInToFoundation(pose: Pose2d, loc: Int): PathFollower {
         var angle = -Math.PI / 2
-        var turnSPD = 0.3
+        var turnSPD = 0.2
         var sPeEd = 0.29
         var t = PathBuilder(pose)
 
@@ -154,27 +154,27 @@ class Paths {
         var turnSPD = 0.6
         var sPeEd = 0.4
         var xCord = 80.0
-        var xOffset =25
+        var xOffset = 65
         var t = PathBuilder(pose)
 
         t.addPoint(Vector2d(75.0, 280.0), angle, 0.5, 0.9, "moving forward1")
                 .addPoint(Vector2d(75.0, 220.0), angle, 0.80, 0.9, "moving forward2")
                 .addPoint(Vector2d(75.0, 176.0), angle, 0.40, 0.9, "moving forward2")
-                .addPoint(Vector2d(75.0,132.0),angle,0.40,0.60,"moving Forward")
-                //orginal ending point for single path function
-                //.addPoint(Vector2d(80.0, 130.0), angle, 0.4, 0.6, "moving forwarad2")
+                .addPoint(Vector2d(75.0, 132.0), angle, 0.40, 0.60, "moving Forward")
+        //orginal ending point for single path function
+        //.addPoint(Vector2d(80.0, 130.0), angle, 0.4, 0.6, "moving forwarad2")
         when (loc) {
             2 -> {
-                t.addPoint(Vector2d(xCord, 44.0+xOffset), angle, sPeEd, turnSPD, "Stone 2")
+                t.addPoint(Vector2d(xCord, 44.0 + xOffset), angle, sPeEd, turnSPD, "Stone 2")
             }
             3 -> {
-                t.addPoint(Vector2d(xCord, 64.0+xOffset), angle, sPeEd, turnSPD, "Stone 3")
+                t.addPoint(Vector2d(xCord, 64.0 + xOffset), angle, sPeEd, turnSPD, "Stone 3")
             }
             4 -> {
-                t.addPoint(Vector2d(xCord, 88.0+xOffset), angle, sPeEd, turnSPD, "Stone 4")
+                t.addPoint(Vector2d(xCord, 88.0 + xOffset), angle, sPeEd, turnSPD, "Stone 4")
             }
             else -> {
-                t.addPoint(Vector2d(xCord, 64.0+xOffset), angle, sPeEd, turnSPD, "Stone Else")
+                t.addPoint(Vector2d(xCord, 64.0 + xOffset), angle, sPeEd, turnSPD, "Stone Else")
             }
         }
 

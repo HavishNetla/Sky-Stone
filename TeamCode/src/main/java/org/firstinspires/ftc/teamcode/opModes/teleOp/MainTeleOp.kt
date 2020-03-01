@@ -51,7 +51,7 @@ class MainTeleOp : OpMode() {
             }
             var g1Lx = gamepad1.left_stick_x.toDouble() * scalar * 1.0
             var g1Ly = gamepad1.left_stick_y.toDouble() * scalar * 1.0
-            var g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.9
+            var g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.95
 
 
 //        telemetry.addData("PID", robot.drive.pid)
@@ -160,19 +160,27 @@ class MainTeleOp : OpMode() {
 
             if (abs(gamepad2.left_stick_y) > 0.05f) {
                 robot.lift.liftStatus = Lift.LIFT_STATUS.MANUAL
-                robot.lift.setLiftPower(gamepad2.left_stick_y.toDouble() * 0.5)
+                robot.lift.setLiftPower(gamepad2.left_stick_y.toDouble() * 0.2)
             } else {
                 // Manual is never left and 0.0 is set.
                 robot.lift.setLiftPower(0.0)
 
                 if (statusDown == UtilToggle.Status.COMPLETE && gamepad2.b) {
                     robot.lift.liftStatus = Lift.LIFT_STATUS.RUN_TO_POSITION
-                    liftPos += 238
+                    liftPos += if (liftPos > 8) {
+                        288
+                    } else {
+                        238
+                    }
 
                     robot.lift.setTargetPosition(liftPos)
                 } else if (statusUp == UtilToggle.Status.COMPLETE) {
                     robot.lift.liftStatus = Lift.LIFT_STATUS.RUN_TO_POSITION
-                    liftPos -= 238
+                    liftPos -= if (liftPos > 8) {
+                        288
+                    } else {
+                        238
+                    }
 
                     robot.lift.setTargetPosition(liftPos)
                 } else if (gamepad2.dpad_down) {

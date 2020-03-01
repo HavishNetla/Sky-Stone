@@ -87,18 +87,17 @@ class ServoTest : AutoOpMode(Pose2d(20.7, 81.7, -Math.PI / 2)) {
 ////            robot.drive.specialDelay(time)
 //            robot.drive.stowBlockNoDelay()
 //            robot.drive.specialDelay(time)
-            robot.drive.foundationPrep()
+            //robot.drive.foundationPrep()
+
+
+            robot.drive.readyBlockRedNoDelay()
+            robot.drive.specialDelay(time)
+            robot.drive.grabBlockRed()
+            robot.drive.specialDelay(time)
+            robot.drive.stowBlockRed()
+            robot.drive.specialDelay(time)
+            robot.drive.throwBlockRed()
+            robot.drive.specialDelay(time)
         }
-
-
-//            robot.drive.readyBlockRedNoDelay()
-//            robot.drive.specialDelay(1.0)
-//            robot.drive.grabBlockRed()
-//            robot.drive.specialDelay(1.0)
-//            robot.drive.stowBlockRed()
-//            robot.drive.specialDelay(1.0)
-//            robot.drive.throwBlockRed()
-//            robot.drive.specialDelay(1.0)
-
     }
 }

@@ -41,7 +41,7 @@ class PathsRed {
         var t = PathBuilder(pose)
 
         //new points
-        t.addPoint(Vector2d(-80.32, 140.0), angle, 0.7, 1.0, "moving forward1")
+        t.addPoint(Vector2d(-77.32, 140.0), angle, 0.7, 1.0, "moving forward1")
                 .addPoint(Vector2d(-85.0, 170.0), angle, 0.8, 0.8, "moving forward1")
                 .addPoint(Vector2d(-85.0, 200.0), angle, 0.7, 0.8, "moving forward1")
                 .addPoint(Vector2d(-95.0, 240.0), angle, 0.2, 0.8, "moving forward1")
@@ -50,13 +50,13 @@ class PathsRed {
                 t.addPoint(Vector2d(-103.0, 328.0), angle, 0.3, 0.6, "ENTERS THE PATH")
             }
             2 -> {
-                t.addPoint(Vector2d(-103.0, 320.0), angle, 0.3, 0.6, "moving forward3")
+                t.addPoint(Vector2d(-103.0, 328.0), angle, 0.3, 0.6, "moving forward3")
             }
             3 -> {
-                t.addPoint(Vector2d(-103.0, 310.0), angle, 0.3, 0.6, "moving forward3")
+                t.addPoint(Vector2d(-103.0, 312.0), angle, 0.3, 0.6, "moving forward3")
             }
             else -> {
-                t.addPoint(Vector2d(-103.0, 300.0), angle, 0.3, 0.6, "moving forward3")
+                t.addPoint(Vector2d(-103.0, 312.0), angle, 0.3, 0.6, "moving jjforward3")
             }
         }
 
@@ -93,14 +93,35 @@ class PathsRed {
         return PathFollower(t.create(), 30.0, "FIrst1")
     }
 
-    fun moveOutOfFoundation(pose: Pose2d): PathFollower {
+    fun moveOutOfFoundation(pose: Pose2d, loc :Int): PathFollower {
         var angle = Math.PI / 2
+        var turnSPD = 0.6
+        var sPeEd = 0.4
+        var xCord = -82.0
+        var xOffset = 50
         var t = PathBuilder(pose)
 
-        t.addPoint(Vector2d(-75.0, 280.0), angle, 0.5, 0.9, "moving forward1")
-                .addPoint(Vector2d(-75.0, 200.0), angle, 0.80, 0.9, "moving forward2")
-                .addPoint(Vector2d(-75.0, 160.0), angle, 0.60, 0.9, "moving forward2")
-                .addPoint(Vector2d(-82.0, 130.0), angle, 0.4, 0.6, "moving forwarad2")
+        t.addPoint(Vector2d(-73.0, 280.0), angle, 0.5, 0.9, "moving forward1")
+                .addPoint(Vector2d(-73.0, 220.0), angle, 0.80, 0.9, "moving forward2")
+                .addPoint(Vector2d(-73.0, 176.0), angle, 0.60, 0.9, "moving fasdasorward2")
+                //.addPoint(Vector2d(-73.0, 132.0), angle, 0.60, 0.6, "moving fasorward2")
+        //old point
+        .addPoint(Vector2d(-82.0, 130.0), angle, 0.4, 0.6, "moving forwarad2")
+
+//        when (loc) {
+//            2 -> {
+//                t.addPoint(Vector2d(xCord, 44.0 + xOffset), angle, sPeEd, turnSPD, "Stone 2")
+//            }
+//            3 -> {
+//                t.addPoint(Vector2d(xCord, 64.0 + xOffset), angle, sPeEd, turnSPD, "Stone 3")
+//            }
+//            4 -> {
+//                t.addPoint(Vector2d(xCord, 88.0 + xOffset), angle, sPeEd, turnSPD, "Stone 4")
+//            }
+//            else -> {
+//                t.addPoint(Vector2d(xCord, 64.0 + xOffset), angle, sPeEd, turnSPD, "Stone Else")
+//            }
+//        }
 
         return PathFollower(t.create(), 40.0, "FIrst11")
     }
@@ -110,10 +131,10 @@ class PathsRed {
         var angle2 = -Math.PI / 2
         var t = PathBuilder(pose)
 
-        t.addPoint(Vector2d(-75.0, 280.0), angle2, 0.5, 0.9, "moving forward1")
-                .addPoint(Vector2d(-75.0, 200.0), angle2, 0.5, 0.9, "moving forward2")
+        t.addPoint(Vector2d(-75.0, 280.0), angle2, 0.5, 0.9, "movinaaag forward1")
+                .addPoint(Vector2d(-75.0, 200.0), angle2, 0.5, 0.9, "movingasda forward2")
                 .addPoint(Vector2d(-75.0, 160.0), angle2, 0.5, 0.9, "moving forward2")
-                .addPoint(Vector2d(-85.0, 130.0), angle1, 0.4, 0.8, "moving forwarad2")
+                .addPoint(Vector2d(-85.0, 130.0), angle1, 0.4, 0.8, "moving forawarad2")
 
         return PathFollower(t.create(), 40.0, "FIrst11")
     }
