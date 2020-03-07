@@ -26,6 +26,7 @@ class MainTeleOp : OpMode() {
     private var lastPressed = ""
     private lateinit var eTime: ElapsedTime
 
+
     override fun init() {
         robot = Robot(Pose2d(20.32, 81.7, -Math.PI / 2), this, this.telemetry)
 
@@ -43,6 +44,10 @@ class MainTeleOp : OpMode() {
 
     override fun loop() {
         try {
+            if(gamepad1.back){
+                Robot(Pose2d(0.0, 0.0, 0.0), this, this.telemetry)
+            }
+            var g1Rx=0.0;
             var scalar = 1.0
             if (gamepad1.right_trigger > 0 || gamepad1.a) {
                 scalar = 0.2
@@ -51,7 +56,26 @@ class MainTeleOp : OpMode() {
             }
             var g1Lx = gamepad1.left_stick_x.toDouble() * scalar * 1.0
             var g1Ly = gamepad1.left_stick_y.toDouble() * scalar * 1.0
-            var g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.95
+
+            var turnScalar = 0.5;
+            if(gamepad1.left_stick_y.toDouble() <=turnScalar && gamepad1.left_stick_y.toDouble()>= -turnScalar && gamepad1.left_stick_x.toDouble()<=turnScalar && gamepad1.left_stick_x.toDouble()>=-turnScalar){
+//                telemetry.addLine("left stick = 0")
+//                telemetry.update()
+                g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.3
+            }else{
+                g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.9
+            }
+
+            //insert auto align odometry code -Currently doesent work
+            if(gamepad1.start) {
+//                telemetry.addLine("go to point")
+//                telemetry.update()
+                robot.drive.goToPointGlobal(Vector2d(0.0, 0.0), 0.0, 0.5, 0.5, false)
+            }
+
+            //code for auto foundation if foundation grab were to fail in auto
+            //robot.drive.goToPointGlobal(Vector2d(robot.drive.position.x + 35 , robot.drive.position.x - 50), Math.PI / 2, 0.5, 0.5, false)
+
 
 
 //        telemetry.addData("PID", robot.drive.pid)
