@@ -28,7 +28,7 @@ class MainTeleOp : OpMode() {
 
 
     override fun init() {
-        robot = Robot(Pose2d(20.32, 81.7, -Math.PI / 2), this, this.telemetry)
+        robot = Robot(Pose2d(0.0, 0.0, 0.0), this, this.telemetry)
 
         telemetry.addData("ff", "fff")
         robot.start()
@@ -39,12 +39,12 @@ class MainTeleOp : OpMode() {
     override fun start() {
         robot.drive.resetEncoders()
 
-        //robot.drive.setMode(MecanumDrive.LocalizerMode.THREE_WHEEL_LOCALIZER)
+        robot.drive.setMode(MecanumDrive.LocalizerMode.THREE_WHEEL_LOCALIZER)
     }
 
     override fun loop() {
         try {
-            if(gamepad1.back){
+            if(gamepad1.right_bumper){
                 Robot(Pose2d(0.0, 0.0, 0.0), this, this.telemetry)
             }
             var g1Rx=0.0;
@@ -59,18 +59,26 @@ class MainTeleOp : OpMode() {
 
             var turnScalar = 0.5;
             if(gamepad1.left_stick_y.toDouble() <=turnScalar && gamepad1.left_stick_y.toDouble()>= -turnScalar && gamepad1.left_stick_x.toDouble()<=turnScalar && gamepad1.left_stick_x.toDouble()>=-turnScalar){
-//                telemetry.addLine("left stick = 0")
-//                telemetry.update()
                 g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.3
             }else{
                 g1Rx = gamepad1.right_stick_x.toDouble() * scalar * 0.9
             }
 
-            //insert auto align odometry code -Currently doesent work
-            if(gamepad1.start) {
-//                telemetry.addLine("go to point")
-//                telemetry.update()
-                robot.drive.goToPointGlobal(Vector2d(0.0, 0.0), 0.0, 0.5, 0.5, false)
+            //insert auto align odometry code -Currently affected by distance and app crashes in loop
+            if(gamepad1.left_bumper) {
+//                if(robot.drive.position.y >=61) {
+//                    robot.drive.goToPointGlobal(Vector2d(robot.drive.position.x / 2, robot.drive.position.y / 2), 0.0, 1.0, 0.5, false)
+//                    robot.drive.waitForPathFollower()
+//
+//                    robot.drive.goToPointGlobal(Vector2d(0.0, 0.0), 0.0, 0.7, 0.5, false)
+//                    robot.drive.waitForPathFollower()
+//                }else if(robot.drive.position.y <61) {
+//                    robot.drive.goToPointGlobal(Vector2d(0.0, 0.0), 0.0, 0.2, 0.5, false)
+//                    robot.drive.waitForPathFollower()
+//                }
+                robot.drive.goToPointGlobal(Vector2d(0.0, 0.0), 0.0, 0.6, 0.5, false)
+                robot.drive.waitForPathFollower()
+
             }
 
             //code for auto foundation if foundation grab were to fail in auto
@@ -79,26 +87,27 @@ class MainTeleOp : OpMode() {
 
 
 //        telemetry.addData("PID", robot.drive.pid)
+            var g1RxScalar = 0.1
             when {
                 gamepad1.dpad_up -> {
                     g1Lx = 0.0
                     g1Ly = -0.2 * scalar
-                    g1Rx = 0.0
+                    g1Rx = gamepad1.right_stick_x.toDouble() * scalar * g1RxScalar
                 }
                 gamepad1.dpad_left -> {
                     g1Lx = -0.2 * scalar
                     g1Ly = 0.0
-                    g1Rx = 0.0
+                    g1Rx = gamepad1.right_stick_x.toDouble() * scalar * g1RxScalar
                 }
                 gamepad1.dpad_right -> {
                     g1Lx = 0.2 * scalar
                     g1Ly = 0.0
-                    g1Rx = 0.0
+                    g1Rx = gamepad1.right_stick_x.toDouble() * scalar * g1RxScalar
                 }
                 gamepad1.dpad_down -> {
                     g1Lx = 0.0
                     g1Ly = 0.2 * scalar
-                    g1Rx = 0.0
+                    g1Rx = gamepad1.right_stick_x.toDouble() * scalar * g1RxScalar
                 }
             }
 
