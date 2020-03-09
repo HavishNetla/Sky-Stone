@@ -2,9 +2,12 @@ package org.firstinspires.ftc.teamcode.path
 
 import org.firstinspires.ftc.teamcode.util.Pose2d
 import org.firstinspires.ftc.teamcode.util.Vector2d
+import org.firstinspires.ftc.teamcode.subsystems.Robot
 
 
 class PathsRed {
+    private lateinit var robot: Robot
+
     private var xVal = -96.0
     var blockPositionsRed: List<PathPoint> = listOf(
 
@@ -44,7 +47,8 @@ class PathsRed {
         t.addPoint(Vector2d(-77.32, 140.0), angle, 0.7, 1.0, "moving forward1")
                 .addPoint(Vector2d(-85.0, 170.0), angle, 0.8, 0.8, "moving forward1")
                 .addPoint(Vector2d(-85.0, 200.0), angle, 0.7, 0.8, "moving forward1")
-                .addPoint(Vector2d(-95.0, 240.0), angle, 0.2, 0.8, "moving forward1")
+                robot.drive.setRotaterRedPos(0.0)
+                t.addPoint(Vector2d(-95.0, 240.0), angle, 0.2, 0.8, "moving forward1")
         when (loc) {
             1 -> {
                 t.addPoint(Vector2d(-103.0, 328.0), angle, 0.3, 0.6, "ENTERS THE PATH")
